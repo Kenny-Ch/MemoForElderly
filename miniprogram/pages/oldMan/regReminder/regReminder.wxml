@@ -1,0 +1,12 @@
+<!--miniprogram/pages/oldMan/regReminder/regReminder.wxml-->
+<view class="title">定期提醒</view>
+<view class="list-item row" wx:for="{{reminders}}" wx:key="{{index}}">
+  <view class="column" style="margin-right:96rpx;">
+    <view class="rtitle">{{item.title}}</view>
+    <view class="time">{{item.time}}</view>
+  </view>
+  <switch bindchange="switchChange" data-id="{{item.id}}" data-index="{{index}}" data-on="{{item.on}}" color ="#f9ba17" class="switch" checked='{{item.on}}'/>
+</view>
+<view class="jia" bindtap="jumpAdd">
+  <image src="../../../images/my/jia.svg" class="pic"></image>
+</view>

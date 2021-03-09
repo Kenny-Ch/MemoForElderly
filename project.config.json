@@ -19,9 +19,8 @@
     "checkSiteMap": true,
     "uploadWithSourceMap": true,
     "compileHotReLoad": false,
-    "useMultiFrameRuntime": true,
+    "useMultiFrameRuntime": false,
     "useApiHook": true,
-    "useApiHostProcess": false,
     "babelSetting": {
       "ignore": [],
       "disablePlugins": [],
@@ -39,18 +38,17 @@
   },
   "appid": "wx6891b584826b6a88",
   "projectname": "MemoForElderly",
-  "libVersion": "2.14.1",
+  "libVersion": "2.15.0",
+  "simulatorType": "wechat",
+  "simulatorPluginLibVersion": {},
   "condition": {
-    "search": {
-      "list": []
-    },
-    "conversation": {
-      "list": []
-    },
     "plugin": {
       "list": []
     },
     "game": {
+      "list": []
+    },
+    "gamePlugin": {
       "list": []
     },
     "miniprogram": {
@@ -58,7 +56,32 @@
         {
           "id": -1,
           "name": "db guide",
-          "pathName": "pages/databaseGuide/databaseGuide"
+          "pathName": "pages/databaseGuide/databaseGuide",
+          "query": ""
+        },
+        {
+          "name": "pages/oldMan/my/my",
+          "pathName": "pages/oldMan/my/my",
+          "query": "",
+          "scene": null
+        },
+        {
+          "name": "pages/oldMan/regReminder/regReminder",
+          "pathName": "pages/oldMan/regReminder/regReminder",
+          "query": "",
+          "scene": null
+        },
+        {
+          "name": "pages/oldMan/addReminder/addReminder",
+          "pathName": "pages/oldMan/addReminder/addReminder",
+          "query": "",
+          "scene": null
+        },
+        {
+          "name": "pages/oldMan/kinshipBinding/kinshipBinding",
+          "pathName": "pages/oldMan/kinshipBinding/kinshipBinding",
+          "query": "",
+          "scene": null
         }
       ]
     }

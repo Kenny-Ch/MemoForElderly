@@ -1,0 +1,17 @@
+<!--miniprogram/pages/oldMan/kinshipBinding/kinshipBinding.wxml-->
+<view class="title">亲属绑定</view>
+<view class="QRCard">
+  <view class="bigword">绑定二维码</view>
+  <view class="smallword">扫描该二维码或输入下方识别码进行绑定</view>
+  <image src="../../../images/my/QR.png" class="QRPic"></image>
+  <view class="QRNum">{{QRNum}}</view>
+</view>
+<view class="familyCard">
+  <view class="bigword">已绑定用户</view>
+  <view class="smallword">已绑定的用户可以为您添加备忘内容</view>
+  <view class="list-item row" wx:for="{{family}}">
+    <image src="{{item.avarurl}}" class="uesrPic"></image>
+    <view class="userName">{{item.name}}</view>
+    <image src="../../../images/my/delete.svg" class="del"></image>
+  </view>
+</view>

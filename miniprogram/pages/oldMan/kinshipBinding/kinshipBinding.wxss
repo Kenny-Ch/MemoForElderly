@@ -1,0 +1,103 @@
+/* miniprogram/pages/oldMan/kinshipBinding/kinshipBinding.wxss */
+page{
+  background: rgba(249, 186, 23, 1);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+.title{
+  width: 87%;
+	color: rgba(0, 2, 2, 1);
+	font-size: 47rpx;
+	line-height: 150%;
+	text-align: left;
+  font-weight: bold;
+  margin-top: 24rpx;
+  margin-bottom: 28rpx;
+}
+.QRCard{
+  width: 684rpx;
+	height: 745rpx;
+	color: rgba(80, 80, 80, 1);
+	background-color: rgba(255, 255, 255, 1);
+	border-radius: 33rpx;
+	font-size: 28rpx;
+	line-height: 150%;
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+.bigword{
+  color: rgba(0, 0, 0, 1);
+	font-size: 36rpx;
+	line-height: 150%;
+	text-align: left;
+  font-weight: bold;
+  margin-top: 24rpx;
+}
+.smallword{
+  color: rgba(80, 80, 80, 1);
+	font-size: 28rpx;
+	line-height: 150%;
+  text-align: left;
+  margin-top: 12rpx;
+}
+.QRPic{
+  width: 474rpx;
+  height: 474rpx;
+  margin-top: 24rpx;
+}
+.QRNum{
+  width: 684rpx;
+	height: 96rpx;
+	background-color: rgba(0, 0, 0, 1);
+  font-size: 28rpx;
+  font-weight: bold;
+  color: rgba(255, 255, 255, 1);
+	font-size: 63rpx;
+	line-height: 150%;
+  text-align: center;
+  margin-top: 30rpx;
+  border-bottom-right-radius: 33rpx;
+  border-bottom-left-radius: 33rpx;
+}
+.familyCard{
+  width: 684rpx;
+	height: 658rpx;
+	color: rgba(80, 80, 80, 1);
+	background-color: rgba(255, 255, 255, 1);
+	border-radius: 33rpx;
+	font-size: 28rpx;
+	line-height: 150%;
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-top:48rpx;
+  margin-bottom: 20rpx;
+}
+.list-item{
+  width: 88%;
+  margin-top: 28rpx;
+}
+.uesrPic{
+  width: 60rpx;
+	height: 60rpx;
+	border-radius: 50%;
+}
+.userName{
+  width: 400rpx;
+	color: rgba(80, 80, 80, 1);
+	font-size: 32rpx;
+	line-height: 150%;
+  text-align: left;
+  margin-left:32rpx;
+  margin-right: 60rpx;
+}
+.del{
+  width: 60rpx;
+	height: 60rpx;
+	font-size: 60rpx;
+	color: rgba(249, 186, 23, 1);
+}

@@ -1,0 +1,35 @@
+<!--miniprogram/pages/my/my.wxml-->
+<view class="top"></view>
+<view class="avatar">
+  <open-data type="userAvatarUrl" class="avatar"></open-data>
+</view>
+<view class="content">
+  <view class="row list-item" style="margin-top:72rpx;" bindtap="jumpReminder">
+    <image src="../../../images/my/time.svg" class="pic"></image>
+    <view class="column">
+      <view class="title">定期提醒管理</view>
+      <view class="smalltitle">对你个人信息的编辑</view>
+    </view>
+    <image src="../../../images/my/right.svg" class="rpic"></image>
+  </view>
+  <view class="row list-item" bindtap="jumpBinding">
+    <image src="../../../images/my/family.svg" class="pic"></image>
+    <view class="column">
+      <view class="title">绑定亲属</view>
+      <view class="smalltitle">绑定的亲属可以为你添加备忘事项</view>
+    </view>
+    <image src="../../../images/my/right.svg" class="rpic"></image>
+  </view>
+  <view class="row list-item" style="border-bottom: 1px solid rgba(153, 153, 153, 0.1857142857142857);">
+    <image src="../../../images/my/fankun.svg" class="pic"></image>
+    <view class="column">
+      <view class="title">反馈</view>
+      <view class="smalltitle">对你个人信息的编辑</view>
+    </view>
+    <image src="../../../images/my/right.svg" class="rpic"></image>
+  </view>
+</view>
+<view class="row bottom" style="justify-content: center;margin-bottom:32rpx">
+  <view class="bottom-black">xx团队</view>
+  <view class="bottom-yellow" style="margin-left:20rpx;">关于我们</view>
+</view>

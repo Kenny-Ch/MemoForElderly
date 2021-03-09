@@ -1,0 +1,103 @@
+/* miniprogram/pages/my/my.wxss */
+page{
+  background: #f6f6f6;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+.top{
+  background: rgba(249, 186, 23, 1);
+  width:100%;
+  height: 400rpx;
+}
+.avatar{
+  overflow:hidden;
+  display: block;
+  width: 150rpx;
+	height: 150rpx;
+  border-radius: 50%;
+	left: 25rpx;
+	top: 51rpx;
+  box-shadow: 0rpx 2rpx 44rpx 0rpx rgba(0, 0, 0, 0.5);
+  position: fixed;
+  left: 50rpx;
+  top: 50rpx;
+  z-index: 60;
+}
+.content{
+  width: 749rpx;
+	height: 1106rpx;
+	color: rgba(80, 80, 80, 1);
+	background-color: rgba(255, 255, 255, 1);
+	border-radius: 40rpx;
+	font-size: 28rpx;
+	line-height: 150%;
+	box-shadow: 0rpx 2rpx 28rpx 0rpx rgba(0, 0, 0, 0.3642857142857143);
+  text-align: center;
+  position: fixed;
+  left: 0;
+  top: 175rpx;
+  z-index: 50;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+.pic{
+  width: 60rpx;
+	height: 60rpx;
+	font-size: 60rpx;
+  color: rgba(249, 186, 23, 1);
+  margin-left: 48rpx;
+  margin-right: 24rpx;
+}
+.title{
+  width: 530rpx;
+	letter-spacing: 4rpx;
+	color: rgba(80, 80, 80, 1);
+	font-size: 36rpx;
+	line-height: 150%;
+	text-align: left;
+	font-weight: bold;
+}
+.smalltitle{
+  width: 530rpx;
+	left: 58rpx;
+	top: 179rpx;
+	color: rgba(166, 166, 166, 1);
+	font-size: 24rpx;
+	line-height: 150%;
+	text-align: left;
+}
+.rpic{
+  width: 50rpx;
+	height: 50rpx;
+	font-size: 50rpx;
+	color: rgba(166, 166, 166, 1);
+}
+.list-item{
+  width: 100%;
+  height: 110rpx;
+  border-top: 1px solid rgba(153, 153, 153, 0.1857142857142857);
+}
+.bottom{
+  width:100%;
+  position: fixed;
+  left: 0;
+  bottom: 0;
+  z-index: 60;
+}
+.bottom-black{
+  width: 120rpx;
+	color: rgba(80, 80, 80, 1);
+	font-size: 28rpx;
+	line-height: 150%;
+	text-align: left;
+}
+.bottom-yellow{
+  width: 120rpx;
+	color: rgba(249, 186, 23, 1);
+	font-size: 28rpx;
+	line-height: 150%;
+	text-align: left;
+}
