@@ -82,6 +82,17 @@
           "pathName": "pages/oldMan/kinshipBinding/kinshipBinding",
           "query": "",
           "scene": null
+        },
+        {
+          "name": "pages/child/kinshipBinding/kinshipBinding",
+          "pathName": "pages/child/kinshipBinding/kinshipBinding",
+          "query": "",
+          "scene": null
+        },
+        {
+          "name": "pages/child/my/my",
+          "pathName": "pages/child/my/my",
+          "scene": null
         }
       ]
     }

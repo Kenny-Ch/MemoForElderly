@@ -1,0 +1,15 @@
+<!--miniprogram/pages/child/kinshipBinding/kinshipBinding.wxml-->
+<view class="title">亲属绑定</view>
+<view class="smallword">扫描该二维码或输入下方识别码进行绑定</view>
+<view class="row hh">
+  <label class="label">识别码</label>
+  <input class="user_input" style="width: 380rpx;margin-right:40rpx;" type="number" placeholder-style="color: rgb(98, 98, 98);" placeholder="输入识别码"/>
+  <image src="../../../images/my/scanning.svg" class="pic"></image>
+</view>
+<view class="row hh">
+  <label class="label">关系</label>
+  <picker bindchange="changeRelationship"  class="relationship_input" value="{{relationshipIndex}}" range="{{relationshipList}}">
+    {{relationshipIndex==-1?"请选择绑定人与你的关系":relationshipList[relationshipIndex]}}
+  </picker>
+</view>
+<button class="save" style="width: 623rpx;height: 68rpx;">绑 定</button>

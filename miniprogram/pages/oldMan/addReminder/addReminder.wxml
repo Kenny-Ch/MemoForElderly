@@ -31,5 +31,5 @@
   <image src="../../../images/my/wen.svg" class="pic"></image>
   <switch bindchange="switchChange" color ="#f9ba17" style="margin-left:236rpx;" checked='{{isOn}}'/>
 </view>
-<button class="save" style="width: 623rpx;height: 68rpx;">保存</button>
-  <button class="cancel" style="width: 623rpx;height: 68rpx;">删除</button>
+<button class="save" style="width: 623rpx;height: 68rpx;">保 存</button>
+<button class="cancel" style="width: 623rpx;height: 68rpx;">删 除</button>

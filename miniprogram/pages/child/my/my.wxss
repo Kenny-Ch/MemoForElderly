@@ -1,0 +1,160 @@
+/* miniprogram/pages/child/my/my.wxss */
+page {
+  background: #f6f6f6;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+.title{
+  width: 120rpx;
+	color: rgba(0, 2, 2, 1);
+	font-size: 47rpx;
+	text-align: left;
+  font-weight: bold;
+}
+.arrow{
+  width: 40rpx;
+	height: 40rpx;
+	font-size: 40rpx;
+  color: rgba(153, 153, 153, 1);
+  margin-left:8rpx;
+  margin-top:8rpx;
+}
+.rePic{
+  width: 70rpx;
+	height: 70rpx;
+	font-size: 70rpx;
+	color: rgba(0, 2, 2, 1);
+}
+.top_card{
+  width: 659rpx;
+	height: 119rpx;
+	color: rgba(80, 80, 80, 1);
+	background-color: rgba(249, 186, 23, 1);
+	border-radius: 16rpx;
+	font-size: 28rpx;
+	line-height: 150%;
+  text-align: center;
+  margin-top:20rpx;
+}
+.touxiang{
+  width: 87rpx;
+	height: 87rpx;
+  border-radius: 45rpx;
+  margin-left: 28rpx;
+}
+.name{
+  width: 140rpx;
+	color: rgba(0, 0, 0, 1);
+	font-size: 32rpx;
+	line-height: 150%;
+	text-align: left;
+  font-weight: bold;
+  margin-left: 36rpx;
+}
+.finishPic{
+  width: 40rpx;
+	height: 40rpx;
+	font-size: 40rpx;
+  color: rgba(255, 255, 255, 1);
+}
+.num{
+	color: rgba(255, 255, 255, 1);
+	font-size: 32rpx;
+	line-height: 150%;
+  text-align: left;
+  margin-left:12rpx;
+}
+.medium_card{
+  width: 659rpx;
+	height: 430rpx;
+	color: rgba(80, 80, 80, 1);
+	background-color: rgba(249, 186, 23, 1);
+	border-radius: 16rpx;
+	font-size: 28rpx;
+	line-height: 150%;
+  text-align: center;
+  margin-top:36rpx;
+}
+.card_title{
+  width: 87%;
+	color: rgba(0, 0, 0, 1);
+	font-size: 32rpx;
+	line-height: 150%;
+	text-align: left;
+  font-weight: bold;
+  margin-top:24rpx;
+}
+.input_frame{
+	width: 517rpx;
+	height: 62rpx;
+	color: rgba(80, 80, 80, 1);
+	background-color: rgba(255, 255, 255, 0.25);
+	border-radius: 33rpx;
+	font-size: 28rpx;
+	line-height: 150%;
+	text-align: left;
+	padding-left: 36rpx;
+	padding-right: 36rpx;
+	margin-top:28rpx;
+}
+.add{
+	color: rgba(255, 255, 255, 1);
+	background-color: rgba(0, 0, 0, 1);
+	border-radius: 35rpx;
+	font-size: 28rpx;
+	line-height: 100%;
+  text-align: center;
+  margin-top:36rpx;
+}
+.setReminder{
+	width: 168rpx;
+	height: 42rpx;
+	color: rgba(255, 255, 255, 1);
+	font-size: 28rpx;
+	line-height: 150%;
+	text-align: left;
+	margin-top:28rpx;
+}
+.bottom_card{
+	width: 659rpx;
+	color: rgba(80, 80, 80, 1);
+	background-color: rgba(249, 186, 23, 1);
+	border-radius: 16rpx;
+	font-size: 28rpx;
+	line-height: 150%;
+	text-align: center;
+	padding-bottom: 32rpx;
+	margin-top:36rpx;
+	margin-bottom:48rpx;
+}
+.today_content{
+	width: 100%;
+	color: rgba(0, 2, 2, 1);
+	font-size: 32rpx;
+	line-height: 150%;
+	text-align: left;
+	font-weight: bold;
+	margin-bottom: 8rpx;
+}
+.time{
+	width:100%;
+	color: rgba(138, 87, 10, 1);
+	font-size: 24rpx;
+	line-height: 150%;
+	text-align: left;
+}
+.isFinish{
+	width: 84rpx;
+	height: 42rpx;
+	color: rgba(138, 87, 10, 1);
+	font-size: 28rpx;
+	line-height: 150%;
+	text-align: left;
+}
+.pic{
+	width: 40rpx;
+	height: 40rpx;
+	font-size: 40rpx;
+	color: rgba(138, 87, 10, 1);
+}

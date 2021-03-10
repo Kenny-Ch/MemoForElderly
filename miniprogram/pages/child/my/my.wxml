@@ -1,0 +1,52 @@
+<!--miniprogram/pages/child/my/my.wxml-->
+<view style="width:87%" wx:for="{{family}}" wx:key="{{index}}">
+  <view class="row" style="width:100%;margin-bottom: 12rpx;margin-top: 24rpx;">
+    <view class="title">{{item.relationship}}</view>
+    <view wx:if="{{open[index]==false}}" data-index="{{index}}" bindtap="open">
+      <image src="../../../images/my/arrow-right.png" class="arrow"></image>
+    </view>
+    <view wx:else data-index="{{index}}" bindtap="close">
+      <image src="../../../images/my/arrow-down.png" class="arrow"></image>
+    </view>
+    <image src="../../../images/my/relation.svg" class='rePic' style="margin-left:320rpx;margin-right:20rpx"></image>
+    <image src="../../../images/my/user.svg" class="rePic"></image>
+  </view>
+  <view class="column" wx:if="{{open[index]==true}}">
+    <view class="top_card row">
+      <image src="../../../images/my/touxiang.png" class="touxiang"></image>
+      <view class="name">{{item.name}}</view>
+      <view class="row" style="width:300rpx;flex-direction: row-reverse;margin-left:36rpx;">
+        <view class="num">{{item.finishNum}}/{{item.taskNum}}</view>
+        <image src="../../../images/my/finishPic.svg" class="finishPic"></image>
+      </view>
+    </view>
+    <view class="column medium_card">
+      <view class="card_title">添加备忘事项</view>
+      <input type="text" placeholder="备忘内容" placeholder-style="color: rgba(80, 80, 80, 1);" class="input_frame"/>
+      <picker class='input_frame row' mode="multiSelector" bindchange="bindStartMultiPickerChange" bindtap='pickerTap' bindcolumnchange="bindMultiPickerColumnChange" value="{{multiIndex}}" range="{{multiArray}}">
+        {{startDate}}
+      </picker>
+      <button class="add" style="width: 583rpx;height: 68rpx;"  bindtap="oldToUse">添加</button>
+      <view class="setReminder">设置定期备忘</view>
+    </view>
+    <view class="column bottom_card" wx:if="{{item.reminders.length!=0}}">
+      <view class="card_title">今日需要完成的备忘</view>
+      <view class="row" style="margin-top:28rpx;" wx:for="{{item.reminders}}" wx:for-item="today">
+        <view class="column" style="width:420rpx;margin-right:28rpx;">
+          <view class="today_content">{{today.thing}}</view>
+          <view class="time">{{today.time}}</view>
+        </view>
+        <view class="row" wx:if="{{today.isfinish==true}}">
+          <view class="isFinish">已完成</view>
+          <image class="pic" src="../../../images/my/finish.svg"></image>
+        </view>
+        <view class="row" wx:else>
+          <view class="isFinish">未完成</view>
+          <image class="pic" src="../../../images/my/notfinish.svg"></image>
+        </view>
+      </view>
+    </view>
+  </view>
+</view>
+
+
