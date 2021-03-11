@@ -1,6 +1,6 @@
 <view wx:if="{{isOld==false&&isChild==false}}">
   <image src="../../images/introduce.png" class="intro"></image>
-  <button class="oldMan" style="width: 623rpx;height: 68rpx;" bindtap="oldToUse">我需要使用备忘录</button>
+  <button class="oldMan" style="width: 623rpx;height: 68rpx;" bindgetuserinfo="oldToUse"  open-type='getUserInfo'>我需要使用备忘录</button>
   <button class="child" style="width: 623rpx;height: 68rpx;" bindtap="childToUse">我是子女</button>
 </view>
 <view wx:if="{{isOld==true}}">
@@ -58,7 +58,7 @@
       <view class="edit_card">
         <view class="row hh">
           <label class="label">备忘内容</label>
-          <input class="user_input" type="text" placeholder-style="color: rgb(98, 98, 98);" placeholder="输入您的定期备忘内容"/>
+          <input class="user_input" type="text" placeholder-style="color: rgb(98, 98, 98);" placeholder="输入您的定期备忘内容" bindinput="bindInputContent" value="{{content}}"/>
         </view>
         <view class="row hh">
           <label class="label">提醒时间</label>

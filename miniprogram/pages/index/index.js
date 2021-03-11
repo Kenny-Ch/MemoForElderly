@@ -7,35 +7,54 @@ var currentHours = date.getHours();
 var currentMinute = date.getMinutes();
 Page({
   data: {
-    isOld:false,
-    isChild:false,      //当 isOld 和 isChild 都是fasle时是启动页，当isOld是true时是老人首页
-    things:[{
-     id:1,
-     title:"这个是备忘事件的标题",
-     time:"2021年3月2日 中午12点",
-    },{
-      id:2,
-      title:"这个是备忘事件的标题",
-      time:"2021年3月2日 中午12点",
-     },{
-      id:3,
-      title:"这个是备忘事件的标题",
-      time:"2021年3月2日 中午12点",
-     },{
-      id:4,
-      title:"这个是备忘事件的标题",
-      time:"2021年3月2日 中午12点",
-     }],
-     say:false,
-     is_clock:false,
-     restatement:false,
-     edit:false,
-     startDate: "选择您的定期提醒时间",
-    multiArray: [['今天', '明天', '3-2', '3-3', '3-4', '3-5'], [0, 1, 2, 3, 4, 5, 6], [0, 10, 20]],
+    isOld: false,
+    isChild: false, //当 isOld 和 isChild 都是fasle时是启动页，当isOld是true时是老人首页
+    things: [{
+      id: 1,
+      title: "这个是备忘事件的标题",
+      time: "2021年3月2日 中午12点",
+    }, {
+      id: 2,
+      title: "这个是备忘事件的标题",
+      time: "2021年3月2日 中午12点",
+    }, {
+      id: 3,
+      title: "这个是备忘事件的标题",
+      time: "2021年3月2日 中午12点",
+    }, {
+      id: 4,
+      title: "这个是备忘事件的标题",
+      time: "2021年3月2日 中午12点",
+    }],
+    say: false,
+    is_clock: false,
+    restatement: false,
+    edit: false,
+    startDate: "选择您的定期提醒时间",
+    content: "",
+    recordAuth: false,
+    multiArray: [
+      ['今天', '明天', '3-2', '3-3', '3-4', '3-5'],
+      [0, 1, 2, 3, 4, 5, 6],
+      [0, 10, 20]
+    ],
     multiIndex: [0, 0, 0],
   },
 
-  onLoad: function() {
+  onLoad: function () {
+    let that = this
+    wx.getSetting({
+      success: res => {
+        if (res.authSetting['scope.record']) {
+          this.setData({
+            recordAuth: true
+          })
+        }
+      }
+    })
+  },
+
+  oldToUse: function (e) {
     // 获取用户信息
     wx.getSetting({
       success: res => {
@@ -45,122 +64,220 @@ Page({
             success: res => {
               this.setData({
                 avatarUrl: res.userInfo.avatarUrl,
-                userInfo: res.userInfo
+                userInfo: res.userInfo,
+                isOld: true
               })
+              app.globalData.userInfo = res.userInfo
+            }
+          })
+        } else {
+          wx.showModal({
+            title: '提示',
+            confirmText: '去设置',
+            cancelText: '取消',
+            content: '请授权方便您的使用噢~',
+            success: function (res) {
+              if (res.confirm) {
+                wx.openSetting({
+                  success: (res) => {
+                    if (res.authSetting['scope.record']) {
+                      //成功啦！
+                    } else {
+                      //失败了。。。。
+                    }
+                  }
+                })
+              } else if (res.cancel) {
+
+              }
             }
           })
         }
       }
     })
   },
-  oldToUse:function(e){
-    this.setData({
-      isOld:true,
-    })
-  },
-  jumpMy:function(e){
+  jumpMy: function (e) {
     wx.navigateTo({
       url: '../oldMan/my/my',
     })
   },
 
   //点击输入按钮
-  user_input:function(){
+  user_input: function () {
     this.setData({
-      edit:true,
+      edit: true,
     })
   },
 
   //数据保存
-  saveData:function(){
+  saveData: function () {
+    let content = this.data.content
+    let stratDate = this.data.startDate
     this.setData({
-      edit:false,
+      edit: false,
+    })
+  },
+
+  //备忘录内容输入实时保存
+  bindInputContent: function (e) {
+    this.setData({
+      content: e.detail.value
     })
   },
 
   //-----------------录音模块---------------------------------------
-  handleRecordStart: function(e) {
-    this.setData({
-      is_clock:true,//长按时应设置为true，为可发送状态
-      startPoint: e.touches[0],//记录触摸点的坐标信息
-    })
-    this.setData({
-      say:true
-    })
-    //设置录音参数
-    const options = {
-      duration: 10000,
-      sampleRate: 16000,
-      numberOfChannels: 1,
-      encodeBitRate: 48000,
-      format: 'mp3'
-    }
-    //开始录音
-    recorderManager.start(options);
-  },
-  handleRecordStop:function(e){
-    recorderManager.stop()//结束录音
-    this.setData({
-      say:false
-    })
-    //此时先判断是否需要发送录音
-    if (this.data.is_clock == true) {
-      var that = this
-		  //对停止录音进行监控
-      recorderManager.onStop((res) => {
-        //对录音时长进行判断，少于2s的不进行发送，并做出提示
-        if(res.duration<2000){
-          wx.showToast({
-            title: '录音时间太短，请长按录音',
-            icon: 'none',
-            duration: 1000
-          })
-        }else{
-        //进行语音发送
-          console.log(res)
-          var tempFilePath = res.tempFilePath;
-          wx.showLoading({
-            title: '语音检索中',
-          })
-          let timestamp = util.formatDate(new Date());
-          //上传录制的音频
-          wx.cloud.uploadFile({
-            cloudPath: "uploadVoices/"+timestamp + '-' + this.randomNum(10000, 99999) + '.mp3',
-            filePath: tempFilePath,
-            success: function(event) {
-              wx.hideLoading()
-              console.log("上传成功")
-            },fail:function(e){
-              wx.hideLoading()
-              console.log(e)
-            }
-          })
+  handleRecordStart: function (e) {
+    let that = this
+    if (!this.data.recordAuth) {
+      wx.getSetting({
+        success: res => {
+          if (res.authSetting['scope.record']) {
+            // 已经授权
+            that.setData({
+              recordAuth: true
+            })
+          } else {
+            wx.showModal({
+              title: '提示',
+              confirmText: '去设置',
+              cancelText: '取消',
+              content: '请授权录音权限才能使用该功能噢~',
+              success: function (res) {
+                if (res.confirm) {
+                  wx.openSetting({
+                    success: (res) => {
+                      if (res.authSetting['scope.record']) {
+                        that.setData({
+                          recordAuth: true
+                        })
+                      } else {
+                        //失败了。。。。
+                      }
+                    }
+                  })
+                } else if (res.cancel) {
+
+                }
+              }
+            })
+          }
         }
       })
+    } else {
+      this.setData({
+        is_clock: true, //长按时应设置为true，为可发送状态
+        startPoint: e.touches[0], //记录触摸点的坐标信息
+      })
+      this.setData({
+        say: true
+      })
+      //设置录音参数
+      const options = {
+        duration: 10000,
+        sampleRate: 16000,
+        numberOfChannels: 1,
+        encodeBitRate: 48000,
+        format: 'mp3'
+      }
+      //开始录音
+      recorderManager.start(options);
     }
   },
-  handleTouchMove:function(e){
-    //计算距离，当滑动的垂直距离大于25时，则取消发送语音
-     if (Math.abs(e.touches[e.touches.length - 1].clientY - this.data.startPoint.clientY)>25){
-      wx.showToast({
-        title: '录音取消',
-        icon: 'none',
-        duration: 1000
-      }) 
+  handleRecordStop: function (e) {
+    if (this.data.recordAuth) {
+      recorderManager.stop() //结束录音
       this.setData({
-         is_clock: false,//设置为不发送语音
-          say:false
-       })
-     }
-   },
-  start:function(e){
+        say: false
+      })
+      //此时先判断是否需要发送录音
+      if (this.data.is_clock == true) {
+        var that = this
+        //对停止录音进行监控
+        recorderManager.onStop((res) => {
+          //对录音时长进行判断，少于2s的不进行发送，并做出提示
+          if (res.duration < 2000) {
+            wx.showToast({
+              title: '录音时间太短，请长按录音',
+              icon: 'none',
+              duration: 1000
+            })
+          } else {
+            //进行语音发送
+            console.log(res)
+            var tempFilePath = res.tempFilePath;
+            wx.showLoading({
+              title: '语音检索中',
+            })
+            let timestamp = util.formatDate(new Date());
+            //上传录制的音频
+            new Promise(() => {
+              wx.cloud.uploadFile({
+                cloudPath: "uploadVoices/" + timestamp + '-' + this.randomNum(10000, 99999) + '.mp3',
+                filePath: tempFilePath,
+                success: function (event) {
+                  wx.hideLoading()
+                  console.log("上传成功",event)
+                },
+                fail: function (e) {
+                  wx.hideLoading()
+                  console.log(e)
+                }
+              })
+              // 语音转文字
+              const fs = wx.getFileSystemManager();
+              fs.readFile({
+                filePath: tempFilePath,
+                success(res) {
+                  const base64 = wx.arrayBufferToBase64(res.data);
+                  var fileSize = res.data.byteLength;
+                  console.log(res,base64, fileSize)
+                  wx.cloud.callFunction({
+                    name: 'sentenceRecognition',
+                    data: {
+                      data: base64,
+                      dataLen: fileSize
+                    },
+                    success: res => {
+                      console.log('语音转化文字成功', res)
+                    },
+                    fail: err => {
+                      console.error('语音转化失败', err)
+                    }
+                  })
+                }
+              })
+              
+            })
+
+          }
+        })
+      }
+    }
+  },
+  handleTouchMove: function (e) {
+    if (this.data.recordAuth) {
+      //计算距离，当滑动的垂直距离大于25时，则取消发送语音
+      if (Math.abs(e.touches[e.touches.length - 1].clientY - this.data.startPoint.clientY) > 25) {
+        wx.showToast({
+          title: '录音取消',
+          icon: 'none',
+          duration: 1000
+        })
+        this.setData({
+          is_clock: false, //设置为不发送语音
+          say: false
+        })
+      }
+    }
+  },
+  start: function (e) {
     this.setData({
-      say:true
+      say: true
     })
   },
-  end:function(e){
+  end: function (e) {
     this.setData({
-      say:false
+      say: false
     })
   },
   //生成从minNum到maxNum的随机数
@@ -179,9 +296,9 @@ Page({
   },
   //-----------------------------------------------------------------------------------
   //-----------------时间选择器---------------------------------------------------------
-  pickerTap:function() {
+  pickerTap: function () {
     date = new Date();
-    var monthDay = ['今天','明天'];
+    var monthDay = ['今天', '明天'];
     var hours = [];
     var minute = [];
     currentHours = date.getHours();
@@ -199,8 +316,8 @@ Page({
       multiIndex: this.data.multiIndex
     };
 
-    if(data.multiIndex[0] === 0) {
-      if(data.multiIndex[1] === 0) {
+    if (data.multiIndex[0] === 0) {
+      if (data.multiIndex[1] === 0) {
         this.loadData(hours, minute);
       } else {
         this.loadMinute(hours, minute);
@@ -213,7 +330,7 @@ Page({
     data.multiArray[2] = minute;
     this.setData(data);
   },
-  bindMultiPickerColumnChange:function(e) {
+  bindMultiPickerColumnChange: function (e) {
     date = new Date();
     var that = this;
     var monthDay = ['今天', '明天'];
@@ -233,7 +350,7 @@ Page({
       if (e.detail.value === 0) {
 
         that.loadData(hours, minute);
-        
+
       } else {
         that.loadHoursMinute(hours, minute);
       }
@@ -260,7 +377,7 @@ Page({
       if (data.multiIndex[0] === 0) {
 
         // 如果第一列为 '今天'并且第二列为当前时间
-        if(data.multiIndex[1] === 0) {
+        if (data.multiIndex[1] === 0) {
           that.loadData(hours, minute);
         } else {
           that.loadMinute(hours, minute);
@@ -312,7 +429,7 @@ Page({
     }
   },
 
-  loadHoursMinute: function (hours, minute){
+  loadHoursMinute: function (hours, minute) {
     // 时
     for (var i = 0; i < 24; i++) {
       hours.push(i);
@@ -363,7 +480,7 @@ Page({
     var minute = that.data.multiArray[2][e.detail.value[2]];
 
     if (monthDay === "今天") {
-      var month = date.getMonth()+1;
+      var month = date.getMonth() + 1;
       var day = date.getDate();
       monthDay = month + "月" + day + "日";
     } else if (monthDay === "明天") {
@@ -384,6 +501,6 @@ Page({
   },
   //---------------------------------------------------------------------------------
 
-  
+
 
 })
