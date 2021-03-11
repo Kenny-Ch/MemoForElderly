@@ -1,19 +1,16 @@
 <!--miniprogram/pages/child/my/my.wxml-->
-<view style="width:87%" wx:for="{{family}}" wx:key="{{index}}">
+<view style="width:87%" wx:for="{{person}}" wx:key="{{index}}">
   <view class="row" style="width:100%;margin-bottom: 12rpx;margin-top: 24rpx;">
     <view class="title">{{item.relationship}}</view>
-    <view wx:if="{{open[index]==false}}" data-index="{{index}}" bindtap="open">
-      <image src="../../../images/my/arrow-right.png" class="arrow"></image>
-    </view>
-    <view wx:else data-index="{{index}}" bindtap="close">
+    <view data-index="{{index}}" bindtap="clickme">
       <image src="../../../images/my/arrow-down.png" class="arrow"></image>
     </view>
     <image src="../../../images/my/relation.svg" class='rePic' style="margin-left:320rpx;margin-right:20rpx"></image>
     <image src="../../../images/my/user.svg" class="rePic"></image>
   </view>
-  <view class="column" wx:if="{{open[index]==true}}">
+  <view class="column">
     <view class="top_card row">
-      <image src="../../../images/my/touxiang.png" class="touxiang"></image>
+      <image src="{{item.portrait}}" class="touxiang"></image>
       <view class="name">{{item.name}}</view>
       <view class="row" style="width:300rpx;flex-direction: row-reverse;margin-left:36rpx;">
         <view class="num">{{item.finishNum}}/{{item.taskNum}}</view>
@@ -49,4 +46,13 @@
   </view>
 </view>
 
-
+<!--屏幕背景变暗的背景  -->
+<view class="commodity_screen" bindtap="hideModal" wx:if="{{showModalStatus}}"></view>
+<!--弹出框  -->
+<view animation="{{animationData}}" class="commodity_attr_box" wx:if="{{showModalStatus}}">
+  <view class="row" style="margin-bottom:28rpx;" wx:for="{{familys}}"> 
+    <image src="{{item.portrait}}" class="touxiang1"></image>
+    <view class="name1">{{item.name}}-{{item.relationship}}</view>
+    <image class="del1" src="../../../images/my/del.svg"></image>
+  </view>
+</view>

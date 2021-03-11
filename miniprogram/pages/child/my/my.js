@@ -8,13 +8,13 @@ Page({
    * 页面的初始数据
    */
   data: {
-    open:[false,false],  //与family的元素个数一样
-    family:[
+    familys:[
       {
         relationship:'爸爸',
         taskNum:5,
         finishNum:2,
         name:'李大明',
+        portrait:'../../../images/my/touxiang.png',
         reminders:[{
           id:'21212',
           thing:'午饭后吃药',
@@ -31,6 +31,7 @@ Page({
         taskNum:5,
         finishNum:2,
         name:'李大明',
+        portrait:'../../../images/my/touxiang.png',
         reminders:[{
           id:'21212',
           thing:'午饭后吃药',
@@ -44,34 +45,71 @@ Page({
         },]
       }
     ],
+    person:[],
     startDate: "选择您的定期提醒时间",
     multiArray: [['今天', '明天', '3-2', '3-3', '3-4', '3-5'], [0, 1, 2, 3, 4, 5, 6], [0, 10, 20]],
     multiIndex: [0, 0, 0],
+    showModalStatus: false,
   },
 
   /**
    * 生命周期函数--监听页面加载
    */
   onLoad: function (options) {
-
+    var that=this
+    if(that.data.familys.length>0){
+      var one=[]
+      that.setData({
+        person:one.concat(that.data.familys[0])
+      })
+    }
+    
   },
-  open:function(e){
-    var index=e.currentTarget.dataset.index
-    console.log("打开第",index,'个家人详细信息')
-    var open=this.data.open
-    open[index]=true
-    this.setData({
-      open:open
-    })
+  //点击我显示底部弹出框
+  clickme:function(){
+    this.showModal();
   },
-  close:function(e){
-    var index=e.currentTarget.dataset.index
-    console.log("关闭第",index,'个家人详细信息')
-    var open=this.data.open
-    open[index]=false
-    this.setData({
-      open:open
-    })
+  //显示对话框
+  showModal: function () {
+   // 显示遮罩层
+   var animation = wx.createAnimation({
+     duration: 200,
+     timingFunction: "linear",
+     delay: 0
+   })
+   this.animation = animation
+   animation.translateY(300).step()
+   this.setData({
+     animationData: animation.export(),
+     showModalStatus: true
+   })
+   setTimeout(function () {
+     animation.translateY(0).step()
+     this.setData({
+       animationData: animation.export()
+     })
+   }.bind(this), 200)
+ },
+ //隐藏对话框
+ hideModal: function () {
+   // 隐藏遮罩层
+   var animation = wx.createAnimation({
+     duration: 200,
+     timingFunction: "linear",
+     delay: 0
+   })
+   this.animation = animation
+   animation.translateY(300).step()
+   this.setData({
+     animationData: animation.export(),
+   })
+   setTimeout(function () {
+     animation.translateY(0).step()
+     this.setData({
+       animationData: animation.export(),
+       showModalStatus: false
+     })
+   }.bind(this), 200)
   },
   //-----------------时间选择器---------------------------------------------------------
   pickerTap:function() {

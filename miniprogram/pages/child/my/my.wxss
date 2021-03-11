@@ -158,3 +158,50 @@ page {
 	font-size: 40rpx;
 	color: rgba(138, 87, 10, 1);
 }
+.commodity_screen {
+  width: 100%;
+  height: 100%;
+  position: fixed;
+  top: 0;
+  left: 0;
+  background: #000;
+  opacity: 0.2;
+  overflow: hidden;
+  z-index: 1000;
+  color: #fff;
+}
+/*对话框 */
+.commodity_attr_box {
+  width: 100%;
+  overflow: hidden;
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  z-index: 2000;
+  background: #fff;
+	padding-top: 36rpx;
+	padding-bottom:30rpx ;
+	border-top-right-radius: 40rpx;
+	border-top-left-radius: 40rpx;
+}
+.touxiang1{
+	width: 60rpx;
+	height: 60rpx;
+	border-radius: 150rpx;
+	margin-left: 82rpx;
+}
+.name1{
+	width: 300rpx;
+	color: rgba(80, 80, 80, 1);
+	font-size: 32rpx;
+	line-height: 150%;
+	text-align: left;
+	margin-left: 49rpx;
+}
+.del1{
+	width: 60rpx;
+	height: 60rpx;
+	font-size: 60rpx;
+	color: rgba(249, 186, 23, 1);
+	margin-left: 130rpx;
+}

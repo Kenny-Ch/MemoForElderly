@@ -18,13 +18,15 @@
   <!-- 底部固定组件 -->
   <view class="bottom">
     <view class="input" bindtap="user_input">输入</view>
+    <view class="empty-say"></view>
+    <view class="my" bindtap="jumpMy">我的</view>
+  </view>
+  <view class="bottom-top">
     <view class="say" catch:touchstart="handleRecordStart" catch:touchmove="handleTouchMove" catch:touchend="handleRecordStop">
       <view wx:if="{{say==false}}">开始说话</view>
       <view wx:else>结束说话</view>
     </view>
-    <view class="my" bindtap="jumpMy">我的</view>
   </view>
-
   <!-- 正在记录提示框 -->
   <view wx:if='{{say==true}}'>
     <view class="back">
@@ -53,7 +55,21 @@
   </view>
 
   <!-- 用户编辑框 -->
-  <view wx:if="{{edit==true}}">
+  <!--屏幕背景变暗的背景  -->
+  <view class="commodity_screen" bindtap="hideModal" wx:if="{{edit}}"></view>
+  <!--弹出框  -->
+  <view animation="{{animationData}}" class="commodity_attr_box column" wx:if="{{edit}}">
+    <view class="row hh">
+      <label class="label">备忘内容</label>
+      <input class="user_input" type="text" placeholder-style="color: rgb(98, 98, 98);" placeholder="输入您的定期备忘内容"/>
+    </view>
+    <view class="row hh">
+      <label class="label">提醒时间</label>
+      <picker class='user_input' mode="multiSelector" bindchange="bindStartMultiPickerChange" bindtap='pickerTap' bindcolumnchange="bindMultiPickerColumnChange" value="{{multiIndex}}" range="{{multiArray}}">{{startDate}}</picker>
+    </view>
+    <button class="save" bindtap="saveData">保 存</button>
+  </view>
+  <!-- <view wx:if="{{edit==true}}">
     <view class="back" style="z-index: 110;">
       <view class="edit_card">
         <view class="row hh">
@@ -67,5 +83,5 @@
         <button class="save" bindtap="saveData">保 存</button>
       </view>
     </view>
-  </view>
+  </view> -->
 </view>
