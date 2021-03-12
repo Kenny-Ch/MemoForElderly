@@ -7,7 +7,7 @@ Page({
   data: {
     times:"选择您的定期提醒时间",
     frequencyIndex:0,
-    frequencyList:['每周一次'],
+    frequencyList:['每天一次','每周一次'],
     dateList:['星期一','星期二','星期三','星期四','星期五','星期六','星期天'],
     dateIndex:0,
     isOn:false,
@@ -35,6 +35,12 @@ Page({
     console.log("该备忘事项需要完成",!this.data.isOn)
     this.setData({
       isOn:!this.data.isOn
+    })
+  },
+  bindTimeChange:function(e){
+    console.log("提醒时间：",e.detail.value)
+    this.setData({
+      times:e.detail.value
     })
   },
   /**

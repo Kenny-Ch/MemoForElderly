@@ -5,13 +5,19 @@
   <input class="user_input" type="text" placeholder-style="color: rgb(98, 98, 98);" placeholder="输入您的定期备忘内容"/>
 </view>
 <view class="row" style="margin-bottom: 28rpx;">
-  <view class="row frequency">
+  <view class="row frequency" wx:if="{{frequencyIndex==1}}">
     <label class="label">频率</label>
     <picker bindchange="changeFrequency"  class="frequency_input" value="{{frequencyIndex}}" range="{{frequencyList}}">
       <view >{{frequencyList[frequencyIndex]}}</view>
     </picker>
   </view>
-  <view class="row date">
+  <view class="row hh" wx:else>
+    <label class="label">频率</label>
+    <picker bindchange="changeFrequency"  class="user_input" value="{{frequencyIndex}}" range="{{frequencyList}}">
+      <view >{{frequencyList[frequencyIndex]}}</view>
+    </picker>
+  </view>
+  <view class="row date" wx:if="{{frequencyIndex==1}}">
     <label class="label">日期</label>
     <picker bindchange="changeDate"  class="frequency_input" value="{{dateIndex}}" range="{{dateList}}">
       <view >{{dateList[dateIndex]}}</view>
@@ -31,5 +37,5 @@
   <image src="../../../images/my/wen.svg" class="pic"></image>
   <switch bindchange="switchChange" color ="#f9ba17" style="margin-left:236rpx;" checked='{{isOn}}'/>
 </view>
-<button class="save" style="width: 623rpx;height: 68rpx;">保 存</button>
-<button class="cancel" style="width: 623rpx;height: 68rpx;">删 除</button>
+<button class="save" style="width: 623rpx;height: 88rpx;">保 存</button>
+<button class="cancel" style="width: 623rpx;height: 88rpx;">删 除</button>

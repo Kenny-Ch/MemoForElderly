@@ -101,3 +101,76 @@ page{
 	line-height: 150%;
 	text-align: left;
 }
+.tips {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  position: fixed;
+  left: 0;
+  top: 0;
+  z-index: 100;
+  width: 100%;
+  height: 100%;
+  background: rgba(0,0,0,0.7);
+}
+
+.tips .tips_box {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 75%;
+  height: auto;
+  border-radius: 45rpx;
+  background: #fff;
+  overflow: hidden;
+}
+
+.tips .tips_box .hint_view {
+  display: flex;
+  align-items: center;
+}
+
+.tips .tips_box .hint_view .text {
+  display: flex;
+  flex-direction: column;
+  margin: 12rpx 24rpx;
+}
+
+.tips .tips_box .hint1 {
+  margin-top: 38rpx;
+  text-align: center;
+  font-size: 30rpx;
+  color: #1a1a1a;
+  line-height:52rpx;
+  border-bottom:1px solid;
+}
+.isTipShow {
+display: block;
+}
+
+.isTipHide {
+display: none;
+}
+.my_text_bottom{
+  width: 450rpx;
+	font-size: 36rpx;
+	line-height: 150%;
+	text-align: left;
+  margin-top:32rpx ;
+}
+.cancel {
+  color: rgba(0, 2, 2, 1);
+	background-color: rgba(255, 255, 255, 1);
+	font-size: 36rpx;
+	text-align: center;
+  margin-top:26rpx ;
+  margin-bottom:36rpx ;
+  border: rgba(0, 0, 0, 1) solid 2rpx;
+}
+.noAgreeBtn {
+  color: rgba(0, 2, 2, 1);
+	background-color: rgba(249, 186, 23, 1);
+	font-size: 36rpx;
+	text-align: center;
+  margin-top:40rpx ;
+}

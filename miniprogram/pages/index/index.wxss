@@ -193,12 +193,12 @@ page {
 	color: rgba(0, 2, 2, 1);
 }
 .tisi{
-  width: 418rpx;
+  width:100%;
 	height: 62rpx;
 	color: rgba(80, 80, 80, 1);
 	font-size: 42rpx;
 	line-height: 150%;
-	text-align: left;
+	text-align: center;
   font-weight: bold;
   margin-top:32rpx ;
 }
@@ -324,8 +324,8 @@ label{
 .oldMan{
 	color: rgba(0, 2, 2, 1);
 	background-color: rgba(249, 186, 23, 1);
-	border-radius: 35rpx;
-	font-size: 28rpx;
+	border-radius: 45rpx;
+	font-size: 36rpx;
 	line-height: 100%;
   text-align: center;
   margin-top:104rpx;
@@ -333,12 +333,12 @@ label{
 .child{
 	color: rgba(0, 2, 2, 1);
 	background-color: rgba(255, 255, 255, 1);
-	border-radius: 35rpx;
-	font-size: 28rpx;
+	border-radius: 45rpx;
+	font-size: 36rpx;
 	line-height: 100%;
 	border: rgba(0, 0, 0, 1) solid 2rpx;
   text-align: center;
-  margin-top:24rpx;
+  margin-top:32rpx;
 }
 .commodity_screen {
   width: 100%;

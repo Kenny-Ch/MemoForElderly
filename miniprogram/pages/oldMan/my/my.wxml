@@ -20,16 +20,39 @@
     </view>
     <image src="../../../images/my/right.svg" class="rpic"></image>
   </view>
-  <view class="row list-item" style="border-bottom: 1px solid rgba(153, 153, 153, 0.1857142857142857);">
-    <image src="../../../images/my/fankun.svg" class="pic"></image>
+  <view class="row list-item" bindtap="jumpkefu">
+    <image src="../../../images/my/kefu.png" class="pic"></image>
     <view class="column">
-      <view class="title">反馈</view>
-      <view class="smalltitle">对你个人信息的编辑</view>
+      <view class="title">在线客服</view>
+      <view class="smalltitle">可与开发人员进行直接交流</view>
     </view>
     <image src="../../../images/my/right.svg" class="rpic"></image>
   </view>
+  <navigator class="row list-item" style="border-bottom: 1px solid rgba(153, 153, 153, 0.1857142857142857);" target="miniProgram" open-type="navigate" app-id="{{ appId }}" extra-data="{{ extraData }}" version="release" hover-class="none">
+    <image src="../../../images/my/fankun.svg" class="pic"></image>
+    <view class="column">
+      <view class="title">问题与反馈</view>
+      <view class="smalltitle">您可在问题社区进行反馈</view>
+    </view>
+    <image src="../../../images/my/right.svg" class="rpic"></image>
+  </navigator>
 </view>
 <view class="row bottom" style="justify-content: center;margin-bottom:32rpx">
   <view class="bottom-black">xx团队</view>
   <view class="bottom-yellow" style="margin-left:20rpx;">关于我们</view>
+</view>
+
+
+<view wx:if='{{sub==true}}'>
+  <view catchtouchmove="catchtouchmove" class="tips">
+    <view class="tips_box">
+      <view class="hint_view">
+        <view class="text">
+          <view class="my_text_bottom">此客服通道可询问您关于助记小程序的疑惑</view>
+        </view>
+      </view>
+      <button class="noAgreeBtn" style="width: 382rpx;min-height: 50rpx;border-radius: 20rpx;" open-type='contact'>在线客服</button>
+      <button bindtap="cancel" class="cancel" style="width: 382rpx;min-height: 50rpx;border-radius: 20rpx;">取消</button>
+    </view>
+  </view>
 </view>
