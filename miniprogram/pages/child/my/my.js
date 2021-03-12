@@ -294,22 +294,39 @@ Page({
     var monthDay = that.data.multiArray[0][e.detail.value[0]];
     var hours = that.data.multiArray[1][e.detail.value[1]];
     var minute = that.data.multiArray[2][e.detail.value[2]];
-
+    var month   //选择的月份
+    var day       //选择的日期
     if (monthDay === "今天") {
-      var month = date.getMonth()+1;
-      var day = date.getDate();
+      month = date.getMonth() + 1;
+      day = date.getDate();
       monthDay = month + "月" + day + "日";
     } else if (monthDay === "明天") {
       var date1 = new Date(date);
       date1.setDate(date.getDate() + 1);
-      monthDay = (date1.getMonth() + 1) + "月" + date1.getDate() + "日";
+      month=date1.getMonth() + 1
+      day=date1.getDate()
+      monthDay = month + "月" + day + "日";
 
     } else {
-      var month = monthDay.split("-")[0]; // 返回月
-      var day = monthDay.split("-")[1]; // 返回日
+      month = monthDay.split("-")[0]; // 返回月
+      day = monthDay.split("-")[1]; // 返回日
       monthDay = month + "月" + day + "日";
     }
-
+    var year=date.getFullYear()
+    if(month<date.getMonth()+1)
+      year=year+1
+    if(month<10)
+      month='0'+month
+    if(day<10)
+      day='0'+day
+    if(hours<10)
+      hours='0'+hours
+    if(minute<10)
+      minute='0'+minute
+    var reptime=year+'/'+month+'/'+day+' '+hours+':'+minute+':00'
+    console.log("日期：",reptime)
+    var choose_time=new Date(reptime)        //标准化Date时间
+    console.log("日期：",choose_time)
     var startDate = monthDay + " " + hours + ":" + minute;
     that.setData({
       startDate: startDate
