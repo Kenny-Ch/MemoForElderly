@@ -31,6 +31,7 @@ Page({
     restatement: false,
     edit: false,
     startDate: "选择您的定期提醒时间",
+    stdStartDate: '',
     content: "",
     recordAuth: false,
     multiArray: [
@@ -52,6 +53,13 @@ Page({
         }
       }
     })
+    // wx.scanCode({
+    //   success (res) {
+    //     console.log(res)
+    //   },fail: res => {
+    //     console.log(res)
+    //   }
+    // })
   },
 
   oldToUse: function (e) {
@@ -80,7 +88,7 @@ Page({
               if (res.confirm) {
                 wx.openSetting({
                   success: (res) => {
-                    if (res.authSetting['scope.record']) {
+                    if (res.authSetting['scope.userInfo']) {
                       //成功啦！
                     } else {
                       //失败了。。。。
@@ -155,10 +163,20 @@ Page({
   //数据保存
   saveData: function () {
     let content = this.data.content
-    let stratDate = this.data.startDate
+    let stratDate = this.data.stdStartDate
     this.setData({
       edit: false,
     })
+    if(content && stratDate) {
+
+    } else {
+      wx.showToast({
+        title: '输入不完整噢！',
+        duration: 1000,
+        icon:'error',
+        mask: true
+      })
+    }
   },
 
   //备忘录内容输入实时保存
@@ -281,7 +299,8 @@ Page({
                       dataLen: fileSize
                     },
                     success: res => {
-                      console.log('语音转化文字成功', res)
+                      console.log('语音转化文字成功', res.result)
+
                     },
                     fail: err => {
                       console.error('语音转化失败', err)
@@ -556,7 +575,8 @@ Page({
     console.log("日期：",choose_time)
     var startDate = monthDay + " " + hours + ":" + minute;
     that.setData({
-      startDate: startDate
+      startDate: startDate,
+      stdStartDate: choose_time
     })
   },
   //---------------------------------------------------------------------------------

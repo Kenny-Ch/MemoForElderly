@@ -3,7 +3,7 @@
 <view class="QRCard">
   <view class="bigword">绑定二维码</view>
   <view class="smallword">扫描该二维码或输入下方识别码进行绑定</view>
-  <image src="../../../images/my/QR.png" class="QRPic"></image>
+  <canvas class="QRPic" canvas-id="myQrcode"></canvas >
   <view class="QRNum">{{QRNum}}</view>
 </view>
 <view class="familyCard">
