@@ -61,7 +61,7 @@
   <view animation="{{animationData}}" class="commodity_attr_box column" wx:if="{{edit}}">
     <view class="row hh">
       <label class="label">备忘内容</label>
-      <input class="user_input" type="text" placeholder-style="color: rgb(98, 98, 98);" placeholder="输入您的定期备忘内容"/>
+      <input class="user_input" type="text" placeholder-style="color: rgb(98, 98, 98);" placeholder="输入您的定期备忘内容" bindinput="bindInputContent" value="{{content}}"/>
     </view>
     <view class="row hh">
       <label class="label">提醒时间</label>

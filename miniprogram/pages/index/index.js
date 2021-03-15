@@ -1,5 +1,6 @@
 //index.js
 const app = getApp()
+const db = wx.cloud.database()
 const recorderManager = wx.getRecorderManager()
 var util = require('../../utils/util.js');
 var date = new Date();
@@ -44,6 +45,77 @@ Page({
 
   onLoad: function () {
     let that = this
+    wx.showLoading({
+      title: '加载中',
+      mask: true
+    })
+    wx.cloud.callFunction({
+      name: 'login',
+      data: {},
+      success: res => {
+        console.log('获取openid成功', res.result)
+        app.globalData.openid = res.result.openid
+        db.collection('user').where({
+          openid: res.result.openid
+        }).get({
+          success: function (res) {
+            if (res.data.length == 0) {
+
+            } else {
+              app.globalData.info = res.data[0]
+              switch (res.data[0].identity) {
+                case 0:
+                  break;
+                case 1:
+                  that.setData({
+                    isOld: true
+                  })
+                  wx.cloud.callFunction({
+                    name: 'getMemo',
+                    data: {
+                      openid: app.globalData.openid,
+                      type: 0
+                    },
+                    success: (res) => {
+                      console.log('获取备忘成功：', res.result.data, res.result.errMsg)
+                      let things = []
+                      let data = res.result.data
+                      for (var i = 0; i < data.length; i++) {
+                        let obj = {
+                          title: data[i].content,
+                          time: data[i].time,
+                          id: data[i]._id
+                        }
+                        things.push(obj)
+                      }
+                      that.setData({
+                        things: things
+                      })
+                    },
+                    fail: (res) => {
+                      console.log('获取备忘失败', res)
+                    }
+                  })
+                  break;
+                case 2:
+                  that.setData({
+                    isChild: true
+                  })
+              }
+            }
+            wx.hideLoading({
+
+            })
+
+          },
+          fail: console.error
+        })
+
+      },
+      fail: err => {
+        console.error('获取openiid失败', err)
+      }
+    })
     wx.getSetting({
       success: res => {
         if (res.authSetting['scope.record']) {
@@ -53,6 +125,7 @@ Page({
         }
       }
     })
+
     // wx.scanCode({
     //   success (res) {
     //     console.log(res)
@@ -63,117 +136,287 @@ Page({
   },
 
   oldToUse: function (e) {
-    // 获取用户信息
-    wx.getSetting({
-      success: res => {
-        if (res.authSetting['scope.userInfo']) {
-          // 已经授权，可以直接调用 getUserInfo 获取头像昵称，不会弹框
-          wx.getUserInfo({
-            success: res => {
-              this.setData({
-                avatarUrl: res.userInfo.avatarUrl,
-                userInfo: res.userInfo,
-                isOld: true
-              })
-              app.globalData.userInfo = res.userInfo
-            }
-          })
-        } else {
-          wx.showModal({
-            title: '提示',
-            confirmText: '去设置',
-            cancelText: '取消',
-            content: '请授权方便您的使用噢~',
-            success: function (res) {
-              if (res.confirm) {
-                wx.openSetting({
-                  success: (res) => {
-                    if (res.authSetting['scope.userInfo']) {
-                      //成功啦！
-                    } else {
-                      //失败了。。。。
-                    }
+    let that = this
+    if (app.globalData.info) {
+      this.setData({
+        isOld: ture
+      })
+    } else {
+      // 获取用户信息
+      wx.getSetting({
+        success: res => {
+          if (res.authSetting['scope.userInfo']) {
+            // 已经授权，可以直接调用 getUserInfo 获取头像昵称，不会弹框
+            wx.getUserInfo({
+              success: res => {
+                that.setData({
+                  avatarUrl: res.userInfo.avatarUrl,
+                  userInfo: res.userInfo,
+                  isOld: true
+                })
+                app.globalData.info = {}
+                app.globalData.info.avatarUrl = res.userInfo.avatarUrl
+                console.log(res)
+
+                db.collection('user').add({
+                  // data 字段表示需新增的 JSON 数据
+                  data: {
+                    avatarUrl: res.userInfo.avatarUrl,
+                    nickname: res.userInfo.nickname,
+                    identity: 1,
+                    openid: app.globalData.openid
                   }
                 })
-              } else if (res.cancel) {
-
+                .then(res => {
+                  console.log('新增用户至user数据库成功！',res)
+                  app.globalData.info.nickname = res.userInfo.nickname,
+                  app.globalData.info.identity = 1
+                })
+                .catch(console.error)
               }
-            }
-          })
+            })
+          } else {
+            wx.showModal({
+              title: '提示',
+              confirmText: '去设置',
+              cancelText: '取消',
+              content: '请授权方便您的使用噢~',
+              success: function (res) {
+                if (res.confirm) {
+                  wx.openSetting({
+                    success: (res) => {
+                      if (res.authSetting['scope.userInfo']) {
+                        that.setData({
+                          avatarUrl: res.userInfo.avatarUrl,
+                          userInfo: res.userInfo,
+                          isOld: true
+                        })
+                        app.globalData.info = {}
+                        app.globalData.info.avatarUrl = res.userInfo.avatarUrl
+                        app.globalData.info.nickname = res.userInfo.nickname
+                        console.log(res)
+
+                        db.collection('user').add({
+                          // data 字段表示需新增的 JSON 数据
+                          data: {
+                            avatarUrl: res.userInfo.avatarUrl,
+                            nickname: res.userInfo.nickname,
+                            identity: 1,
+                            openid: app.globalData.openid
+                          }
+                        })
+                        .then(res => {
+                          console.log('新增用户至user数据库成功！',res)
+                          app.globalData.info.nickname = res.userInfo.nickname,
+                          app.globalData.info.identity = 1
+                        })
+                        .catch(console.error)
+                      } else {
+                        //失败了。。。。
+                      }
+                    }
+                  })
+                } else if (res.cancel) {
+
+                }
+              }
+            })
+          }
         }
-      }
-    })
+      })
+    }
+
   },
   jumpMy: function (e) {
     wx.navigateTo({
       url: '../oldMan/my/my',
     })
   },
-  childToUse:function(e){
-    wx.navigateTo({
-      url: '../child/my/my',
-    })
+  childToUse: function (e) {
+    let that = this
+    if (app.globalData.info) {
+      this.setData({
+        isChild: ture
+      })
+
+    } else {
+      // 获取用户信息
+      wx.getSetting({
+        success: res => {
+          if (res.authSetting['scope.userInfo']) {
+            // 已经授权，可以直接调用 getUserInfo 获取头像昵称，不会弹框
+            wx.getUserInfo({
+              success: res => {
+                that.setData({
+                  avatarUrl: res.userInfo.avatarUrl,
+                  userInfo: res.userInfo,
+                  isChild: true
+                })
+                app.globalData.info = {}
+                app.globalData.info.avatarUrl = res.userInfo.avatarUrl
+                console.log(res)
+
+                db.collection('user').add({
+                  // data 字段表示需新增的 JSON 数据
+                  data: {
+                    avatarUrl: res.userInfo.avatarUrl,
+                    nickname: res.userInfo.nickname,
+                    identity: 2,
+                    openid: app.globalData.openid
+                  }
+                })
+                .then(res => {
+                  console.log('新增用户至user数据库成功！',res)
+                  app.globalData.info.nickname = res.userInfo.nickname,
+                  app.globalData.info.identity = 2
+                  wx.navigateTo({
+                    url: '../child/my/my',
+                  })
+                })
+                .catch(console.error)
+              }
+            })
+          } else {
+            wx.showModal({
+              title: '提示',
+              confirmText: '去设置',
+              cancelText: '取消',
+              content: '请授权方便您的使用噢~',
+              success: function (res) {
+                if (res.confirm) {
+                  wx.openSetting({
+                    success: (res) => {
+                      if (res.authSetting['scope.userInfo']) {
+                        that.setData({
+                          avatarUrl: res.userInfo.avatarUrl,
+                          userInfo: res.userInfo,
+                          isChild: true
+                        })
+                        app.globalData.info = {}
+                        app.globalData.info.avatarUrl = res.userInfo.avatarUrl
+                        app.globalData.info.nickname = res.userInfo.nickname
+                        console.log(res)
+
+                        db.collection('user').add({
+                          // data 字段表示需新增的 JSON 数据
+                          data: {
+                            avatarUrl: res.userInfo.avatarUrl,
+                            nickname: res.userInfo.nickname,
+                            identity: 2,
+                            openid: app.globalData.openid
+                          }
+                        })
+                        .then(res => {
+                          console.log('新增用户至user数据库成功！',res)
+                          app.globalData.info.nickname = res.userInfo.nickname,
+                          app.globalData.info.identity = 2
+                          wx.navigateTo({
+                            url: '../child/my/my',
+                          })
+                        })
+                        .catch(console.error)
+                      } else {
+                        //失败了。。。。
+                      }
+                    }
+                  })
+                } else if (res.cancel) {
+
+                }
+              }
+            })
+          }
+        }
+      })
+    }
+    
   },
   //点击我显示底部弹出框
-  user_input:function(){
+  user_input: function () {
     this.showModal();
   },
   //显示对话框
   showModal: function () {
-   // 显示遮罩层
-   var animation = wx.createAnimation({
-     duration: 200,
-     timingFunction: "linear",
-     delay: 0
-   })
-   this.animation = animation
-   animation.translateY(300).step()
-   this.setData({
-     animationData: animation.export(),
-     edit:true,
-   })
-   setTimeout(function () {
-     animation.translateY(0).step()
-     this.setData({
-       animationData: animation.export()
-     })
-   }.bind(this), 200)
- },
- //隐藏对话框
- hideModal: function () {
-   // 隐藏遮罩层
-   var animation = wx.createAnimation({
-     duration: 200,
-     timingFunction: "linear",
-     delay: 0
-   })
-   this.animation = animation
-   animation.translateY(300).step()
-   this.setData({
-     animationData: animation.export(),
-   })
-   setTimeout(function () {
-     animation.translateY(0).step()
-     this.setData({
-       animationData: animation.export(),
-       edit: false
-     })
-   }.bind(this), 200)
+    // 显示遮罩层
+    var animation = wx.createAnimation({
+      duration: 200,
+      timingFunction: "linear",
+      delay: 0
+    })
+    this.animation = animation
+    animation.translateY(300).step()
+    this.setData({
+      animationData: animation.export(),
+      edit: true,
+    })
+    setTimeout(function () {
+      animation.translateY(0).step()
+      this.setData({
+        animationData: animation.export()
+      })
+    }.bind(this), 200)
+  },
+  //隐藏对话框
+  hideModal: function () {
+    // 隐藏遮罩层
+    var animation = wx.createAnimation({
+      duration: 200,
+      timingFunction: "linear",
+      delay: 0
+    })
+    this.animation = animation
+    animation.translateY(300).step()
+    this.setData({
+      animationData: animation.export(),
+    })
+    setTimeout(function () {
+      animation.translateY(0).step()
+      this.setData({
+        animationData: animation.export(),
+        edit: false
+      })
+    }.bind(this), 200)
   },
   //数据保存
   saveData: function () {
+    let that = this
     let content = this.data.content
-    let stratDate = this.data.stdStartDate
+    let startDate = this.data.stdStartDate
     this.setData({
       edit: false,
     })
-    if(content && stratDate) {
-
+    if (content && startDate) {
+      db.collection('memo').add({
+          // data 字段表示需新增的 JSON 数据
+          data: {
+            belong: app.globalData.openid,
+            content: content,
+            creator: app.globalData.openid,
+            finish: 0,
+            recordUrl: '',
+            time: startDate
+          }
+        })
+        .then(res => {
+          console.log('添加文字版备忘成功', res)
+          that.setData({
+            content: '',
+            startDate: '',
+            stdStartDate: null
+          })
+          wx.showToast({
+            title: '添加成功！',
+            duration: 1000,
+            icon: 'success',
+            mask: true
+          })
+        })
+        .catch(console.error)
     } else {
       wx.showToast({
         title: '输入不完整噢！',
         duration: 1000,
-        icon:'error',
+        icon: 'error',
         mask: true
       })
     }
@@ -198,29 +441,40 @@ Page({
               recordAuth: true
             })
           } else {
-            wx.showModal({
-              title: '提示',
-              confirmText: '去设置',
-              cancelText: '取消',
-              content: '请授权录音权限才能使用该功能噢~',
-              success: function (res) {
-                if (res.confirm) {
-                  wx.openSetting({
-                    success: (res) => {
-                      if (res.authSetting['scope.record']) {
-                        that.setData({
-                          recordAuth: true
-                        })
-                      } else {
-                        //失败了。。。。
-                      }
-                    }
-                  })
-                } else if (res.cancel) {
+            wx.authorize({
+              scope: "scope.record",
+              success: (res) => {
+                that.setData({
+                  recordAuth: true
+                })
+              },
+              fail: (res) => {
+                wx.showModal({
+                  title: '提示',
+                  confirmText: '去设置',
+                  cancelText: '取消',
+                  content: '请授权录音权限才能使用该功能噢~',
+                  success: function (res) {
+                    if (res.confirm) {
+                      wx.openSetting({
+                        success: (res) => {
+                          if (res.authSetting['scope.record']) {
+                            that.setData({
+                              recordAuth: true
+                            })
+                          } else {
+                            //失败了。。。。
+                          }
+                        }
+                      })
+                    } else if (res.cancel) {
 
-                }
+                    }
+                  }
+                })
               }
             })
+
           }
         }
       })
@@ -242,6 +496,9 @@ Page({
       }
       //开始录音
       recorderManager.start(options);
+      recorderManager.onStart((res) => {
+        console.log(res)
+      })
     }
   },
   handleRecordStop: function (e) {
@@ -277,7 +534,7 @@ Page({
                 filePath: tempFilePath,
                 success: function (event) {
                   wx.hideLoading()
-                  console.log("上传成功",event)
+                  console.log("上传成功", event)
                 },
                 fail: function (e) {
                   wx.hideLoading()
@@ -291,7 +548,7 @@ Page({
                 success(res) {
                   const base64 = wx.arrayBufferToBase64(res.data);
                   var fileSize = res.data.byteLength;
-                  console.log(res,base64, fileSize)
+                  console.log(res, base64, fileSize)
                   wx.cloud.callFunction({
                     name: 'sentenceRecognition',
                     data: {
@@ -308,7 +565,7 @@ Page({
                   })
                 }
               })
-              
+
             })
 
           }
@@ -540,8 +797,8 @@ Page({
     var monthDay = that.data.multiArray[0][e.detail.value[0]];
     var hours = that.data.multiArray[1][e.detail.value[1]];
     var minute = that.data.multiArray[2][e.detail.value[2]];
-    var month   //选择的月份
-    var day       //选择的日期
+    var month //选择的月份
+    var day //选择的日期
     if (monthDay === "今天") {
       month = date.getMonth() + 1;
       day = date.getDate();
@@ -549,8 +806,8 @@ Page({
     } else if (monthDay === "明天") {
       var date1 = new Date(date);
       date1.setDate(date.getDate() + 1);
-      month=date1.getMonth() + 1
-      day=date1.getDate()
+      month = date1.getMonth() + 1
+      day = date1.getDate()
       monthDay = month + "月" + day + "日";
 
     } else {
@@ -558,21 +815,21 @@ Page({
       day = monthDay.split("-")[1]; // 返回日
       monthDay = month + "月" + day + "日";
     }
-    var year=date.getFullYear()
-    if(month<date.getMonth()+1)
-      year=year+1
-    if(month<10)
-      month='0'+month
-    if(day<10)
-      day='0'+day
-    if(hours<10)
-      hours='0'+hours
-    if(minute<10)
-      minute='0'+minute
-    var reptime=year+'/'+month+'/'+day+' '+hours+':'+minute+':00'
-    console.log("日期：",reptime)
-    var choose_time=new Date(reptime)        //标准化Date时间
-    console.log("日期：",choose_time)
+    var year = date.getFullYear()
+    if (month < date.getMonth() + 1)
+      year = year + 1
+    if (month < 10)
+      month = '0' + month
+    if (day < 10)
+      day = '0' + day
+    if (hours < 10)
+      hours = '0' + hours
+    if (minute < 10)
+      minute = '0' + minute
+    var reptime = year + '/' + month + '/' + day + ' ' + hours + ':' + minute + ':00'
+    console.log("日期：", reptime)
+    var choose_time = new Date(reptime) //标准化Date时间
+    console.log("日期：", choose_time)
     var startDate = monthDay + " " + hours + ":" + minute;
     that.setData({
       startDate: startDate,
