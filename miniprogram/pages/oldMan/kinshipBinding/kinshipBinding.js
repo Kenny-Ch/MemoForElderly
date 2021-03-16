@@ -1,12 +1,13 @@
 // miniprogram/pages/oldMan/kinshipBinding/kinshipBinding.js
 import drawQrcode from '../../../utils/weapp.qrcode.esm'
+const app = getApp()
 Page({
 
   /**
    * 页面的初始数据
    */
   data: {
-    QRNum:"12345678",
+    QRNum:'',
     family:[
       {
         avarurl:'../../../images/my/testAvarurl.jpg',
@@ -24,7 +25,14 @@ Page({
   /**
    * 生命周期函数--监听页面加载
    */
-  onLoad: function (options) {console.log(getApp().globalData)
+  onLoad: function (options) {
+    wx.showLoading({
+      title: '加载中',
+      mask: true
+    })
+    this.setData({
+      QRNum: app.globalData.info.userid
+    })
     new Promise(function(resolve,reject){
       wx.getSystemInfo({
       success (res) {
@@ -39,7 +47,7 @@ Page({
         height: res,
         canvasId: 'myQrcode',
         // ctx: wx.createCanvasContext('myQrcode'),
-        text: 'h123456',
+        text: 'userid:' + app.globalData.info.userid,
         // v1.0.0+版本支持在二维码上绘制图片
         // image: {
         //   imageResource: getApp().globalData.userInfo.avatarUrl,
@@ -50,7 +58,9 @@ Page({
         // }
       })
     })
-    
+    wx.hideLoading({
+      success: (res) => {},
+    })
   },
 
   /**

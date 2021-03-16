@@ -49,27 +49,30 @@ Page({
       title: '加载中',
       mask: true
     })
+    //获取用户openid
     wx.cloud.callFunction({
       name: 'login',
       data: {},
       success: res => {
         console.log('获取openid成功', res.result)
         app.globalData.openid = res.result.openid
+        //利用openid获取用户在user的记录
         db.collection('user').where({
           openid: res.result.openid
         }).get({
           success: function (res) {
             if (res.data.length == 0) {
-
+              //新用户，无记录
             } else {
               app.globalData.info = res.data[0]
               switch (res.data[0].identity) {
                 case 0:
                   break;
-                case 1:
+                case 1://老人
                   that.setData({
                     isOld: true
                   })
+                  //获取老人的所有备忘
                   wx.cloud.callFunction({
                     name: 'getMemo',
                     data: {
@@ -84,7 +87,8 @@ Page({
                         let obj = {
                           title: data[i].content,
                           time: data[i].time,
-                          id: data[i]._id
+                          id: data[i]._id,
+                          finish: data[i].finish
                         }
                         things.push(obj)
                       }
@@ -97,15 +101,19 @@ Page({
                     }
                   })
                   break;
-                case 2:
+                case 2://子女界面
                   that.setData({
                     isChild: true
                   })
+                  wx.navigateTo({
+                    url: '../child/my/my',
+                  })
+                  break;
               }
-            }
-            wx.hideLoading({
+              wx.hideLoading({
 
-            })
+              })
+            }
 
           },
           fail: console.error
@@ -116,6 +124,7 @@ Page({
         console.error('获取openiid失败', err)
       }
     })
+    //检查是否有录音权限
     wx.getSetting({
       success: res => {
         if (res.authSetting['scope.record']) {
@@ -137,7 +146,7 @@ Page({
 
   oldToUse: function (e) {
     let that = this
-    if (app.globalData.info) {
+    if (app.globalData.info) {//一般不可能进入这个分支
       this.setData({
         isOld: ture
       })
@@ -157,20 +166,23 @@ Page({
                 app.globalData.info = {}
                 app.globalData.info.avatarUrl = res.userInfo.avatarUrl
                 console.log(res)
-
+                //存用户信息到数据库，并添加user记录
+                let userid = (new Date()).getTime().toString() + Math.ceil(Math.random()*10).toString()
                 db.collection('user').add({
                   // data 字段表示需新增的 JSON 数据
                   data: {
                     avatarUrl: res.userInfo.avatarUrl,
                     nickname: res.userInfo.nickname,
                     identity: 1,
-                    openid: app.globalData.openid
+                    openid: app.globalData.openid,
+                    userid: userid
                   }
                 })
                 .then(res => {
                   console.log('新增用户至user数据库成功！',res)
-                  app.globalData.info.nickname = res.userInfo.nickname,
+                  app.globalData.info.nickname = res.userInfo.nickname
                   app.globalData.info.identity = 1
+                  app.globalData.info.userid = userid
                 })
                 .catch(console.error)
               }
@@ -195,20 +207,23 @@ Page({
                         app.globalData.info.avatarUrl = res.userInfo.avatarUrl
                         app.globalData.info.nickname = res.userInfo.nickname
                         console.log(res)
-
+                        //存用户信息到数据库，并添加user记录
+                        let userid = (new Date()).getTime().toString() + Math.ceil(Math.random()*10).toString()
                         db.collection('user').add({
                           // data 字段表示需新增的 JSON 数据
                           data: {
                             avatarUrl: res.userInfo.avatarUrl,
                             nickname: res.userInfo.nickname,
                             identity: 1,
-                            openid: app.globalData.openid
+                            openid: app.globalData.openid,
+                            userid: userid
                           }
                         })
                         .then(res => {
                           console.log('新增用户至user数据库成功！',res)
-                          app.globalData.info.nickname = res.userInfo.nickname,
+                          app.globalData.info.nickname = res.userInfo.nickname
                           app.globalData.info.identity = 1
+                          app.globalData.info.userid = userid
                         })
                         .catch(console.error)
                       } else {
@@ -234,7 +249,7 @@ Page({
   },
   childToUse: function (e) {
     let that = this
-    if (app.globalData.info) {
+    if (app.globalData.info) {//一般不可能进入这个分支
       this.setData({
         isChild: ture
       })
@@ -255,20 +270,23 @@ Page({
                 app.globalData.info = {}
                 app.globalData.info.avatarUrl = res.userInfo.avatarUrl
                 console.log(res)
-
+                //存用户信息到数据库，并添加user记录
+                let userid = (new Date()).getTime().toString() + Math.ceil(Math.random()*10).toString()
                 db.collection('user').add({
                   // data 字段表示需新增的 JSON 数据
                   data: {
                     avatarUrl: res.userInfo.avatarUrl,
                     nickname: res.userInfo.nickname,
                     identity: 2,
-                    openid: app.globalData.openid
+                    openid: app.globalData.openid,
+                    userid: userid
                   }
                 })
                 .then(res => {
                   console.log('新增用户至user数据库成功！',res)
-                  app.globalData.info.nickname = res.userInfo.nickname,
+                  app.globalData.info.nickname = res.userInfo.nickname
                   app.globalData.info.identity = 2
+                  app.globalData.info.userid = userid
                   wx.navigateTo({
                     url: '../child/my/my',
                   })
@@ -296,20 +314,23 @@ Page({
                         app.globalData.info.avatarUrl = res.userInfo.avatarUrl
                         app.globalData.info.nickname = res.userInfo.nickname
                         console.log(res)
-
+                        //存用户信息到数据库，并添加user记录
+                        let userid = (new Date()).getTime().toString() + Math.ceil(Math.random()*10).toString()
                         db.collection('user').add({
                           // data 字段表示需新增的 JSON 数据
                           data: {
                             avatarUrl: res.userInfo.avatarUrl,
                             nickname: res.userInfo.nickname,
                             identity: 2,
-                            openid: app.globalData.openid
+                            openid: app.globalData.openid,
+                            userid: userid
                           }
                         })
                         .then(res => {
                           console.log('新增用户至user数据库成功！',res)
-                          app.globalData.info.nickname = res.userInfo.nickname,
+                          app.globalData.info.nickname = res.userInfo.nickname
                           app.globalData.info.identity = 2
+                          app.globalData.info.userid = userid
                           wx.navigateTo({
                             url: '../child/my/my',
                           })
@@ -426,6 +447,23 @@ Page({
   bindInputContent: function (e) {
     this.setData({
       content: e.detail.value
+    })
+  },
+
+  finish: function(e) {
+    let _id = e.target.dataset.id
+    wx.cloud.callFunction({
+      name: 'finishMemo',
+      data: {
+        _id: _id
+      },
+      success: res => {
+        console.log('备忘成功', res.result)
+
+      },
+      fail: err => {
+        console.error('备忘失败', err)
+      }
     })
   },
 
