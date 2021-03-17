@@ -5,8 +5,19 @@
 </view>
 <view wx:if="{{isOld==true}}">
   <!-- 备忘事件列表 -->
-  <view class="card" wx:for="{{things}}">
-    <view class="title">{{item.title}}</view>
+  <view class="card" wx:for="{{things}}" wx:key="{{index}}">
+    
+    <view wx:if="{{item.title.length>12&&item.showAll==false}}" class="row">
+      <view class="title">{{item.title}}</view>
+      <image src="../../images/xia.png" class="xia" data-index="{{index}}" bindtap="showAll"></image>
+    </view>
+    <view wx:if="{{item.title.length>12&&item.showAll==true}}" class="row">
+      <view class="title1">{{item.title}}</view>
+      <image src="../../images/xia.png" class="top" data-index="{{index}}" bindtap="hideAPart"></image>
+    </view>
+    <view wx:if="{{item.title.length<=12}}" class="row">
+      <view class="title">{{item.title}}</view>
+    </view>
     <view class="time">{{item.time}}</view>
     <view class="row">
       <view data-id="{{item.id}}" class="play" bindtap="play">播 放</view>
@@ -41,10 +52,10 @@
   <view wx:if="{{restatement==true}}">
     <view class="back" style="z-index: 110;">
       <view class="confirm_card">
-        <view class="black">在</view>
-        <view class="yellow">周三上午九点钟</view>
-        <view class="black">提醒你</view>
-        <view class="yellow">去医院取药</view>
+        <view class="black">提醒时间：</view>
+        <picker class='yellow' mode="multiSelector" bindchange="bindStartMultiPickerChange" bindtap='pickerTap' bindcolumnchange="bindMultiPickerColumnChange" value="{{multiIndex}}" range="{{multiArray}}">{{startDate}}</picker>
+        <view class="black">备忘事项：</view>
+        <input class="yellow" type="text" value="{{reContent}}"/>
         <button class="confirm">确 定</button>
         <view class="row">
             <button class="white" style="width: 195rpx;height: 90rpx;margin-right:48rpx;">重 录</button>

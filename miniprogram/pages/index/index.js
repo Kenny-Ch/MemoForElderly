@@ -31,7 +31,7 @@ Page({
     is_clock: false,
     restatement: false,
     edit: false,
-    startDate: "选择您的定期提醒时间",
+    startDate: "点击选择提醒时间",
     stdStartDate: '',
     content: "",
     recordAuth: false,
@@ -41,6 +41,7 @@ Page({
       [0, 10, 20]
     ],
     multiIndex: [0, 0, 0],
+    reContent:"去医院取药",
   },
 
   onLoad: function () {
@@ -63,6 +64,7 @@ Page({
           success: function (res) {
             if (res.data.length == 0) {
               //新用户，无记录
+              wx.hideLoading({})
             } else {
               app.globalData.info = res.data[0]
               switch (res.data[0].identity) {
@@ -86,8 +88,9 @@ Page({
                       for (var i = 0; i < data.length; i++) {
                         let obj = {
                           title: data[i].content,
-                          time: data[i].time,
+                          time: util.formatTime(data[i].time),
                           id: data[i]._id,
+                          showAll:false,
                           finish: data[i].finish
                         }
                         things.push(obj)
@@ -110,9 +113,7 @@ Page({
                   })
                   break;
               }
-              wx.hideLoading({
-
-              })
+              wx.hideLoading({})
             }
 
           },
@@ -122,6 +123,7 @@ Page({
       },
       fail: err => {
         console.error('获取openiid失败', err)
+        wx.hideLoading({})
       }
     })
     //检查是否有录音权限
@@ -143,7 +145,22 @@ Page({
     //   }
     // })
   },
-
+  showAll:function(e){
+    let index = e.target.dataset.index
+    var things=this.data.things
+    things[index].showAll=true
+    this.setData({
+      things:things
+    })
+  },
+  hideAPart:function(e){
+    let index = e.target.dataset.index
+    var things=this.data.things
+    things[index].showAll=false
+    this.setData({
+      things:things
+    })
+  },
   oldToUse: function (e) {
     let that = this
     if (app.globalData.info) {//一般不可能进入这个分支
@@ -595,6 +612,8 @@ Page({
                     },
                     success: res => {
                       console.log('语音转化文字成功', res.result)
+
+
 
                     },
                     fail: err => {

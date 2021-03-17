@@ -7,7 +7,6 @@ page {
 }
 .card{
   width: 682rpx;
-	height: 274rpx;
 	color: rgba(80, 80, 80, 1);
 	background-color: rgba(249, 186, 23, 1);
 	border-radius: 33rpx;
@@ -20,9 +19,24 @@ page {
   justify-content: center;
   margin-top: 20rpx;
   margin-bottom: 20rpx;
+  padding-top: 32rpx;
+  padding-bottom: 32rpx;
 }
 .title{
-  width: 500rpx;
+  width: 580rpx;
+	color: rgba(1, 2, 3, 1);
+	font-size: 48rpx;
+	line-height: 150%;
+	text-align: left;
+  font-weight: bold;
+  margin-left:32rpx ;
+  margin-bottom: 8rpx;
+  overflow:hidden;
+  text-overflow:ellipsis;
+  white-space:nowrap;
+}
+.title1{
+  width: 580rpx;
 	color: rgba(1, 2, 3, 1);
 	font-size: 48rpx;
 	line-height: 150%;
@@ -78,6 +92,20 @@ page {
 	font-size: 80rpx;
   color: rgba(255, 255, 255, 1);
   margin-left: 175rpx;
+}
+.xia{
+  width: 16px;
+	height: 8px;
+	font-size: 40px;
+	color: rgba(0, 2, 2, 1);
+}
+.top{
+  width: 16px;
+	height: 8px;
+	-webkit-transform: rotate(180deg);
+	transform: rotate(180deg);
+	font-size: 40px;
+	color: rgba(0, 2, 2, 1);
 }
 /* 底部固定组件  */
 .bottom{
