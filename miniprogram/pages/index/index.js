@@ -2,6 +2,7 @@
 const app = getApp()
 const db = wx.cloud.database()
 const recorderManager = wx.getRecorderManager()
+const innerAudioContext = wx.createInnerAudioContext()
 var util = require('../../utils/util.js');
 var date = new Date();
 var currentHours = date.getHours();
@@ -91,7 +92,8 @@ Page({
                           time: util.formatTime(data[i].time),
                           id: data[i]._id,
                           showAll:false,
-                          finish: data[i].finish
+                          finish: data[i].finish,
+                          recordUrl: data[i].recordUrl
                         }
                         things.push(obj)
                       }
@@ -189,7 +191,7 @@ Page({
                   // data 字段表示需新增的 JSON 数据
                   data: {
                     avatarUrl: res.userInfo.avatarUrl,
-                    nickname: res.userInfo.nickname,
+                    nickName: res.userInfo.nickName,
                     identity: 1,
                     openid: app.globalData.openid,
                     userid: userid
@@ -197,7 +199,7 @@ Page({
                 })
                 .then(res => {
                   console.log('新增用户至user数据库成功！',res)
-                  app.globalData.info.nickname = res.userInfo.nickname
+                  app.globalData.info.nickName = res.userInfo.nickName
                   app.globalData.info.identity = 1
                   app.globalData.info.userid = userid
                 })
@@ -222,7 +224,7 @@ Page({
                         })
                         app.globalData.info = {}
                         app.globalData.info.avatarUrl = res.userInfo.avatarUrl
-                        app.globalData.info.nickname = res.userInfo.nickname
+                        app.globalData.info.nickName = res.userInfo.nickName
                         console.log(res)
                         //存用户信息到数据库，并添加user记录
                         let userid = (new Date()).getTime().toString() + Math.ceil(Math.random()*10).toString()
@@ -230,7 +232,7 @@ Page({
                           // data 字段表示需新增的 JSON 数据
                           data: {
                             avatarUrl: res.userInfo.avatarUrl,
-                            nickname: res.userInfo.nickname,
+                            nickName: res.userInfo.nickName,
                             identity: 1,
                             openid: app.globalData.openid,
                             userid: userid
@@ -238,7 +240,7 @@ Page({
                         })
                         .then(res => {
                           console.log('新增用户至user数据库成功！',res)
-                          app.globalData.info.nickname = res.userInfo.nickname
+                          app.globalData.info.nickName = res.userInfo.nickName
                           app.globalData.info.identity = 1
                           app.globalData.info.userid = userid
                         })
@@ -293,7 +295,7 @@ Page({
                   // data 字段表示需新增的 JSON 数据
                   data: {
                     avatarUrl: res.userInfo.avatarUrl,
-                    nickname: res.userInfo.nickname,
+                    nickName: res.userInfo.nickName,
                     identity: 2,
                     openid: app.globalData.openid,
                     userid: userid
@@ -301,7 +303,7 @@ Page({
                 })
                 .then(res => {
                   console.log('新增用户至user数据库成功！',res)
-                  app.globalData.info.nickname = res.userInfo.nickname
+                  app.globalData.info.nickName = res.userInfo.nickName
                   app.globalData.info.identity = 2
                   app.globalData.info.userid = userid
                   wx.navigateTo({
@@ -329,7 +331,7 @@ Page({
                         })
                         app.globalData.info = {}
                         app.globalData.info.avatarUrl = res.userInfo.avatarUrl
-                        app.globalData.info.nickname = res.userInfo.nickname
+                        app.globalData.info.nickName = res.userInfo.nickName
                         console.log(res)
                         //存用户信息到数据库，并添加user记录
                         let userid = (new Date()).getTime().toString() + Math.ceil(Math.random()*10).toString()
@@ -337,7 +339,7 @@ Page({
                           // data 字段表示需新增的 JSON 数据
                           data: {
                             avatarUrl: res.userInfo.avatarUrl,
-                            nickname: res.userInfo.nickname,
+                            nickName: res.userInfo.nickName,
                             identity: 2,
                             openid: app.globalData.openid,
                             userid: userid
@@ -345,7 +347,7 @@ Page({
                         })
                         .then(res => {
                           console.log('新增用户至user数据库成功！',res)
-                          app.globalData.info.nickname = res.userInfo.nickname
+                          app.globalData.info.nickName = res.userInfo.nickName
                           app.globalData.info.identity = 2
                           app.globalData.info.userid = userid
                           wx.navigateTo({
@@ -424,32 +426,63 @@ Page({
       edit: false,
     })
     if (content && startDate) {
-      db.collection('memo').add({
-          // data 字段表示需新增的 JSON 数据
-          data: {
-            belong: app.globalData.openid,
-            content: content,
-            creator: app.globalData.openid,
-            finish: 0,
-            recordUrl: '',
-            time: startDate
+      wx.cloud.callFunction({
+        name: 'textToVoice',
+        data: {
+          text: content,
+          openid: app.globalData.openid
+        },
+        success: res => {
+          console.log('文字转化语音成功', res.result)
+          if(res.result != null) {
+            db.collection('memo').add({
+              // data 字段表示需新增的 JSON 数据
+              data: {
+                belong: app.globalData.openid,
+                content: content,
+                creator: app.globalData.openid,
+                finish: 0,
+                recordUrl: res.result,
+                time: startDate
+              }
+            })
+            .then(res => {
+              console.log('添加文字版备忘成功', res)
+              that.setData({
+                content: '',
+                startDate: '',
+                stdStartDate: null
+              })
+              wx.showToast({
+                title: '添加成功！',
+                duration: 1000,
+                icon: 'success',
+                mask: true
+              })
+            })
+            .catch(console.error)
+          } else {
+            console.log('文字转语音失败')
+            wx.showToast({
+              title: '保持失败！',
+              duration: 1000,
+              icon: 'error',
+              mask: true
+            })
           }
-        })
-        .then(res => {
-          console.log('添加文字版备忘成功', res)
-          that.setData({
-            content: '',
-            startDate: '',
-            stdStartDate: null
-          })
+          
+        },
+        fail: err => {
+          console.error('文字转语音失败失败', err)
           wx.showToast({
-            title: '添加成功！',
+            title: '保持失败！',
             duration: 1000,
-            icon: 'success',
+            icon: 'error',
             mask: true
           })
-        })
-        .catch(console.error)
+        }
+      })
+      
     } else {
       wx.showToast({
         title: '输入不完整噢！',
@@ -460,6 +493,22 @@ Page({
     }
   },
 
+  //播放备忘
+  play: function(e) {
+    let url = e.target.dataset.id
+    innerAudioContext.src = null
+    innerAudioContext.src = url
+    innerAudioContext.play()
+    innerAudioContext.onError((res)=>{
+      wx.showToast({
+        title: '播放错误，请稍后再试~',
+        duration: 1000,
+        icon: 'error',
+        mask: true
+      })
+    })
+  },
+
   //备忘录内容输入实时保存
   bindInputContent: function (e) {
     this.setData({
@@ -467,6 +516,7 @@ Page({
     })
   },
 
+  //备忘完成
   finish: function(e) {
     let _id = e.target.dataset.id
     wx.cloud.callFunction({
@@ -584,12 +634,14 @@ Page({
             let timestamp = util.formatDate(new Date());
             //上传录制的音频
             new Promise(() => {
+              let fileID
               wx.cloud.uploadFile({
                 cloudPath: "uploadVoices/" + timestamp + '-' + this.randomNum(10000, 99999) + '.mp3',
                 filePath: tempFilePath,
                 success: function (event) {
                   wx.hideLoading()
                   console.log("上传成功", event)
+                  fileID = event.fileID
                 },
                 fail: function (e) {
                   wx.hideLoading()
@@ -603,7 +655,6 @@ Page({
                 success(res) {
                   const base64 = wx.arrayBufferToBase64(res.data);
                   var fileSize = res.data.byteLength;
-                  console.log(res, base64, fileSize)
                   wx.cloud.callFunction({
                     name: 'sentenceRecognition',
                     data: {
@@ -611,8 +662,14 @@ Page({
                       dataLen: fileSize
                     },
                     success: res => {
-                      console.log('语音转化文字成功', res.result)
-
+                      console.log('语音转化文字成功:', res.result)
+                      let content
+                      if(res.result) {
+                        content = res.result
+                      } else {
+                        content = "语音备忘"
+                      }
+                      console.log(content,fileID)
 
 
                     },

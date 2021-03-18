@@ -1,6 +1,7 @@
 // miniprogram/pages/oldMan/kinshipBinding/kinshipBinding.js
 import drawQrcode from '../../../utils/weapp.qrcode.esm'
 const app = getApp()
+const db = wx.cloud.database()
 Page({
 
   /**
@@ -26,6 +27,7 @@ Page({
    * 生命周期函数--监听页面加载
    */
   onLoad: function (options) {
+    let that = this
     wx.showLoading({
       title: '加载中',
       mask: true
@@ -56,6 +58,17 @@ Page({
         //   dWidth: 60,
         //   dHeight: 60
         // }
+      })
+      new Promise(function(resolve, reject) {
+        let res = db.collection('bindingRelation').where({
+          observed: app.globalData.openid
+        }).get()
+        resolve(res)
+      }).then(res => {
+        console.log(res)
+        that.setData({
+          
+        })
       })
     })
     wx.hideLoading({

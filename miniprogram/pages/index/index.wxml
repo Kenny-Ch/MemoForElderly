@@ -20,7 +20,7 @@
     </view>
     <view class="time">{{item.time}}</view>
     <view class="row">
-      <view data-id="{{item.id}}" class="play" bindtap="play">播 放</view>
+      <view data-id="{{item.recordUrl}}" class="play" bindtap="play">播 放</view>
       <view data-id="{{item.id}}" class="finish" bindtap="finish" wx:if="{{item.finish!=1}}">完 成</view>
       <image class="more" src="../../images/more.svg"></image>
     </view>
