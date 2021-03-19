@@ -86,6 +86,11 @@ page {
   align-items: center;
   justify-content: center;
 }
+.finish1{
+  width: 172rpx;
+	height: 80rpx;
+  margin-left:32rpx ;
+}
 .more{
   width: 80rpx;
 	height: 80rpx;

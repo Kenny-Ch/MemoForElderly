@@ -647,6 +647,7 @@ Page({
     }
   },
   handleRecordStop: function (e) {
+    var that=this
     if (this.data.recordAuth) {
       recorderManager.stop() //结束录音
       this.setData({
@@ -709,6 +710,10 @@ Page({
                       } else {
                         content = "语音备忘"
                       }
+                      that.setData({
+                        restatement:true,
+                        reContent:content
+                      })
                       console.log(content,fileID)
 
 
@@ -726,6 +731,11 @@ Page({
         })
       }
     }
+  },
+  cancelRestate:function(e){
+    this.setData({
+      restatement:false,
+    })
   },
   handleTouchMove: function (e) {
     if (this.data.recordAuth) {

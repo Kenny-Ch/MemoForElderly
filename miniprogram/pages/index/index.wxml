@@ -22,6 +22,7 @@
     <view class="row">
       <view data-id="{{item.recordUrl}}" class="play" bindtap="play">播 放</view>
       <view data-id="{{item.id}}" class="finish" bindtap="finish" wx:if="{{item.finish!=1}}">完 成</view>
+      <view class="finish1"wx:else></view>
       <image class="more" src="../../images/more.svg" data-index="{{index}}" bindtap="clickme"></image>
     </view>
     <view class="row" style="margin-top:24rpx;" wx:if="{{item.showMore==true}}">
@@ -63,7 +64,7 @@
         <button class="confirm">确 定</button>
         <view class="row">
             <button class="white" style="width: 195rpx;height: 90rpx;margin-right:48rpx;">重 录</button>
-            <button class="white" style="width: 195rpx;height: 90rpx;">取 消</button>
+            <button class="white" style="width: 195rpx;height: 90rpx;" bindtap="cancelRestate">取 消</button>
         </view>
       </view>
     </view>
