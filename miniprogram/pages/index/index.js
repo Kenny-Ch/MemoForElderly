@@ -92,6 +92,7 @@ Page({
                           time: util.formatTime(data[i].time),
                           id: data[i]._id,
                           showAll:false,
+                          showMore:false,
                           finish: data[i].finish,
                           recordUrl: data[i].recordUrl
                         }
@@ -147,6 +148,22 @@ Page({
     //   }
     // })
   },
+  //-------------------更多弹出框--------------------------------------------------
+  clickme:function(e){
+    let index = e.target.dataset.index
+    var things=this.data.things
+    things[index].showMore=!things[index].showMore
+    this.setData({
+      things:things
+    })
+  },
+  jumpRegular:function(e){
+    let title = e.target.dataset.title
+    wx.navigateTo({
+      url: '../oldMan/addReminder/addReminder?title='+title,
+    })
+  },
+  //-------------------------------------------------------------------------------------------------
   showAll:function(e){
     let index = e.target.dataset.index
     var things=this.data.things

@@ -2,7 +2,7 @@
 <view class="title">定期提醒设置</view>
 <view class="row hh" style="margin-top: 28rpx;">
   <label class="label">备忘内容</label>
-  <input class="user_input" type="text" placeholder-style="color: rgb(98, 98, 98);" placeholder="输入您的定期备忘内容"/>
+  <input class="user_input" type="text" placeholder-style="color: rgb(98, 98, 98);" value="{{title}}" placeholder="输入您的定期备忘内容"/>
 </view>
 <view class="row" style="margin-bottom: 28rpx;">
   <view class="row frequency" wx:if="{{frequencyIndex==1}}">

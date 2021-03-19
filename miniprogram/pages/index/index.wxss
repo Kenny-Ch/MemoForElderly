@@ -394,3 +394,13 @@ label{
 	border-top-right-radius: 40rpx;
 	border-top-left-radius: 40rpx;
 }
+
+.picText{
+  width: 300rpx;
+  font-size: 36rpx;
+	line-height: 150%;
+  text-align: center;
+  color:white;
+  font-weight: bold;
+}
+

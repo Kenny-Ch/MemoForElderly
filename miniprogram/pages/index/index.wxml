@@ -22,7 +22,11 @@
     <view class="row">
       <view data-id="{{item.recordUrl}}" class="play" bindtap="play">播 放</view>
       <view data-id="{{item.id}}" class="finish" bindtap="finish" wx:if="{{item.finish!=1}}">完 成</view>
-      <image class="more" src="../../images/more.svg"></image>
+      <image class="more" src="../../images/more.svg" data-index="{{index}}" bindtap="clickme"></image>
+    </view>
+    <view class="row" style="margin-top:24rpx;" wx:if="{{item.showMore==true}}">
+        <view class="picText" data-title="{{item.title}}" bindtap="jumpRegular">定期</view>
+        <view class="picText" style="margin-left:48rpx;">删除</view>
     </view>
   </view>
 
@@ -80,19 +84,4 @@
     </view>
     <button class="save" bindtap="saveData">保 存</button>
   </view>
-  <!-- <view wx:if="{{edit==true}}">
-    <view class="back" style="z-index: 110;">
-      <view class="edit_card">
-        <view class="row hh">
-          <label class="label">备忘内容</label>
-          <input class="user_input" type="text" placeholder-style="color: rgb(98, 98, 98);" placeholder="输入您的定期备忘内容" bindinput="bindInputContent" value="{{content}}"/>
-        </view>
-        <view class="row hh">
-          <label class="label">提醒时间</label>
-          <picker class='user_input' mode="multiSelector" bindchange="bindStartMultiPickerChange" bindtap='pickerTap' bindcolumnchange="bindMultiPickerColumnChange" value="{{multiIndex}}" range="{{multiArray}}">{{startDate}}</picker>
-        </view>
-        <button class="save" bindtap="saveData">保 存</button>
-      </view>
-    </view>
-  </view> -->
 </view>

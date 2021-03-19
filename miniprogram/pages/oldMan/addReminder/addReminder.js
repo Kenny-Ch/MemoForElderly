@@ -11,13 +11,18 @@ Page({
     dateList:['星期一','星期二','星期三','星期四','星期五','星期六','星期天'],
     dateIndex:0,
     isOn:false,
+    title:"",
   },
 
   /**
    * 生命周期函数--监听页面加载
    */
   onLoad: function (options) {
-
+    if(options.title!=undefined){
+      this.setData({
+        title:options.title
+      })
+    }
   },
   changeFrequency(e){
     console.log("选择的频率为",this.data.frequencyList[e.detail.value])
