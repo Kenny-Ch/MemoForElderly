@@ -60,14 +60,30 @@ Page({
         // }
       })
       new Promise(function(resolve, reject) {
-        let res = db.collection('bindingRelation').where({
-          observed: app.globalData.openid
-        }).get()
-        resolve(res)
+        wx.cloud.callFunction({
+          name: 'getBindList',
+          data: {
+            userid: app.globalData.info.userid,
+            type: 0
+          },
+          success: res => {
+            console.log('获取绑定用户列表成功', res)
+            resolve(res.result.list)
+          },
+          fail: err => {
+            console.error('备忘失败', err)
+          }
+        })
       }).then(res => {
-        console.log(res)
+        let family = []
+        for(let i=0; i<res.length; i++) {
+          let map = {}
+          map.avarurl = res[0].observerInfo[0].avatarUrl,
+          map.name = res[0].observerInfo[0].nickName + " - " + res[0].observerIdentity
+          family.push(map)
+        }
         that.setData({
-          
+          family: family
         })
       })
     })

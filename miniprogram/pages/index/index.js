@@ -140,14 +140,6 @@ Page({
         }
       }
     })
-
-    // wx.scanCode({
-    //   success (res) {
-    //     console.log(res)
-    //   },fail: res => {
-    //     console.log(res)
-    //   }
-    // })
   },
   //-------------------更多弹出框--------------------------------------------------
   clickme:function(e){
@@ -733,40 +725,51 @@ Page({
   confirmVoiceMemo:function() {
     let fileID
     let that = this
-    that.uploadVioceFile(this.data.vioceTempFilePath,function(res) {
-      console.log('上传语音到云存储成功：', res)
-      fileID = res.fileID
-      db.collection('memo').add({
-        // data 字段表示需新增的 JSON 数据
-        data: {
-          belong: app.globalData.openid,
-          content: that.data.reContent,
-          creator: app.globalData.openid,
-          finish: 0,
-          recordUrl: fileID,
-          time: that.data.stdStartDate
-        }
-      })
-      .then(res => {
-        console.log('添加语音版备忘成功', res)
-        that.setData({
-          restatement:false,
-        vioceTempFilePath: "",
-        reContent: "",
-        startDate: "点击选择提醒时间",
-        stdStartDate: null
+    let content = that.data.reContent
+    let startTime = that.data.stdStartDate
+    if(content && startTime) {
+      that.uploadVioceFile(this.data.vioceTempFilePath,function(res) {
+        console.log('上传语音到云存储成功：', res)
+        fileID = res.fileID
+        db.collection('memo').add({
+          // data 字段表示需新增的 JSON 数据
+          data: {
+            belong: app.globalData.openid,
+            content: content,
+            creator: app.globalData.openid,
+            finish: 0,
+            recordUrl: fileID,
+            time: startTime
+          }
         })
-        wx.showToast({
-          title: '添加成功！',
-          duration: 1000,
-          icon: 'success',
-          mask: true
+        .then(res => {
+          console.log('添加语音版备忘成功', res)
+          that.setData({
+            restatement:false,
+          vioceTempFilePath: "",
+          reContent: "",
+          startDate: "点击选择提醒时间",
+          stdStartDate: null
+          })
+          wx.showToast({
+            title: '添加成功！',
+            duration: 1000,
+            icon: 'success',
+            mask: true
+          })
         })
+        .catch(console.error)
+      },function(err) {
+        console.log('上传语音到云存储失败：', err)
       })
-      .catch(console.error)
-    },function(err) {
-      console.log('上传语音到云存储失败：', err)
-    })
+    } else {
+      wx.showToast({
+        title: '输入不完整噢！',
+        duration: 1000,
+        icon: 'error',
+        mask: true
+      })
+    }
   },
 
   //上传语音文件到云存储
