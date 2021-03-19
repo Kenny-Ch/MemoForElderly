@@ -3,10 +3,9 @@
   <button class="oldMan" style="width: 623rpx;height: 88rpx;" bindgetuserinfo="oldToUse"  open-type='getUserInfo'>我需要使用备忘录</button>
   <button class="child" style="width: 623rpx;height: 88rpx;" bindtap="childToUse">我是子女</button>
 </view>
-<view wx:if="{{isOld==true}}" style="margin-bottom:36rpx;">
+<view wx:if="{{isOld==true}}" style="margin-bottom:128rpx;">
   <!-- 备忘事件列表 -->
   <view class="card" wx:for="{{things}}" wx:key="{{index}}">
-    
     <view wx:if="{{item.title.length>12&&item.showAll==false}}" class="row">
       <view class="title">{{item.title}}</view>
       <image src="../../images/xia.png" class="xia" data-index="{{index}}" bindtap="showAll"></image>
