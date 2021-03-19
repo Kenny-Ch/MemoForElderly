@@ -60,8 +60,8 @@
         <view class="black">提醒时间：</view>
         <picker class='yellow' mode="multiSelector" bindchange="bindStartMultiPickerChange" bindtap='pickerTap' bindcolumnchange="bindMultiPickerColumnChange" value="{{multiIndex}}" range="{{multiArray}}">{{startDate}}</picker>
         <view class="black">备忘事项：</view>
-        <input class="yellow" type="text" value="{{reContent}}"/>
-        <button class="confirm">确 定</button>
+        <input class="yellow" type="text" value="{{reContent}}"bindinput="bindReContentChange"/>
+        <button class="confirm" bindtap="confirmVoiceMemo">确 定</button>
         <view class="row">
             <button class="white" style="width: 195rpx;height: 90rpx;margin-right:48rpx;">重 录</button>
             <button class="white" style="width: 195rpx;height: 90rpx;" bindtap="cancelRestate">取 消</button>

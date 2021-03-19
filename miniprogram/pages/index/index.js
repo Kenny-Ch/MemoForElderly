@@ -43,6 +43,7 @@ Page({
     ],
     multiIndex: [0, 0, 0],
     reContent:"去医院取药",
+    vioceTempFilePath:"",//生产录音时产生的临时路径，用于上传云存储
   },
 
   onLoad: function () {
@@ -490,7 +491,7 @@ Page({
               console.log('添加文字版备忘成功', res)
               that.setData({
                 content: '',
-                startDate: '',
+                startDate: '点击选择提醒时间',
                 stdStartDate: null
               })
               wx.showToast({
@@ -549,10 +550,17 @@ Page({
     })
   },
 
-  //备忘录内容输入实时保存
+  //文字备忘录内容输入实时保存
   bindInputContent: function (e) {
     this.setData({
       content: e.detail.value
+    })
+  },
+
+  //语音转文字备忘内容输入实时保存
+  bindReContentChange: function (e) {
+    this.setData({
+      reContent: e.detail.value
     })
   },
 
@@ -669,26 +677,14 @@ Page({
             //进行语音发送
             console.log(res)
             var tempFilePath = res.tempFilePath;
+            that.setData({
+              vioceTempFilePath: tempFilePath
+            })
             wx.showLoading({
               title: '语音检索中',
             })
-            let timestamp = util.formatDate(new Date());
             //上传录制的音频
             new Promise(() => {
-              let fileID
-              wx.cloud.uploadFile({
-                cloudPath: "uploadVoices/" + timestamp + '-' + this.randomNum(10000, 99999) + '.mp3',
-                filePath: tempFilePath,
-                success: function (event) {
-                  wx.hideLoading()
-                  console.log("上传成功", event)
-                  fileID = event.fileID
-                },
-                fail: function (e) {
-                  wx.hideLoading()
-                  console.log(e)
-                }
-              })
               // 语音转文字
               const fs = wx.getFileSystemManager();
               fs.readFile({
@@ -710,15 +706,16 @@ Page({
                       } else {
                         content = "语音备忘"
                       }
+                      wx.hideLoading()
                       that.setData({
                         restatement:true,
                         reContent:content
                       })
-                      console.log(content,fileID)
 
 
                     },
                     fail: err => {
+                      wx.hideLoading()
                       console.error('语音转化失败', err)
                     }
                   })
@@ -732,9 +729,64 @@ Page({
       }
     }
   },
+
+  confirmVoiceMemo:function() {
+    let fileID
+    let that = this
+    that.uploadVioceFile(this.data.vioceTempFilePath,function(res) {
+      console.log('上传语音到云存储成功：', res)
+      fileID = res.fileID
+      db.collection('memo').add({
+        // data 字段表示需新增的 JSON 数据
+        data: {
+          belong: app.globalData.openid,
+          content: that.data.reContent,
+          creator: app.globalData.openid,
+          finish: 0,
+          recordUrl: fileID,
+          time: that.data.stdStartDate
+        }
+      })
+      .then(res => {
+        console.log('添加语音版备忘成功', res)
+        that.setData({
+          restatement:false,
+        vioceTempFilePath: "",
+        reContent: "",
+        startDate: "点击选择提醒时间",
+        stdStartDate: null
+        })
+        wx.showToast({
+          title: '添加成功！',
+          duration: 1000,
+          icon: 'success',
+          mask: true
+        })
+      })
+      .catch(console.error)
+    },function(err) {
+      console.log('上传语音到云存储失败：', err)
+    })
+  },
+
+  //上传语音文件到云存储
+  uploadVioceFile: function(tempFilePath, successCallback, failCallback) {
+    let timestamp = util.formatDate(new Date());
+    wx.cloud.uploadFile({
+      cloudPath: "uploadVoices/" + timestamp + '-' + this.randomNum(10000, 99999) + '.mp3',
+      filePath: tempFilePath,
+      success: successCallback,
+      fail: failCallback
+    })
+  },
+
   cancelRestate:function(e){
     this.setData({
       restatement:false,
+      vioceTempFilePath: "",
+      reContent: "",
+      startDate: "点击选择提醒时间",
+      stdStartDate: null
     })
   },
   handleTouchMove: function (e) {
