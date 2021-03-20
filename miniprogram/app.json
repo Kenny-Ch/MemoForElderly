@@ -6,7 +6,8 @@
     "pages/oldMan/addReminder/addReminder",
     "pages/oldMan/kinshipBinding/kinshipBinding",
     "pages/child/kinshipBinding/kinshipBinding",
-    "pages/child/my/my"
+    "pages/child/my/my",
+    "pages/test/test"
   ],
   "window": {
     "backgroundColor": "#F6F6F6",

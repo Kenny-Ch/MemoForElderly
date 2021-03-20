@@ -6,19 +6,24 @@ page {
   align-items: center;
 }
 .card{
+  margin-top: 20rpx;
+  margin-bottom: 32rpx;
+  position: relative;
+  left: 0px;
+  transition: 0.5s;
+}
+.content-scroll{
   width: 682rpx;
-	color: rgba(80, 80, 80, 1);
+  line-height: 50px;
+}
+.leftcard{
+  width: 682rpx;
+  color: rgba(80, 80, 80, 1);
 	background-color: rgba(249, 186, 23, 1);
 	border-radius: 33rpx;
 	font-size: 28rpx;
 	line-height: 150%;
   text-align: center;
-  display: flex;
-  flex-direction: column;
-  align-items: left;
-  justify-content: center;
-  margin-top: 20rpx;
-  margin-bottom: 32rpx;
   padding-top: 32rpx;
   padding-bottom: 32rpx;
 }
@@ -34,6 +39,45 @@ page {
   overflow:hidden;
   text-overflow:ellipsis;
   white-space:nowrap;
+}
+.rightcard{
+  width:200rpx;
+	font-size: 28rpx;
+  text-align: center;
+  margin-left: 20rpx;
+}
+.dingqi{
+  width: 100rpx;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  color: rgba(80, 80, 80, 1);
+  background-color: rgba(254, 244, 226, 1);
+  border-top-left-radius: 33rpx;
+  border-bottom-left-radius: 33rpx;
+  font-size: 40rpx;
+  font-weight: bold;
+	line-height: 150%;
+  text-align: center;
+  
+}
+.dell{
+  width: 100rpx;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+	color: rgba(80, 80, 80, 1);
+  background-color: rgba(249, 186, 23, 1);
+  border-top-right-radius: 33rpx;
+  border-bottom-right-radius: 33rpx;
+  font-size: 40rpx;
+  font-weight: bold;
+	line-height: 150%;
+	text-align: center;
 }
 .title1{
   width: 580rpx;
@@ -398,14 +442,5 @@ label{
 	padding-bottom:64rpx ;
 	border-top-right-radius: 40rpx;
 	border-top-left-radius: 40rpx;
-}
-
-.picText{
-  width: 300rpx;
-  font-size: 36rpx;
-	line-height: 150%;
-  text-align: center;
-  color:white;
-  font-weight: bold;
 }
 

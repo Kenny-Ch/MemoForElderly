@@ -93,8 +93,11 @@ Page({
                           time: util.formatTime(data[i].time),
                           id: data[i]._id,
                           showAll:false,
-                          showMore:false,
+                          // showMore:false,
+                          _leftTxt: '0rpx',
+                          scrollFlag: false,
                           finish: data[i].finish,
+                          height:90,
                           recordUrl: data[i].recordUrl
                         }
                         things.push(obj)
@@ -142,12 +145,48 @@ Page({
     })
   },
   //-------------------更多弹出框--------------------------------------------------
-  clickme:function(e){
+  async clickme(e){
     let index = e.target.dataset.index
     var things=this.data.things
-    things[index].showMore=!things[index].showMore
-    this.setData({
-      things:things
+    if(things[index].scrollFlag==false){
+      for(let item in things){
+        if(things[item].scrollFlag==true){
+          things[item]._leftTxt="0rpx"
+          things[item].scrollFlag=false
+        }
+      }
+      things[index]._leftTxt="-220rpx"
+      things[index].scrollFlag=true
+      await this.queryHeight(index)
+      this.setData({
+        things:things
+      })
+    }else{
+      things[index]._leftTxt="0rpx"
+      things[index].scrollFlag=false
+      this.setData({
+        things:things
+      })
+    }
+    // let index = e.target.dataset.index
+    // var things=this.data.things
+    // things[index].showMore=!things[index].showMore
+    // this.setData({
+    //   things:things
+    // })
+  },
+  async queryHeight(index){
+    var query = wx.createSelectorQuery();
+    var things=this.data.things
+    var that=this
+    query.selectAll('#card').boundingClientRect()
+    query.exec(function (res) {
+      //res就是 所有标签为mjltest的元素的信息 的数组
+      //取高度
+      things[index].height=res[0][index].height
+      that.setData({
+        things:things
+      })
     })
   },
   jumpRegular:function(e){
