@@ -5,31 +5,34 @@
 </view>
 <view wx:if="{{isOld==true}}" style="margin-bottom:128rpx;">
   <!-- 备忘事件列表 -->
-  <view class="card" wx:for="{{things}}" wx:key="{{index}}">
-    <view wx:if="{{item.title.length>12&&item.showAll==false}}" class="row">
-      <view class="title">{{item.title}}</view>
-      <image src="../../images/xia.png" class="xia" data-index="{{index}}" bindtap="showAll"></image>
-    </view>
-    <view wx:if="{{item.title.length>12&&item.showAll==true}}" class="row">
-      <view class="title1">{{item.title}}</view>
-      <image src="../../images/xia.png" class="top" data-index="{{index}}" bindtap="hideAPart"></image>
-    </view>
-    <view wx:if="{{item.title.length<=12}}" class="row">
-      <view class="title">{{item.title}}</view>
-    </view>
-    <view class="time">{{item.time}}</view>
-    <view class="row">
-      <view data-id="{{item.recordUrl}}" class="play" bindtap="play">播 放</view>
-      <view data-id="{{item.id}}" class="finish" bindtap="finish" wx:if="{{item.finish!=1}}">完 成</view>
-      <view class="finish1"wx:else></view>
-      <image class="more" src="../../images/more.svg" data-index="{{index}}" bindtap="clickme"></image>
-    </view>
-    <view class="row" style="margin-top:24rpx;" wx:if="{{item.showMore==true}}">
-        <view class="picText" data-title="{{item.title}}" bindtap="jumpRegular">定期</view>
-        <view class="picText" style="margin-left:48rpx;">删除</view>
+  <view class="content-scroll">
+    <view class="card row" id='card' wx:for="{{things}}" wx:key="{{index}}" style="left:{{item._leftTxt}};width:calc(682rpx - {{item._leftTxt}})">
+      <view class="column leftcard" >
+        <view wx:if="{{item.title.length>12&&item.showAll==false}}" class="row" >
+          <view class="title">{{item.title}}</view>
+          <image src="../../images/xia.png" class="xia" data-index="{{index}}" bindtap="showAll"></image>
+        </view>
+        <view wx:if="{{item.title.length>12&&item.showAll==true}}" class="row">
+          <view class="title1">{{item.title}}</view>
+          <image src="../../images/xia.png" class="top" data-index="{{index}}" bindtap="hideAPart"></image>
+        </view>
+        <view wx:if="{{item.title.length<=12}}" class="row">
+          <view class="title">{{item.title}}</view>
+        </view>
+        <view class="time">{{item.time}}</view>
+        <view class="row">
+          <view data-id="{{item.recordUrl}}" class="play" bindtap="play">播 放</view>
+          <view data-id="{{item.id}}" class="finish" bindtap="finish" wx:if="{{item.finish!=1}}">完 成</view>
+          <view class="finish1"wx:else></view>
+          <image class="more" src="../../images/more.svg" data-index="{{index}}" bindtap="clickme"></image>
+        </view>
+      </view>  
+      <view class="rightcard row" style="height:{{item.height}}px;" wx:if="{{item.scrollFlag==true}}">
+        <view class="dingqi" data-title="{{item.title}}" bindtap="jumpRegular">定期</view>
+        <view class="dell">删除</view>
+      </view>
     </view>
   </view>
-
   <!-- 底部固定组件 -->
   <view class="bottom">
     <view class="input" bindtap="user_input">输入</view>

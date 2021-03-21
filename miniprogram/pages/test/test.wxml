@@ -1,0 +1,11 @@
+<!--miniprogram/pages/test/test.wxml-->
+<view class="content1">
+  <view class="content-scroll">
+      <view class="content-scroll-text" style="left:{{_leftTxt}};width:calc(600rpx - {{_leftTxt}})" bindtap="_touch"> 
+      不实心不---------------------------------------1。
+    </view>
+    <view class="content-scroll-bt" style="left:calc(600rpx - {{_leftBt}}) ; width:{{_leftBt}}" bindtap="shanchu">
+      <view class="content-scroll-bt-shanchu">删除</view>
+    </view>
+  </view>
+</view>
