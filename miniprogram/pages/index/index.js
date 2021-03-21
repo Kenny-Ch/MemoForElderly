@@ -141,6 +141,74 @@ Page({
       }
     })
   },
+
+  //新人授权成功处理用户信息
+  setNewUserInfo: function(res, identity) {
+    let that = this
+    if(identity == 0) {
+      that.setData({
+        avatarUrl: res.userInfo.avatarUrl,
+        userInfo: res.userInfo,
+        isOld: true
+      })
+      app.globalData.info = {}
+      app.globalData.info.avatarUrl = res.userInfo.avatarUrl
+      app.globalData.info.nickName = res.userInfo.nickName
+      console.log(res)
+      //存用户信息到数据库，并添加user记录
+      let userid = (new Date()).getTime().toString() + Math.ceil(Math.random()*10).toString()
+      db.collection('user').add({
+        // data 字段表示需新增的 JSON 数据
+        data: {
+          avatarUrl: res.userInfo.avatarUrl,
+          nickName: res.userInfo.nickName,
+          identity: 1,
+          openid: app.globalData.openid,
+          userid: userid
+        }
+      })
+      .then(res => {
+        console.log('新增用户至user数据库成功！',res)
+        app.globalData.info.nickName = res.userInfo.nickName
+        app.globalData.info.identity = 1
+        app.globalData.info.userid = userid
+      })
+      .catch(console.error)
+    } else if(identity == 1) {
+      that.setData({
+        avatarUrl: res.userInfo.avatarUrl,
+        userInfo: res.userInfo,
+        isChild: true
+      })
+      app.globalData.info = {}
+      app.globalData.info.avatarUrl = res.userInfo.avatarUrl
+      app.globalData.info.nickName = res.userInfo.nickName
+      console.log(res)
+      //存用户信息到数据库，并添加user记录
+      let userid = (new Date()).getTime().toString() + Math.ceil(Math.random()*10).toString()
+      db.collection('user').add({
+        // data 字段表示需新增的 JSON 数据
+        data: {
+          avatarUrl: res.userInfo.avatarUrl,
+          nickName: res.userInfo.nickName,
+          identity: 2,
+          openid: app.globalData.openid,
+          userid: userid
+        }
+      })
+      .then(res => {
+        console.log('新增用户至user数据库成功！',res)
+        app.globalData.info.nickName = res.userInfo.nickName
+        app.globalData.info.identity = 2
+        app.globalData.info.userid = userid
+        wx.navigateTo({
+          url: '../child/my/my',
+        })
+      })
+      .catch(console.error)
+    }
+  },
+
   //-------------------更多弹出框--------------------------------------------------
   clickme:function(e){
     let index = e.target.dataset.index
@@ -173,7 +241,7 @@ Page({
       things:things
     })
   },
-  oldToUse: function (e) {
+  oldToUse: function (e) {console.log(e)
     let that = this
     if (app.globalData.info) {//一般不可能进入这个分支
       this.setData({
@@ -188,93 +256,31 @@ Page({
         success: function (res) {
           if (res.confirm) {
             console.log('用户点击确定')
-            wx.getSetting({
-              success: res => {
-                if (res.authSetting['scope.userInfo']) {
-                  // 已经授权，可以直接调用 getUserInfo 获取头像昵称，不会弹框
-                  wx.getUserInfo({
-                    success: res => {
-                      that.setData({
-                        avatarUrl: res.userInfo.avatarUrl,
-                        userInfo: res.userInfo,
-                        isOld: true
-                      })
-                      app.globalData.info = {}
-                      app.globalData.info.avatarUrl = res.userInfo.avatarUrl
-                      console.log(res)
-                      //存用户信息到数据库，并添加user记录
-                      let userid = (new Date()).getTime().toString() + Math.ceil(Math.random()*10).toString()
-                      db.collection('user').add({
-                        // data 字段表示需新增的 JSON 数据
-                        data: {
-                          avatarUrl: res.userInfo.avatarUrl,
-                          nickName: res.userInfo.nickName,
-                          identity: 1,
-                          openid: app.globalData.openid,
-                          userid: userid
-                        }
-                      })
-                      .then(res => {
-                        console.log('新增用户至user数据库成功！',res)
-                        app.globalData.info.nickName = res.userInfo.nickName
-                        app.globalData.info.identity = 1
-                        app.globalData.info.userid = userid
-                      })
-                      .catch(console.error)
-                    }
-                  })
-                } else {
-                  wx.showModal({
-                    title: '提示',
-                    confirmText: '去设置',
-                    cancelText: '取消',
-                    content: '请授权方便您的使用噢~',
-                    success: function (res) {
-                      if (res.confirm) {
-                        wx.openSetting({
-                          success: (res) => {
-                            if (res.authSetting['scope.userInfo']) {
-                              that.setData({
-                                avatarUrl: res.userInfo.avatarUrl,
-                                userInfo: res.userInfo,
-                                isOld: true
-                              })
-                              app.globalData.info = {}
-                              app.globalData.info.avatarUrl = res.userInfo.avatarUrl
-                              app.globalData.info.nickName = res.userInfo.nickName
-                              console.log(res)
-                              //存用户信息到数据库，并添加user记录
-                              let userid = (new Date()).getTime().toString() + Math.ceil(Math.random()*10).toString()
-                              db.collection('user').add({
-                                // data 字段表示需新增的 JSON 数据
-                                data: {
-                                  avatarUrl: res.userInfo.avatarUrl,
-                                  nickName: res.userInfo.nickName,
-                                  identity: 1,
-                                  openid: app.globalData.openid,
-                                  userid: userid
-                                }
-                              })
-                              .then(res => {
-                                console.log('新增用户至user数据库成功！',res)
-                                app.globalData.info.nickName = res.userInfo.nickName
-                                app.globalData.info.identity = 1
-                                app.globalData.info.userid = userid
-                              })
-                              .catch(console.error)
-                            } else {
-                              //失败了。。。。
-                            }
-                          }
-                        })
-                      } else if (res.cancel) {
-      
-                      }
-                    }
+            if(typeof wx.getUserProfile == 'function') {
+              console.log('调用getUserProfile')
+              wx.getUserProfile({
+                desc:'您的信息仅作为个人展示噢',
+                success: (res) => {
+                  console.log('获取用户信息成功', res)
+                  that.setNewUserInfo(res,0)
+                },
+                fail: (res) =>{
+                  console.log('获取用户信息失败',res)
+                  wx.showToast({
+                    title: '信息授权失败~',
+                    duration: 1000,
+                    icon: 'error',
+                    mask: true
                   })
                 }
-              }
-            })
+              })
+            } else {
+              wx.showModal({
+                title: '提示',
+                content: '当前微信版本过低，无法使用该功能，请升级到最新微信版本后重试。'
+              })
+            }
+            
           } else if (res.cancel) {
             console.log('用户点击取消')
           }
@@ -303,100 +309,29 @@ Page({
         success: function (res) {
           if (res.confirm) {
             console.log('用户点击确定')
-            // 获取用户信息
-            wx.getSetting({
-              success: res => {
-                if (res.authSetting['scope.userInfo']) {
-                  // 已经授权，可以直接调用 getUserInfo 获取头像昵称，不会弹框
-                  wx.getUserInfo({
-                    success: res => {
-                      that.setData({
-                        avatarUrl: res.userInfo.avatarUrl,
-                        userInfo: res.userInfo,
-                        isChild: true
-                      })
-                      app.globalData.info = {}
-                      app.globalData.info.avatarUrl = res.userInfo.avatarUrl
-                      console.log(res)
-                      //存用户信息到数据库，并添加user记录
-                      let userid = (new Date()).getTime().toString() + Math.ceil(Math.random()*10).toString()
-                      db.collection('user').add({
-                        // data 字段表示需新增的 JSON 数据
-                        data: {
-                          avatarUrl: res.userInfo.avatarUrl,
-                          nickName: res.userInfo.nickName,
-                          identity: 2,
-                          openid: app.globalData.openid,
-                          userid: userid
-                        }
-                      })
-                      .then(res => {
-                        console.log('新增用户至user数据库成功！',res)
-                        app.globalData.info.nickName = res.userInfo.nickName
-                        app.globalData.info.identity = 2
-                        app.globalData.info.userid = userid
-                        wx.navigateTo({
-                          url: '../child/my/my',
-                        })
-                      })
-                      .catch(console.error)
-                    }
-                  })
-                } else {
-                  wx.showModal({
-                    title: '提示',
-                    confirmText: '去设置',
-                    cancelText: '取消',
-                    content: '请授权方便您的使用噢~',
-                    success: function (res) {
-                      if (res.confirm) {
-                        wx.openSetting({
-                          success: (res) => {
-                            if (res.authSetting['scope.userInfo']) {
-                              that.setData({
-                                avatarUrl: res.userInfo.avatarUrl,
-                                userInfo: res.userInfo,
-                                isChild: true
-                              })
-                              app.globalData.info = {}
-                              app.globalData.info.avatarUrl = res.userInfo.avatarUrl
-                              app.globalData.info.nickName = res.userInfo.nickName
-                              console.log(res)
-                              //存用户信息到数据库，并添加user记录
-                              let userid = (new Date()).getTime().toString() + Math.ceil(Math.random()*10).toString()
-                              db.collection('user').add({
-                                // data 字段表示需新增的 JSON 数据
-                                data: {
-                                  avatarUrl: res.userInfo.avatarUrl,
-                                  nickName: res.userInfo.nickName,
-                                  identity: 2,
-                                  openid: app.globalData.openid,
-                                  userid: userid
-                                }
-                              })
-                              .then(res => {
-                                console.log('新增用户至user数据库成功！',res)
-                                app.globalData.info.nickName = res.userInfo.nickName
-                                app.globalData.info.identity = 2
-                                app.globalData.info.userid = userid
-                                wx.navigateTo({
-                                  url: '../child/my/my',
-                                })
-                              })
-                              .catch(console.error)
-                            } else {
-                              //失败了。。。。
-                            }
-                          }
-                        })
-                      } else if (res.cancel) {
-
-                      }
-                    }
+            if(typeof wx.getUserProfile == 'function') {
+              wx.getUserProfile({
+                desc:'您的信息仅作为个人展示噢',
+                success: (res) => {
+                  console.log('获取用户信息成功', res)
+                  that.setNewUserInfo(res,1)
+                },
+                fail: (res) =>{
+                  console.log('获取用户信息失败',res)
+                  wx.showToast({
+                    title: '信息授权失败~',
+                    duration: 1000,
+                    icon: 'error',
+                    mask: true
                   })
                 }
-              }
-            })
+              })
+            } else {
+              wx.showModal({
+                title: '提示',
+                content: '当前微信版本过低，无法使用该功能，请升级到最新微信版本后重试。'
+              })
+            }
           } else if (res.cancel) {
             console.log('用户点击取消')
           }

@@ -1,6 +1,6 @@
 <view wx:if="{{isOld==false&&isChild==false}}">
   <image src="../../images/introduce.png" class="intro"></image>
-  <button class="oldMan" style="width: 623rpx;height: 88rpx;" bindgetuserinfo="oldToUse"  open-type='getUserInfo'>我需要使用备忘录</button>
+  <button class="oldMan" style="width: 623rpx;height: 88rpx;" bindtap="oldToUse">我需要使用备忘录</button>
   <button class="child" style="width: 623rpx;height: 88rpx;" bindtap="childToUse">我是子女</button>
 </view>
 <view wx:if="{{isOld==true}}" style="margin-bottom:128rpx;">
