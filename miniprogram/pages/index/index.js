@@ -380,6 +380,10 @@ Page({
   },
   //点击我显示底部弹出框
   user_input: function () {
+    wx.requestSubscribeMessage({
+      tmplIds: ['GnLGROy6j9ElGm0FNzXnF4k_0zZy1kWYHuwMJ2iez6s'],
+      success (res) { console.log(res)}
+    })
     this.showModal();
   },
   //显示对话框
@@ -450,7 +454,8 @@ Page({
                 creator: app.globalData.openid,
                 finish: 0,
                 recordUrl: res.result,
-                time: startDate
+                time: startDate,
+                isRegular:0
               }
             })
             .then(res => {
@@ -471,7 +476,7 @@ Page({
           } else {
             console.log('文字转语音失败')
             wx.showToast({
-              title: '保持失败！',
+              title: '保存失败！',
               duration: 1000,
               icon: 'error',
               mask: true
@@ -482,7 +487,7 @@ Page({
         fail: err => {
           console.error('文字转语音失败失败', err)
           wx.showToast({
-            title: '保持失败！',
+            title: '保存失败！',
             duration: 1000,
             icon: 'error',
             mask: true
@@ -713,7 +718,8 @@ Page({
             creator: app.globalData.openid,
             finish: 0,
             recordUrl: fileID,
-            time: startTime
+            time: startTime,
+            isRegular: 0
           }
         })
         .then(res => {

@@ -19,11 +19,11 @@
     </view>
     <view class="column medium_card">
       <view class="card_title">添加备忘事项</view>
-      <input type="text" placeholder="备忘内容" placeholder-style="color: rgba(80, 80, 80, 1);" class="input_frame"/>
+      <input type="text" placeholder="备忘内容" placeholder-style="color: rgba(80, 80, 80, 1);" class="input_frame" bindinput="bindinputchange"/>
       <picker class='input_frame row' mode="multiSelector" bindchange="bindStartMultiPickerChange" bindtap='pickerTap' bindcolumnchange="bindMultiPickerColumnChange" value="{{multiIndex}}" range="{{multiArray}}">
         {{startDate}}
       </picker>
-      <button class="add" style="width: 583rpx;height: 68rpx;"  bindtap="oldToUse">添加</button>
+      <button class="add" style="width: 583rpx;height: 68rpx;"  bindtap="oldToUse" data-openid="{{item.openid}}" data-index="{{index}}">添加</button>
       <view class="setReminder">设置定期备忘</view>
     </view>
     <view class="column bottom_card" wx:if="{{item.reminders.length!=0}}">
