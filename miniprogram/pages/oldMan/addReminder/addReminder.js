@@ -1,4 +1,6 @@
 // miniprogram/pages/oldMan/addReminder/addReminder.js
+const app = getApp()
+const db = wx.cloud.database()
 Page({
 
   /**
@@ -48,6 +50,111 @@ Page({
       times:e.detail.value
     })
   },
+
+  //保存备忘
+  saveData: function() {
+    let that = this
+    let content = this.data.title
+    let frequencyIndex = this.data.frequencyIndex
+    let dateIndex = this.data.dateIndex
+    let memtionTime = this.data.times    
+
+    if (content && memtionTime.length == 5) {
+      //处理
+      let weekday = (dateIndex+1)%7
+      let regularTime
+      if(frequencyIndex == 0) {
+        regularTime =  parseInt(memtionTime.slice(0,2))*10000 + parseInt(memtionTime.slice(3,5))*100
+      } else if(frequencyIndex == 1) {
+        regularTime =  weekday*1000000 + parseInt(memtionTime.slice(0,2))*10000 + parseInt(memtionTime.slice(3,5))*100
+      }
+
+      wx.cloud.callFunction({
+        name: 'textToVoice',
+        data: {
+          text: content,
+          openid: app.globalData.openid
+        },
+        success: res => {
+          console.log('文字转化语音成功', res.result)
+          if(res.result != null) {
+            db.collection('memo').add({
+              // data 字段表示需新增的 JSON 数据
+              data: {
+                belong: app.globalData.openid,
+                content: content,
+                creator: app.globalData.openid,
+                finish: 0,
+                recordUrl: res.result,
+                isRegular: 1,
+                finish: 0,
+                regularType: frequencyIndex,
+                regularTime: regularTime
+              }
+            })
+            .then(res => {
+              console.log('添加文字版备忘成功', res)
+              that.setData({
+                content: '',
+              })
+              wx.showToast({
+                title: '添加成功！',
+                duration: 1000,
+                icon: 'success',
+                mask: true,
+                success:()=>{
+                  let pages = getCurrentPages(); // 当前页，
+                  let prevPage = pages[pages.length - 2]; // 上一页
+                  prevPage.setData({
+                    freshNow: 1,
+                  })
+
+                  wx.navigateBack({
+                    delta: 1,
+                  })
+                }
+              })
+            })
+            .catch(console.error)
+          } else {
+            console.log('文字转语音失败')
+            wx.showToast({
+              title: '保持失败！',
+              duration: 1000,
+              icon: 'error',
+              mask: true
+            })
+          }
+          
+        },
+        fail: err => {
+          console.error('文字转语音失败失败', err)
+          wx.showToast({
+            title: '保持失败！',
+            duration: 1000,
+            icon: 'error',
+            mask: true
+          })
+        }
+      })
+      
+    } else {
+      wx.showToast({
+        title: '输入不完整噢！',
+        duration: 1000,
+        icon: 'error',
+        mask: true
+      })
+    }
+  },
+
+  //备忘内容输入更新
+  bindTitleInput: function(e){
+    this.setData({
+      title: e.detail.value
+    })
+  },
+
   /**
    * 生命周期函数--监听页面初次渲染完成
    */

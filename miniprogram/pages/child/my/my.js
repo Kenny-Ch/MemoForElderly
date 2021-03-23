@@ -2,6 +2,7 @@
 var date = new Date();
 var currentHours = date.getHours();
 var currentMinute = date.getMinutes();
+const app = getApp()
 Page({
 
   /**
@@ -57,12 +58,54 @@ Page({
    */
   onLoad: function (options) {
     var that=this
-    if(that.data.familys.length>0){
-      var one=[]
-      that.setData({
-        person:one.concat(that.data.familys[0])
-      })
-    }
+    wx.cloud.callFunction({
+      name: 'getMemo',
+      data: {
+        type: 1,
+        userid: app.globalData.info.userid
+      },
+      success: res => {
+        console.log('获取备忘成功', res.result)
+        let familyArr = []
+        let pre = res.result
+        for(let i=0; i<pre.length; i++) {
+          let reminderss = []
+          let finishNum = 0
+          for(let j=0; j<pre[i].memos.length; j++) {
+            if(pre[i].memos[j].finish == 1) finishNum++;
+            let o = {
+              id: pre[i].memos[j]._id,
+              thing: pre[i].memos[j].content,
+              time: pre[i].memos[j].time?that.timeToFormat(pre[i].memos[j].time,2):that.timeToFormat(pre[i].memos[j].regularTime,pre[i].memos[j].regularType),
+              isfinish: pre[i].memos[j].finish
+            }
+            reminderss.push(o)
+          }
+          let obj = {
+            relationship: pre[i].observedIdentity,
+            taskNum:pre[i].memos.length,
+            finishNum:finishNum,
+            name: pre[i].observedInfo[0].nickName,
+            portrait:pre[i].observedInfo[0].avatarUrl,
+            reminders:reminderss
+          }
+          familyArr.push(obj)
+        }
+        that.setData({
+          familys: familyArr
+        })
+        if(that.data.familys.length>0){
+          var one=[]
+          that.setData({
+            person:one.concat(that.data.familys[0])
+          })
+        }
+      },
+      fail: err => {
+        console.error('获取备忘失败', err)
+      }
+    })
+    
     
   },
   //点击我显示底部弹出框
@@ -331,6 +374,37 @@ Page({
     that.setData({
       startDate: startDate
     })
+  },
+
+  //数据库拿取的时间转换成输出格式字符串
+  timeToFormat(time,type) {
+    let dayToStr ={
+      "0": "日",
+      "1": "一",
+      "2": "二",
+      "3": "三",
+      "4": "四",
+      "5": "五",
+      "6": "六",
+    }
+    if(type == 0) {
+      //regularType = 0 每天类型
+      let t = time.toString()
+      let hour = t.slice(0,2)
+      let minute = t.slice(2,4)
+      return "每日" + hour + ":" + minute
+    } else if(type == 1){
+      //regularType = 1 每周类型
+      let t = time.toString()
+      let week = t.slice(0,1)
+      let hour = t.slice(1,3)
+      let minute = t.slice(3,5)
+      return "每周" + dayToStr[week] + " " + hour + ":" + minute
+    } else if(type == 2) {
+      //一次性备忘
+      let t = new Date(time)
+      return t.getFullYear() + "年" + (t.getMonth()+1) + "月" + t.getDate() + "日 " + (t.getHours()<10?"0"+t.getHours():t.getHours()) + ":" + (t.getMinutes()<10?"0"+t.getMinutes():t.getHours())
+    }
   },
   //---------------------------------------------------------------------------------
   /**
