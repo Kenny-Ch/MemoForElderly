@@ -42,8 +42,8 @@ Page({
       [0, 10, 20]
     ],
     multiIndex: [0, 0, 0],
-    reContent:"去医院取药",
-    vioceTempFilePath:"",//生产录音时产生的临时路径，用于上传云存储
+    reContent: "去医院取药",
+    vioceTempFilePath: "", //生产录音时产生的临时路径，用于上传云存储
   },
 
   onLoad: function () {
@@ -72,7 +72,7 @@ Page({
               switch (res.data[0].identity) {
                 case 0:
                   break;
-                case 1://老人
+                case 1: //老人
                   that.setData({
                     isOld: true
                   })
@@ -88,16 +88,49 @@ Page({
                       let things = []
                       let data = res.result.data
                       for (var i = 0; i < data.length; i++) {
+                        let time
+                        if (data[i].time) {
+                          time = util.formatTime(data[i].time)
+                        } else {
+                          let dayToStr ={
+                            "0": "日",
+                            "1": "一",
+                            "2": "二",
+                            "3": "三",
+                            "4": "四",
+                            "5": "五",
+                            "6": "六",
+                          }
+                          let str
+                          if (data[i].regularType == 0) {
+                            str = "每天"
+                            let ttt = data[i].regularTime
+                            let hour = Math.floor(ttt / 10000)
+                            ttt = ttt - hour * 10000
+                            let minute = Math.floor(ttt / 100)
+                            str = str + (hour < 10 ? "0" + hour.toString() : hour.toString()) + ":" + (minute < 10 ? "0" + minute.toString() : minute.toString())
+                          } else if (data[i].regularType == 1) {
+                            str = "每周"
+                            let ttt = data[i].regularTime
+                            let week = Math.floor(ttt / 1000000)
+                            ttt = ttt - week * 1000000
+                            let hour = Math.floor(ttt / 10000)
+                            ttt = ttt - hour * 10000
+                            let minute = Math.floor(ttt / 100)
+                            str = str + dayToStr[week.toString()] + (hour < 10 ? "0" + hour.toString() : hour.toString()) + ":" + (minute < 10 ? "0" + minute.toString() : minute.toString())
+                          }
+                          time = str
+                        }
                         let obj = {
                           title: data[i].content,
-                          time: util.formatTime(data[i].time),
+                          time: time,
                           id: data[i]._id,
-                          showAll:false,
+                          showAll: false,
                           // showMore:false,
                           _leftTxt: '0rpx',
                           scrollFlag: false,
                           finish: data[i].finish,
-                          height:90,
+                          height: 90,
                           recordUrl: data[i].recordUrl
                         }
                         things.push(obj)
@@ -111,7 +144,7 @@ Page({
                     }
                   })
                   break;
-                case 2://子女界面
+                case 2: //子女界面
                   that.setData({
                     isChild: true
                   })
@@ -146,9 +179,9 @@ Page({
   },
 
   //新人授权成功处理用户信息
-  setNewUserInfo: function(res, identity) {
+  setNewUserInfo: function (res, identity) {
     let that = this
-    if(identity == 0) {
+    if (identity == 0) {
       that.setData({
         avatarUrl: res.userInfo.avatarUrl,
         userInfo: res.userInfo,
@@ -159,25 +192,25 @@ Page({
       app.globalData.info.nickName = res.userInfo.nickName
       console.log(res)
       //存用户信息到数据库，并添加user记录
-      let userid = (new Date()).getTime().toString() + Math.ceil(Math.random()*10).toString()
+      let userid = (new Date()).getTime().toString() + Math.ceil(Math.random() * 10).toString()
       db.collection('user').add({
-        // data 字段表示需新增的 JSON 数据
-        data: {
-          avatarUrl: res.userInfo.avatarUrl,
-          nickName: res.userInfo.nickName,
-          identity: 1,
-          openid: app.globalData.openid,
-          userid: userid
-        }
-      })
-      .then(res => {
-        console.log('新增用户至user数据库成功！',res)
-        app.globalData.info.nickName = res.userInfo.nickName
-        app.globalData.info.identity = 1
-        app.globalData.info.userid = userid
-      })
-      .catch(console.error)
-    } else if(identity == 1) {
+          // data 字段表示需新增的 JSON 数据
+          data: {
+            avatarUrl: res.userInfo.avatarUrl,
+            nickName: res.userInfo.nickName,
+            identity: 1,
+            openid: app.globalData.openid,
+            userid: userid
+          }
+        })
+        .then(res => {
+          console.log('新增用户至user数据库成功！', res)
+          app.globalData.info.nickName = res.userInfo.nickName
+          app.globalData.info.identity = 1
+          app.globalData.info.userid = userid
+        })
+        .catch(console.error)
+    } else if (identity == 1) {
       that.setData({
         avatarUrl: res.userInfo.avatarUrl,
         userInfo: res.userInfo,
@@ -188,52 +221,52 @@ Page({
       app.globalData.info.nickName = res.userInfo.nickName
       console.log(res)
       //存用户信息到数据库，并添加user记录
-      let userid = (new Date()).getTime().toString() + Math.ceil(Math.random()*10).toString()
+      let userid = (new Date()).getTime().toString() + Math.ceil(Math.random() * 10).toString()
       db.collection('user').add({
-        // data 字段表示需新增的 JSON 数据
-        data: {
-          avatarUrl: res.userInfo.avatarUrl,
-          nickName: res.userInfo.nickName,
-          identity: 2,
-          openid: app.globalData.openid,
-          userid: userid
-        }
-      })
-      .then(res => {
-        console.log('新增用户至user数据库成功！',res)
-        app.globalData.info.nickName = res.userInfo.nickName
-        app.globalData.info.identity = 2
-        app.globalData.info.userid = userid
-        wx.redirectTo({
-          url: '../child/my/my',
+          // data 字段表示需新增的 JSON 数据
+          data: {
+            avatarUrl: res.userInfo.avatarUrl,
+            nickName: res.userInfo.nickName,
+            identity: 2,
+            openid: app.globalData.openid,
+            userid: userid
+          }
         })
-      })
-      .catch(console.error)
+        .then(res => {
+          console.log('新增用户至user数据库成功！', res)
+          app.globalData.info.nickName = res.userInfo.nickName
+          app.globalData.info.identity = 2
+          app.globalData.info.userid = userid
+          wx.redirectTo({
+            url: '../child/my/my',
+          })
+        })
+        .catch(console.error)
     }
   },
 
   //-------------------更多弹出框--------------------------------------------------
-  async clickme(e){
+  async clickme(e) {
     let index = e.target.dataset.index
-    var things=this.data.things
-    if(things[index].scrollFlag==false){
-      for(let item in things){
-        if(things[item].scrollFlag==true){
-          things[item]._leftTxt="0rpx"
-          things[item].scrollFlag=false
+    var things = this.data.things
+    if (things[index].scrollFlag == false) {
+      for (let item in things) {
+        if (things[item].scrollFlag == true) {
+          things[item]._leftTxt = "0rpx"
+          things[item].scrollFlag = false
         }
       }
-      things[index]._leftTxt="-220rpx"
-      things[index].scrollFlag=true
+      things[index]._leftTxt = "-220rpx"
+      things[index].scrollFlag = true
       await this.queryHeight(index)
       this.setData({
-        things:things
+        things: things
       })
-    }else{
-      things[index]._leftTxt="0rpx"
-      things[index].scrollFlag=false
+    } else {
+      things[index]._leftTxt = "0rpx"
+      things[index].scrollFlag = false
       this.setData({
-        things:things
+        things: things
       })
     }
     // let index = e.target.dataset.index
@@ -243,46 +276,47 @@ Page({
     //   things:things
     // })
   },
-  async queryHeight(index){
+  async queryHeight(index) {
     var query = wx.createSelectorQuery();
-    var things=this.data.things
-    var that=this
+    var things = this.data.things
+    var that = this
     query.selectAll('#card').boundingClientRect()
     query.exec(function (res) {
       //res就是 所有标签为mjltest的元素的信息 的数组
       //取高度
-      things[index].height=res[0][index].height
+      things[index].height = res[0][index].height
       that.setData({
-        things:things
+        things: things
       })
     })
   },
-  jumpRegular:function(e){
+  jumpRegular: function (e) {
     let title = e.target.dataset.title
     wx.navigateTo({
-      url: '../oldMan/addReminder/addReminder?title='+title,
+      url: '../oldMan/addReminder/addReminder?title=' + title,
     })
   },
   //-------------------------------------------------------------------------------------------------
-  showAll:function(e){
+  showAll: function (e) {
     let index = e.target.dataset.index
-    var things=this.data.things
-    things[index].showAll=true
+    var things = this.data.things
+    things[index].showAll = true
     this.setData({
-      things:things
+      things: things
     })
   },
-  hideAPart:function(e){
+  hideAPart: function (e) {
     let index = e.target.dataset.index
-    var things=this.data.things
-    things[index].showAll=false
+    var things = this.data.things
+    things[index].showAll = false
     this.setData({
-      things:things
+      things: things
     })
   },
-  oldToUse: function (e) {console.log(e)
+  oldToUse: function (e) {
+    console.log(e)
     let that = this
-    if (app.globalData.info) {//一般不可能进入这个分支
+    if (app.globalData.info) { //一般不可能进入这个分支
       this.setData({
         isOld: ture
       })
@@ -295,16 +329,16 @@ Page({
         success: function (res) {
           if (res.confirm) {
             console.log('用户点击确定')
-            if(typeof wx.getUserProfile == 'function') {
+            if (typeof wx.getUserProfile == 'function') {
               console.log('调用getUserProfile')
               wx.getUserProfile({
-                desc:'您的信息仅作为个人展示噢',
+                desc: '您的信息仅作为个人展示噢',
                 success: (res) => {
                   console.log('获取用户信息成功', res)
-                  that.setNewUserInfo(res,0)
+                  that.setNewUserInfo(res, 0)
                 },
-                fail: (res) =>{
-                  console.log('获取用户信息失败',res)
+                fail: (res) => {
+                  console.log('获取用户信息失败', res)
                   wx.showToast({
                     title: '信息授权失败~',
                     duration: 1000,
@@ -319,12 +353,12 @@ Page({
                 content: '当前微信版本过低，无法使用该功能，请升级到最新微信版本后重试。'
               })
             }
-            
+
           } else if (res.cancel) {
             console.log('用户点击取消')
           }
         }
-      })          
+      })
     }
   },
   jumpMy: function (e) {
@@ -334,7 +368,7 @@ Page({
   },
   childToUse: function (e) {
     let that = this
-    if (app.globalData.info) {//一般不可能进入这个分支
+    if (app.globalData.info) { //一般不可能进入这个分支
       this.setData({
         isChild: ture
       })
@@ -348,15 +382,15 @@ Page({
         success: function (res) {
           if (res.confirm) {
             console.log('用户点击确定')
-            if(typeof wx.getUserProfile == 'function') {
+            if (typeof wx.getUserProfile == 'function') {
               wx.getUserProfile({
-                desc:'您的信息仅作为个人展示噢',
+                desc: '您的信息仅作为个人展示噢',
                 success: (res) => {
                   console.log('获取用户信息成功', res)
-                  that.setNewUserInfo(res,1)
+                  that.setNewUserInfo(res, 1)
                 },
-                fail: (res) =>{
-                  console.log('获取用户信息失败',res)
+                fail: (res) => {
+                  console.log('获取用户信息失败', res)
                   wx.showToast({
                     title: '信息授权失败~',
                     duration: 1000,
@@ -375,15 +409,11 @@ Page({
             console.log('用户点击取消')
           }
         }
-      })  
+      })
     }
   },
   //点击我显示底部弹出框
-  user_input: function () {
-    wx.requestSubscribeMessage({
-      tmplIds: ['GnLGROy6j9ElGm0FNzXnF4k_0zZy1kWYHuwMJ2iez6s'],
-      success (res) { console.log(res)}
-    })
+  user_input: function () {    
     this.showModal();
   },
   //显示对话框
@@ -445,34 +475,95 @@ Page({
         },
         success: res => {
           console.log('文字转化语音成功', res.result)
-          if(res.result != null) {
-            db.collection('memo').add({
-              // data 字段表示需新增的 JSON 数据
-              data: {
-                belong: app.globalData.openid,
-                content: content,
-                creator: app.globalData.openid,
-                finish: 0,
-                recordUrl: res.result,
-                time: startDate,
-                isRegular:0
-              }
+          if (res.result != null) {
+            let recordurl = res.result
+            wx.showModal({
+              confirmText: '我已明白',
+              content: '请您允许消息推送，以便我们给您定期推送备忘信息，如您取消则会收不到我们的定期提醒！',
+              title: '提示',
+              showCancel: false,
+              success: (result) => {
+                wx.requestSubscribeMessage({
+                  tmplIds: ['GnLGROy6j9ElGm0FNzXnF4k_0zZy1kWYHuwMJ2iez6s'],
+                  //success: (res)=> { console.log(res)}
+                  success: (res) => {
+                    let r = res['GnLGROy6j9ElGm0FNzXnF4k_0zZy1kWYHuwMJ2iez6s']
+                    db.collection('memo').add({
+                      // data 字段表示需新增的 JSON 数据
+                      data: {
+                        belong: app.globalData.openid,
+                        content: content,
+                        creator: app.globalData.openid,
+                        finish: 0,
+                        recordUrl: recordurl,
+                        time: startDate,
+                        isRegular: 0
+                      }
+                    })
+                    .then(res => {
+                      console.log('添加文字版备忘成功', res)
+                      let obj = {
+                        title: content,
+                        time: util.formatTime(startDate),
+                        id: res._id,
+                        showAll:false,
+                        _leftTxt: '0rpx',
+                        scrollFlag: false,
+                        finish:0,
+                        height:90,
+                        recordUrl:recordurl
+                      }
+                      let things = that.data.things
+                      things.push(obj)
+                      that.setData({
+                        content: '',
+                        startDate: '点击选择提醒时间',
+                        stdStartDate: null,
+                        things: things
+                      })
+                      if (r == 'reject') {
+                        wx.showModal({
+                          confirmText: '前往设置',
+                          content: '保存成功！但您可能无法收到我们的备忘通知！',
+                          showCancel: true,
+                          title: '提示',
+                          success: (result) => {
+                            if(result.confirm) {
+                              wx.openSetting({
+                                success: (res) => {
+                                }
+                              })
+                            }
+                          },
+                          fail: (res) => {},
+                          complete: (res) => {},
+                        })
+                      } else if (r == 'ban') {
+                        wx.showToast({
+                          title: '保存成功！但消息推送设置出错！',
+                          duration: 1000,
+                          icon: 'error',
+                          mask: true
+                        })
+                      } else if(r=='accept') {
+                        wx.showToast({
+                          title: '保存成功！',
+                          duration: 1000,
+                          icon: 'success',
+                          mask: true
+                        })
+                      }
+                    })
+                    .catch(console.error)
+                    
+                    
+                  }
+                })
+              },
+              fail: (res) => {},
+              complete: (res) => {},
             })
-            .then(res => {
-              console.log('添加文字版备忘成功', res)
-              that.setData({
-                content: '',
-                startDate: '点击选择提醒时间',
-                stdStartDate: null
-              })
-              wx.showToast({
-                title: '添加成功！',
-                duration: 1000,
-                icon: 'success',
-                mask: true
-              })
-            })
-            .catch(console.error)
+            
           } else {
             console.log('文字转语音失败')
             wx.showToast({
@@ -482,7 +573,7 @@ Page({
               mask: true
             })
           }
-          
+
         },
         fail: err => {
           console.error('文字转语音失败失败', err)
@@ -494,7 +585,7 @@ Page({
           })
         }
       })
-      
+
     } else {
       wx.showToast({
         title: '输入不完整噢！',
@@ -506,12 +597,12 @@ Page({
   },
 
   //播放备忘
-  play: function(e) {
+  play: function (e) {
     let url = e.target.dataset.id
     innerAudioContext.src = null
     innerAudioContext.src = url
     innerAudioContext.play()
-    innerAudioContext.onError((res)=>{
+    innerAudioContext.onError((res) => {
       wx.showToast({
         title: '播放错误，请稍后再试~',
         duration: 1000,
@@ -536,8 +627,10 @@ Page({
   },
 
   //备忘完成
-  finish: function(e) {
+  finish: function (e) {
     let _id = e.target.dataset.id
+    let index = e.target.dataset.index
+    let that = this
     wx.cloud.callFunction({
       name: 'finishMemo',
       data: {
@@ -545,10 +638,106 @@ Page({
       },
       success: res => {
         console.log('备忘成功', res.result)
+        if (res.result == 1) {
+          let things = that.data.things
+          things[index].finish = 1
+          that.setData({
+            things: things
+          })
+          wx.showToast({
+            title: '完成成功',
+            duration: 1000,
+            icon: 'success',
+            mask: true,
+            success: (res) => {},
+            fail: (res) => {},
+            complete: (res) => {},
+          })
+        } else {
+          wx.showToast({
+            title: '完成失败',
+            duration: 1000,
+            icon: 'error',
+            mask: true,
+            success: (res) => {},
+            fail: (res) => {},
+            complete: (res) => {},
+          })
+        }
 
       },
       fail: err => {
         console.error('备忘失败', err)
+      }
+    })
+  },
+
+  //删除备忘
+  deleteMemo: function (e) {
+    let _id = e.target.dataset.id
+    let index = e.target.dataset.index
+    let that = this
+    wx.showLoading({
+      title: '删除中',
+      mask: true,
+      success: (res) => {},
+      fail: (res) => {},
+      complete: (res) => {},
+    })
+    wx.cloud.callFunction({
+      name: 'deleteMemo',
+      data: {
+        _id: _id
+      },
+      success: res => {
+        console.log('删除备忘成功', res.result)
+        let len = that.data.things.length
+        let things = [].concat(that.data.things.slice(0, index))
+        if (index + 1 != len) things = things.concat(that.data.things.slice(index + 1, len))
+        if (res.result == 1) {
+          that.setData({
+            things: things
+          })
+          wx.showToast({
+            title: '删除成功',
+            duration: 1000,
+            icon: 'success',
+            mask: true,
+            success: (res) => {},
+            fail: (res) => {},
+            complete: (res) => {},
+          })
+        } else {
+          wx.showToast({
+            title: '删除失败',
+            duration: 1000,
+            icon: 'error',
+            mask: true,
+            success: (res) => {},
+            fail: (res) => {},
+            complete: (res) => {},
+          })
+        }
+        wx.hideLoading({
+          success: (res) => {},
+          fail: (res) => {},
+          complete: (res) => {},
+        })
+      },
+      fail: err => {
+        wx.hideLoading({
+          success: (res) => {},
+        })
+        wx.showToast({
+          title: '删除失败',
+          duration: 1000,
+          icon: 'error',
+          mask: true,
+          success: (res) => {},
+          fail: (res) => {},
+          complete: (res) => {},
+        })
+        console.error('删除备忘失败', err)
       }
     })
   },
@@ -626,7 +815,7 @@ Page({
     }
   },
   handleRecordStop: function (e) {
-    var that=this
+    var that = this
     if (this.data.recordAuth) {
       recorderManager.stop() //结束录音
       this.setData({
@@ -672,15 +861,15 @@ Page({
                     success: res => {
                       console.log('语音转化文字成功:', res.result)
                       let content
-                      if(res.result) {
+                      if (res.result) {
                         content = res.result
                       } else {
                         content = "语音备忘"
                       }
                       wx.hideLoading()
                       that.setData({
-                        restatement:true,
-                        reContent:content
+                        restatement: true,
+                        reContent: content
                       })
 
 
@@ -701,45 +890,105 @@ Page({
     }
   },
 
-  confirmVoiceMemo:function() {
+  confirmVoiceMemo: function () {
     let fileID
     let that = this
     let content = that.data.reContent
     let startTime = that.data.stdStartDate
-    if(content && startTime) {
-      that.uploadVioceFile(this.data.vioceTempFilePath,function(res) {
+    if (content && startTime) {
+      that.uploadVioceFile(this.data.vioceTempFilePath, function (res) {
         console.log('上传语音到云存储成功：', res)
         fileID = res.fileID
-        db.collection('memo').add({
-          // data 字段表示需新增的 JSON 数据
-          data: {
-            belong: app.globalData.openid,
-            content: content,
-            creator: app.globalData.openid,
-            finish: 0,
-            recordUrl: fileID,
-            time: startTime,
-            isRegular: 0
-          }
+        wx.showModal({
+          confirmText: '我已明白',
+          content: '请您允许消息推送，以便我们给您定期推送备忘信息，如您取消则会收不到我们的定期提醒！',
+          title: '提示',
+          showCancel: false,
+          success: (result) => {
+            wx.requestSubscribeMessage({
+              tmplIds: ['GnLGROy6j9ElGm0FNzXnF4k_0zZy1kWYHuwMJ2iez6s'],
+              //success: (res)=> { console.log(res)}
+              success: (res) => {
+                let r = res['GnLGROy6j9ElGm0FNzXnF4k_0zZy1kWYHuwMJ2iez6s']
+                db.collection('memo').add({
+                  // data 字段表示需新增的 JSON 数据
+                  data: {
+                    belong: app.globalData.openid,
+                    content: content,
+                    creator: app.globalData.openid,
+                    finish: 0,
+                    recordUrl: fileID,
+                    time: startTime,
+                    isRegular: 0
+                  }
+                })
+                .then(res => {
+                  console.log('添加语音版备忘成功', res)
+                  let obj = {
+                    title: content,
+                    time: util.formatTime(startTime),
+                    id: res._id,
+                    showAll:false,
+                    _leftTxt: '0rpx',
+                    scrollFlag: false,
+                    finish:0,
+                    height:90,
+                    recordUrl:fileID
+                  }
+                  let things = that.data.things
+                  things.push(obj)
+                  that.setData({
+                    restatement: false,
+                    vioceTempFilePath: "",
+                    reContent: "",
+                    startDate: "点击选择提醒时间",
+                    stdStartDate: null,
+                    things: things
+                  })
+                  if (r == 'reject') {
+                    wx.showModal({
+                      confirmText: '前往设置',
+                      content: '保存成功！但您可能无法收到我们的备忘通知！',
+                      showCancel: true,
+                      title: '提示',
+                      success: (result) => {
+                        if(result.confirm) {
+                          wx.openSetting({
+                            success: (res) => {
+                            }
+                          })
+                        }
+                      },
+                      fail: (res) => {},
+                      complete: (res) => {},
+                    })
+                  } else if (r == 'ban') {
+                    wx.showToast({
+                      title: '保存成功！但消息推送设置出错！',
+                      duration: 1000,
+                      icon: 'error',
+                      mask: true
+                    })
+                  } else if(r=='accept') {
+                    wx.showToast({
+                      title: '保存成功！',
+                      duration: 1000,
+                      icon: 'success',
+                      mask: true
+                    })
+                  }
+                })
+                .catch(console.error)
+                
+                
+              }
+            })
+          },
+          fail: (res) => {},
+          complete: (res) => {},
         })
-        .then(res => {
-          console.log('添加语音版备忘成功', res)
-          that.setData({
-            restatement:false,
-          vioceTempFilePath: "",
-          reContent: "",
-          startDate: "点击选择提醒时间",
-          stdStartDate: null
-          })
-          wx.showToast({
-            title: '添加成功！',
-            duration: 1000,
-            icon: 'success',
-            mask: true
-          })
-        })
-        .catch(console.error)
-      },function(err) {
+        
+      }, function (err) {
         console.log('上传语音到云存储失败：', err)
       })
     } else {
@@ -753,7 +1002,7 @@ Page({
   },
 
   //上传语音文件到云存储
-  uploadVioceFile: function(tempFilePath, successCallback, failCallback) {
+  uploadVioceFile: function (tempFilePath, successCallback, failCallback) {
     let timestamp = util.formatDate(new Date());
     wx.cloud.uploadFile({
       cloudPath: "uploadVoices/" + timestamp + '-' + this.randomNum(10000, 99999) + '.mp3',
@@ -763,9 +1012,9 @@ Page({
     })
   },
 
-  cancelRestate:function(e){
+  cancelRestate: function (e) {
     this.setData({
-      restatement:false,
+      restatement: false,
       vioceTempFilePath: "",
       reContent: "",
       startDate: "点击选择提醒时间",

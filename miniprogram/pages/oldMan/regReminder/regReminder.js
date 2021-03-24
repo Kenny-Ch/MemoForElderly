@@ -117,12 +117,20 @@ Page({
           let str
           if(data[i].regularType == 0) {
             str = "每天"
-            let timeStr = data[i].regularTime.toString()
-            str = str + timeStr.slice(0,2) + ":" + timeStr.slice(2,4) + "提醒"
+            let ttt = data[i].regularTime
+            let hour = Math.floor(ttt/10000)
+            ttt = ttt-hour*10000
+            let minute = Math.floor(ttt/100)
+            str = str + (hour<10?"0"+hour.toString():hour.toString()) + ":" + (minute<10?"0"+minute.toString():minute.toString()) + "提醒"
           } else if(data[i].regularType == 1){
             str = "每周"
-            let timeStr = data[i].regularTime.toString()
-            str = str + dayToStr[timeStr.slice(0,1)] + timeStr.slice(1,3) + ":" + timeStr.slice(3,5) + "提醒"
+            let ttt = data[i].regularTime
+            let week = Math.floor(ttt/1000000)
+            ttt = ttt-week*1000000
+            let hour = Math.floor(ttt/10000)
+            ttt = ttt-hour*10000
+            let minute = Math.floor(ttt/100)
+            str = str + dayToStr[week.toString()]+(hour<10?"0"+hour.toString():hour.toString()) + ":" + (minute<10?"0"+minute.toString():minute.toString()) + "提醒"
           }
           let obj = {
             id:data[i]._id,
