@@ -32,10 +32,10 @@
     </view>
   </picker>
 </view>
-<view class="row">
+<!-- <view class="row">
   <label class="label">该备忘事项需要完成</label>
   <image src="../../../images/my/wen.svg" class="pic"></image>
   <switch bindchange="switchChange" color ="#f9ba17" style="margin-left:236rpx;" checked='{{isOn}}'/>
-</view>
-<button class="save" style="width: 623rpx;height: 88rpx;" bindtap="saveData">保 存</button>
-<button class="cancel" style="width: 623rpx;height: 88rpx;">删 除</button>
+</view> -->
+<button class="save" style="width: 623rpx;height: 88rpx;">保 存</button>
+<!-- <button class="cancel" style="width: 623rpx;height: 88rpx;">删 除</button> -->

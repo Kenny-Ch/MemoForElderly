@@ -312,6 +312,12 @@ Page({
     })
   },
 
+  jumpReminder:function(){
+    wx.navigateTo({
+      url: '../../oldMan/addReminder/addReminder',
+    })
+  },
+
   //点击我显示底部弹出框
   clickme:function(){
     this.showModal();

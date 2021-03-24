@@ -115,7 +115,7 @@ Page({
                   that.setData({
                     isChild: true
                   })
-                  wx.navigateTo({
+                  wx.redirectTo({
                     url: '../child/my/my',
                   })
                   break;
@@ -204,7 +204,7 @@ Page({
         app.globalData.info.nickName = res.userInfo.nickName
         app.globalData.info.identity = 2
         app.globalData.info.userid = userid
-        wx.navigateTo({
+        wx.redirectTo({
           url: '../child/my/my',
         })
       })

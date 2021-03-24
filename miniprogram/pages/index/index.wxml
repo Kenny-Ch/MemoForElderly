@@ -7,7 +7,7 @@
   <!-- 备忘事件列表 -->
   <view class="content-scroll">
     <view class="card row" id='card' wx:for="{{things}}" wx:key="{{index}}" style="left:{{item._leftTxt}};width:calc(682rpx - {{item._leftTxt}})">
-      <view class="column leftcard" >
+      <view class="leftcard">
         <view wx:if="{{item.title.length>12&&item.showAll==false}}" class="row" >
           <view class="title">{{item.title}}</view>
           <image src="../../images/xia.png" class="xia" data-index="{{index}}" bindtap="showAll"></image>

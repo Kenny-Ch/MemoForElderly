@@ -1,9 +1,11 @@
 <!--miniprogram/pages/child/my/my.wxml-->
 <view style="width:87%" wx:for="{{person}}" wx:key="{{index}}">
   <view class="row" style="width:100%;margin-bottom: 12rpx;margin-top: 24rpx;">
-    <view class="title">{{item.relationship}}</view>
-    <view data-index="{{index}}" bindtap="clickme">
-      <image src="../../../images/my/arrow-down.png" class="arrow"></image>
+    <view class="row" bindtap="clickme">
+      <view class="title">{{item.relationship}}</view>
+      <view data-index="{{index}}">
+        <image src="../../../images/my/arrow-down.png" class="arrow"></image>
+      </view>
     </view>
     <image src="../../../images/my/relation.svg" class='rePic' style="margin-left:320rpx;margin-right:20rpx"></image>
     <image src="../../../images/my/user.svg" class="rePic"></image>
@@ -24,7 +26,7 @@
         {{startDate}}
       </picker>
       <button class="add" style="width: 583rpx;height: 68rpx;"  bindtap="oldToUse" data-openid="{{item.openid}}" data-index="{{index}}">添加</button>
-      <view class="setReminder">设置定期备忘</view>
+      <view class="setReminder" bindtap="jumpReminder">设置定期备忘</view>
     </view>
     <view class="column bottom_card" wx:if="{{item.reminders.length!=0}}">
       <view class="card_title">今日需要完成的备忘</view>
