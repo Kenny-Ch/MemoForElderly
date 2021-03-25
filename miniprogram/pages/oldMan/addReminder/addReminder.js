@@ -14,6 +14,7 @@ Page({
     dateIndex:0,
     isOn:false,
     title:"",
+    belongOpenid: ""
   },
 
   /**
@@ -23,6 +24,11 @@ Page({
     if(options.title!=undefined){
       this.setData({
         title:options.title
+      })
+    }
+    if(options.belongOpenid) {
+      this.setData({
+        belongOpenid: options.belongOpenid
       })
     }
   },
@@ -78,48 +84,108 @@ Page({
         success: res => {
           console.log('文字转化语音成功', res.result)
           if(res.result != null) {
-            db.collection('memo').add({
-              // data 字段表示需新增的 JSON 数据
-              data: {
-                belong: app.globalData.openid,
-                content: content,
-                creator: app.globalData.openid,
-                finish: 0,
-                recordUrl: res.result,
-                isRegular: 1,
-                finish: 0,
-                regularType: frequencyIndex,
-                regularTime: regularTime
-              }
+            let recordurl = res.result
+            wx.showModal({
+              confirmText: '我已明白',
+              content: '请您允许消息推送，以便我们给您定期推送备忘信息，如您取消则会收不到我们的定期提醒！',
+              title: '提示',
+              showCancel: false,
+              success: (result) => {
+                if(result.confirm || result.cancel){
+                wx.requestSubscribeMessage({
+                  tmplIds: ['GnLGROy6j9ElGm0FNzXnF4k_0zZy1kWYHuwMJ2iez6s'],
+                  //success: (res)=> { console.log(res)}
+                  success: (res) => {
+                    let r = res['GnLGROy6j9ElGm0FNzXnF4k_0zZy1kWYHuwMJ2iez6s']
+                    db.collection('memo').add({
+                      // data 字段表示需新增的 JSON 数据
+                      data: {
+                        belong: that.data.belongOpenid?that.data.belongOpenid:app.globalData.openid,
+                        content: content,
+                        creator: app.globalData.openid,
+                        finish: 0,
+                        recordUrl: recordurl,
+                        isRegular: 1,
+                        finish: 0,
+                        regularType: frequencyIndex,
+                        regularTime: regularTime
+                      }
+                    })
+                    .then(res => {
+                      console.log('添加文字版备忘成功', res)
+                      that.setData({
+                        content: '',
+                      })
+                      let pages = getCurrentPages(); // 当前页，
+                          let prevPage = pages[pages.length - 2]; // 上一页
+                          prevPage.setData({
+                            freshNow: 1,
+                          })
+        
+                          
+                      if (r == 'reject') {
+                        wx.showModal({
+                          confirmText: '前往设置',
+                          content: '保存成功！但您可能无法收到我们的备忘通知！',
+                          showCancel: true,
+                          title: '提示',
+                          success: (result) => {
+                            wx.navigateBack({
+                              delta: 1,
+                            })
+                            if(result.confirm) {
+                              wx.openSetting({
+                                success: (res) => {
+                                  
+                                }
+                              })
+                            }
+                          },
+                          fail: (res) => {},
+                          complete: (res) => {},
+                        })
+                      } else if (r == 'ban') {
+                        wx.showToast({
+                          title: '保存成功！但消息推送设置出错！',
+                          duration: 1000,
+                          icon: 'error',
+                          mask: true,
+                          success:res=>{
+                            wx.navigateBack({
+                              delta: 1,
+                            })
+                          }
+                        })
+                      } else if(r=='accept') {
+                        wx.showToast({
+                          title: '保存成功！',
+                          duration: 1000,
+                          icon: 'success',
+                          mask: true,
+                          success:res=>{
+                            wx.navigateBack({
+                              delta: 1,
+                            })
+                          }
+                        })
+                      }
+                    })
+                    .catch(console.error)
+                    
+                    
+                  }
+                })}
+              },
+              fail: (res) => {},
+              complete: (res) => {
+                
+            },
             })
-            .then(res => {
-              console.log('添加文字版备忘成功', res)
-              that.setData({
-                content: '',
-              })
-              wx.showToast({
-                title: '添加成功！',
-                duration: 1000,
-                icon: 'success',
-                mask: true,
-                success:()=>{
-                  let pages = getCurrentPages(); // 当前页，
-                  let prevPage = pages[pages.length - 2]; // 上一页
-                  prevPage.setData({
-                    freshNow: 1,
-                  })
 
-                  wx.navigateBack({
-                    delta: 1,
-                  })
-                }
-              })
-            })
-            .catch(console.error)
           } else {
             console.log('文字转语音失败')
             wx.showToast({
-              title: '保持失败！',
+              title: '保存失败！',
               duration: 1000,
               icon: 'error',
               mask: true
@@ -130,7 +196,7 @@ Page({
         fail: err => {
           console.error('文字转语音失败失败', err)
           wx.showToast({
-            title: '保持失败！',
+            title: '保存失败！',
             duration: 1000,
             icon: 'error',
             mask: true
