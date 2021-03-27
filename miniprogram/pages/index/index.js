@@ -460,6 +460,9 @@ Page({
   },
   //数据保存
   saveData: function () {
+    wx.showLoading({
+      title: '保存中~',
+    })
     let that = this
     let content = this.data.content
     let startDate = this.data.stdStartDate
@@ -477,6 +480,9 @@ Page({
           console.log('文字转化语音成功', res.result)
           if (res.result != null) {
             let recordurl = res.result
+            wx.hideLoading({
+              success: (res) => {},
+            })
             wx.showModal({
               confirmText: '我已明白',
               content: '请您允许消息推送，以便我们给您定期推送备忘信息，如您取消则会收不到我们的定期提醒！',
@@ -502,6 +508,7 @@ Page({
                     })
                     .then(res => {
                       console.log('添加文字版备忘成功', res)
+                      let _id = res._id
                       let obj = {
                         title: content,
                         time: util.formatTime(startDate),
@@ -522,6 +529,13 @@ Page({
                         things: things
                       })
                       if (r == 'reject') {
+                        db.collection('memo').where({
+                          _id:_id
+                        }).update({
+                          data:{
+                            accept:false
+                          }
+                        })
                         wx.showModal({
                           confirmText: '前往设置',
                           content: '保存成功！但您可能无法收到我们的备忘通知！',
@@ -529,16 +543,19 @@ Page({
                           title: '提示',
                           success: (result) => {
                             if(result.confirm) {
-                              wx.openSetting({
-                                success: (res) => {
-                                }
-                              })
                             }
                           },
                           fail: (res) => {},
                           complete: (res) => {},
                         })
                       } else if (r == 'ban') {
+                        db.collection('memo').where({
+                          _id:_id
+                        }).update({
+                          data:{
+                            accept:false
+                          }
+                        })
                         wx.showToast({
                           title: '保存成功！但消息推送设置出错！',
                           duration: 1000,
@@ -546,6 +563,13 @@ Page({
                           mask: true
                         })
                       } else if(r=='accept') {
+                        db.collection('memo').where({
+                          _id:_id
+                        }).update({
+                          data:{
+                            accept:true
+                          }
+                        })
                         wx.showToast({
                           title: '保存成功！',
                           duration: 1000,
@@ -565,6 +589,9 @@ Page({
             })
             
           } else {
+            wx.hideLoading({
+              success: (res) => {},
+            })
             console.log('文字转语音失败')
             wx.showToast({
               title: '保存失败！',
@@ -576,6 +603,9 @@ Page({
 
         },
         fail: err => {
+          wx.hideLoading({
+            success: (res) => {},
+          })
           console.error('文字转语音失败失败', err)
           wx.showToast({
             title: '保存失败！',
@@ -587,6 +617,9 @@ Page({
       })
 
     } else {
+      wx.hideLoading({
+        success: (res) => {},
+      })
       wx.showToast({
         title: '输入不完整噢！',
         duration: 1000,
@@ -891,6 +924,9 @@ Page({
   },
 
   confirmVoiceMemo: function () {
+    wx.showLoading({
+      title: '保存中~',
+    })
     let fileID
     let that = this
     let content = that.data.reContent
@@ -899,6 +935,9 @@ Page({
       that.uploadVioceFile(this.data.vioceTempFilePath, function (res) {
         console.log('上传语音到云存储成功：', res)
         fileID = res.fileID
+        wx.hideLoading({
+          success: (res) => {},
+        })
         wx.showModal({
           confirmText: '我已明白',
           content: '请您允许消息推送，以便我们给您定期推送备忘信息，如您取消则会收不到我们的定期提醒！',
@@ -924,6 +963,7 @@ Page({
                 })
                 .then(res => {
                   console.log('添加语音版备忘成功', res)
+                  let _id = res._id
                   let obj = {
                     title: content,
                     time: util.formatTime(startTime),
@@ -946,6 +986,13 @@ Page({
                     things: things
                   })
                   if (r == 'reject') {
+                    db.collection('memo').where({
+                      _id:_id
+                    }).update({
+                      data:{
+                        accept:false
+                      }
+                    })
                     wx.showModal({
                       confirmText: '前往设置',
                       content: '保存成功！但您可能无法收到我们的备忘通知！',
@@ -953,16 +1000,19 @@ Page({
                       title: '提示',
                       success: (result) => {
                         if(result.confirm) {
-                          wx.openSetting({
-                            success: (res) => {
-                            }
-                          })
                         }
                       },
                       fail: (res) => {},
                       complete: (res) => {},
                     })
                   } else if (r == 'ban') {
+                    db.collection('memo').where({
+                      _id:_id
+                    }).update({
+                      data:{
+                        accept:false
+                      }
+                    })
                     wx.showToast({
                       title: '保存成功！但消息推送设置出错！',
                       duration: 1000,
@@ -970,6 +1020,13 @@ Page({
                       mask: true
                     })
                   } else if(r=='accept') {
+                    db.collection('memo').where({
+                      _id:_id
+                    }).update({
+                      data:{
+                        accept:true
+                      }
+                    })
                     wx.showToast({
                       title: '保存成功！',
                       duration: 1000,
@@ -989,9 +1046,15 @@ Page({
         })
         
       }, function (err) {
+        wx.hideLoading({
+          success: (res) => {},
+        })
         console.log('上传语音到云存储失败：', err)
       })
     } else {
+      wx.hideLoading({
+        success: (res) => {},
+      })
       wx.showToast({
         title: '输入不完整噢！',
         duration: 1000,

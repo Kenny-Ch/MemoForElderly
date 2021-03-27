@@ -121,6 +121,9 @@ Page({
 
   //添加备忘
   oldToUse: function (e) {
+    wx.showLoading({
+      title: '保存中~',
+    })
     let that = this
     let iindex = e.target.dataset.index
     let content = this.data.content
@@ -139,6 +142,9 @@ Page({
           console.log('文字转化语音成功', res.result)
           if (res.result != null) {
             let recordurl = res.result
+            wx.hideLoading({
+              success: (res) => {},
+            })
             wx.showModal({
               confirmText: '我已明白',
               content: '请您允许消息推送，以便我们给您定期推送备忘信息，如您取消则会收不到我们的定期提醒！',
@@ -165,6 +171,7 @@ Page({
                       .then(res => {
                         console.log('添加文字版备忘成功', res)
                         let arr = that.data.familys[iindex].reminders
+                        let _id = res._id
                         arr.push({
                           id: res._id,
                           thing: content,
@@ -192,22 +199,30 @@ Page({
                           person: personn
                         })
                         if (r == 'reject') {
+                          db.collection('memo').where({
+                            _id:_id
+                          }).update({
+                            data:{
+                              accept:false
+                            }
+                          })
                           wx.showModal({
-                            confirmText: '前往设置',
+                            confirmText: '确认',
                             content: '保存成功！但您可能无法收到我们的备忘通知！',
-                            showCancel: true,
+                            showCancel: false,
                             title: '提示',
-                            success: (result) => {
-                              if (result.confirm) {
-                                wx.openSetting({
-                                  success: (res) => {}
-                                })
-                              }
-                            },
+                            success: (result) => {},
                             fail: (res) => {},
                             complete: (res) => {},
                           })
                         } else if (r == 'ban') {
+                          db.collection('memo').where({
+                            _id:_id
+                          }).update({
+                            data:{
+                              accept:false
+                            }
+                          })
                           wx.showToast({
                             title: '保存成功！但消息推送设置出错！',
                             duration: 1000,
@@ -215,6 +230,13 @@ Page({
                             mask: true
                           })
                         } else if (r == 'accept') {
+                          db.collection('memo').where({
+                            _id:_id
+                          }).update({
+                            data:{
+                              accept:true
+                            }
+                          })
                           wx.showToast({
                             title: '保存成功！',
                             duration: 1000,
@@ -235,6 +257,9 @@ Page({
 
           } else {
             console.log('文字转语音失败')
+            wx.hideLoading({
+              success: (res) => {},
+            })
             wx.showToast({
               title: '添加失败！',
               duration: 1000,
@@ -246,6 +271,9 @@ Page({
         },
         fail: err => {
           console.error('文字转语音失败失败', err)
+          wx.hideLoading({
+            success: (res) => {},
+          })
           wx.showToast({
             title: '添加失败！',
             duration: 1000,
@@ -255,6 +283,9 @@ Page({
         }
       })
     } else {
+      wx.hideLoading({
+        success: (res) => {},
+      })
       wx.showToast({
         title: '输入不完整噢！',
         duration: 1000,
