@@ -112,7 +112,6 @@ Page({
                         finish: 0,
                         recordUrl: recordurl,
                         isRegular: 1,
-                        finish: 0,
                         regularType: frequencyIndex,
                         regularTime: regularTime
                       }

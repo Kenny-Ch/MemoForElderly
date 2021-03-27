@@ -88,7 +88,7 @@ Page({
               id: pre[i].memos[j]._id,
               thing: pre[i].memos[j].content,
               time: pre[i].memos[j].time ? that.timeToFormat(pre[i].memos[j].time, 2) : that.timeToFormat(pre[i].memos[j].regularTime, pre[i].memos[j].regularType),
-              isfinish: pre[i].memos[j].finish
+              isfinish: pre[i].memos[j].finish == 1 ? true:false
             }
             reminderss.push(o)
           }
@@ -176,7 +176,7 @@ Page({
                           id: res._id,
                           thing: content,
                           time: startTime,
-                          isfinish: 0
+                          isfinish: false
                         })
                         let obj = {
                           relationship: that.data.familys[iindex].relationship,
