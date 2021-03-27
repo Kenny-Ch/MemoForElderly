@@ -83,14 +83,43 @@ Page({
           let reminderss = []
           let finishNum = 0
           for (let j = 0; j < pre[i].memos.length; j++) {
-            if (pre[i].memos[j].finish == 1) finishNum++;
-            let o = {
-              id: pre[i].memos[j]._id,
-              thing: pre[i].memos[j].content,
-              time: pre[i].memos[j].time ? that.timeToFormat(pre[i].memos[j].time, 2) : that.timeToFormat(pre[i].memos[j].regularTime, pre[i].memos[j].regularType),
-              isfinish: pre[i].memos[j].finish == 1 ? true:false
+            if(pre[i].memos[j].time) {
+              let t = new Date(pre[i].memos[j].time)
+              let td = new Date()
+              let today = new Date(td.getFullYear(),td.getMonth(),td.getDate())
+              let tomorrow = new Date(today.getTime()+86400000)
+              if(t.getTime()<tomorrow.getTime() && t.getTime()>=today.getTime()) {
+                if (pre[i].memos[j].finish == 1) finishNum++;
+                let o = {
+                  id: pre[i].memos[j]._id,
+                  thing: pre[i].memos[j].content,
+                  time: that.timeToFormat(pre[i].memos[j].time, 2) ,
+                  isfinish: pre[i].memos[j].finish == 1 ? true:false
+                }
+                reminderss.push(o)
+              }
+            } else if(pre[i].memos[j].regularType==0) {
+              if (pre[i].memos[j].finish == 1) finishNum++;
+                let o = {
+                  id: pre[i].memos[j]._id,
+                  thing: pre[i].memos[j].content,
+                  time:that.timeToFormat(pre[i].memos[j].regularTime, 0),
+                  isfinish: pre[i].memos[j].finish == 1 ? true:false
+                }
+                reminderss.push(o)
+            } else if(pre[i].memos[j].regularType == 1){
+              if(Math.floor(pre[i].memos[j].regularTime/1000000) == new Date().getDay()) {
+                if (pre[i].memos[j].finish == 1) finishNum++;
+                  let o = {
+                    id: pre[i].memos[j]._id,
+                    thing: pre[i].memos[j].content,
+                    time: pre[i].memos[j].time ? that.timeToFormat(pre[i].memos[j].time, 2) : that.timeToFormat(pre[i].memos[j].regularTime, pre[i].memos[j].regularType),
+                    isfinish: pre[i].memos[j].finish == 1 ? true:false
+                  }
+                  reminderss.push(o)
+              }
             }
-            reminderss.push(o)
+            
           }
           let obj = {
             relationship: pre[i].observedIdentity,
@@ -99,7 +128,8 @@ Page({
             name: pre[i].observedInfo[0].nickName,
             portrait: pre[i].observedInfo[0].avatarUrl,
             reminders: reminderss,
-            openid: pre[i].observedInfo[0].openid
+            openid: pre[i].observedInfo[0].openid,
+            userid: pre[i].observedInfo[0].userid
           }
           familyArr.push(obj)
         }
@@ -185,7 +215,8 @@ Page({
                           name: that.data.familys[iindex].name,
                           portrait: that.data.familys[iindex].portrait,
                           reminders: arr,
-                          openid: that.data.familys[iindex].openid
+                          openid: that.data.familys[iindex].openid,
+                          userid: that.data.familys[iindex].userid
                         }
                         let familyy = that.data.familys
                         familyy[iindex] = obj
@@ -293,6 +324,78 @@ Page({
         mask: true
       })
     }
+  },
+
+  //取消绑定关系
+  cancelBinding: function(e) {
+    let that = this
+    let userid = e.target.dataset.userid
+    let index = e.target.dataset.index
+    wx.showModal({
+      cancelText: '取消',
+      confirmText: '确定',
+      content: '您确定要接触关系嘛？所有您给Ta设置的备忘也将会清空！',
+      showCancel: true,
+      title: '提示',
+      success: (result) => {
+        if(result.confirm) {
+          wx.cloud.callFunction({
+            name: 'cancelBinding',
+            data: {
+              observer: app.globalData.info.userid,
+              observed: userid
+            },
+            success: res => {
+              console.log('取消绑定成功', res)
+              let family = []
+              family = family.concat(that.data.familys.slice(0,index))
+              if(index != that.data.familys.length-1) {
+                family = family.concat(that.data.familys.slice(index+1))
+              }
+              if(that.data.person[0].userid == that.data.familys[index].userid) {
+                if(family.length == 0) {
+                  that.setData({
+                    person:[]
+                  })
+                } else{
+                  let person = [].concat([family[0]])
+                  that.setData({
+                    person: person
+                  })
+                }
+              }
+              that.setData({
+                familys: family
+              })
+              
+              wx.showToast({
+                title: '取消绑定成功！',
+                duration: 1000,
+                icon: 'success',
+                mask: true,
+                success: (res) => {},
+                fail: (res) => {},
+                complete: (res) => {},
+              })
+            },
+            fail: err => {
+              wx.showToast({
+                title: '取消绑定失败！',
+                duration: 1000,
+                icon: 'error',
+                mask: true,
+                success: (res) => {},
+                fail: (res) => {},
+                complete: (res) => {},
+              })
+              console.error('取消绑定失败', err)
+            }
+          })
+        }
+      },
+      fail: (res) => {},
+      complete: (res) => {},
+    })
   },
 
   //content内容

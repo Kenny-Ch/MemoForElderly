@@ -245,6 +245,22 @@ Page({
     }
   },
 
+  //播放自己录下的录音
+  replayRecord:function(e) {
+    let url = this.data.vioceTempFilePath
+    innerAudioContext.src = null
+    innerAudioContext.src = url
+    innerAudioContext.play()
+    innerAudioContext.onError((res) => {
+      wx.showToast({
+        title: '播放错误，请稍后再试~',
+        duration: 1000,
+        icon: 'error',
+        mask: true
+      })
+    })
+  },
+
   //-------------------更多弹出框--------------------------------------------------
   async clickme(e) {
     let index = e.target.dataset.index

@@ -80,6 +80,7 @@ Page({
           let map = {}
           map.avarurl = res[0].observerInfo[0].avatarUrl,
           map.name = res[0].observerInfo[0].nickName + " - " + res[0].observerIdentity
+          map.userid = res[0].observerInfo[0].userid
           family.push(map)
         }
         that.setData({
@@ -89,6 +90,66 @@ Page({
     })
     wx.hideLoading({
       success: (res) => {},
+    })
+  },
+
+  //取消关系
+  cancleBinding: function(e) {
+    let that = this
+    let userid = e.target.dataset.userid
+    let index = e.target.dataset.index
+    wx.showModal({
+      cancelText: '取消',
+      confirmText: '确定',
+      content: '您确定要接触关系嘛？所有Ta给您设置的备忘也将会清空！',
+      showCancel: true,
+      title: '提示',
+      success: (result) => {
+        if(result.confirm) {
+          wx.cloud.callFunction({
+            name: 'cancelBinding',
+            data: {
+              observer: userid,
+              observed: app.globalData.info.userid
+            },
+            success: res => {
+              console.log('取消绑定成功', res)
+              let family = []
+              family = family.concat(that.data.family.slice(0,index))
+              if(index != that.data.family.length-1) {
+                family = family.concat(that.data.family.slice(index+1))
+              }
+              that.setData({
+                family: family
+              })
+              
+              wx.showToast({
+                title: '取消绑定成功！',
+                duration: 1000,
+                icon: 'success',
+                mask: true,
+                success: (res) => {},
+                fail: (res) => {},
+                complete: (res) => {},
+              })
+            },
+            fail: err => {
+              wx.showToast({
+                title: '取消绑定失败！',
+                duration: 1000,
+                icon: 'error',
+                mask: true,
+                success: (res) => {},
+                fail: (res) => {},
+                complete: (res) => {},
+              })
+              console.error('取消绑定失败', err)
+            }
+          })
+        }
+      },
+      fail: (res) => {},
+      complete: (res) => {},
     })
   },
 

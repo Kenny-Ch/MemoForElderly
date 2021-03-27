@@ -76,7 +76,7 @@ Page({
   },
   jumpAdd:function(e){
     wx.navigateTo({
-      url: '../addReminder/addReminder',
+      url: '../addReminder/addReminder?isOld=1',
     })
   },
   /**

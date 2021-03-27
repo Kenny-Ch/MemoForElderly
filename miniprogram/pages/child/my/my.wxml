@@ -52,9 +52,9 @@
 <view class="commodity_screen" bindtap="hideModal" wx:if="{{showModalStatus}}"></view>
 <!--弹出框  -->
 <view animation="{{animationData}}" class="commodity_attr_box" wx:if="{{showModalStatus}}">
-  <view class="row" style="margin-bottom:28rpx;" wx:for="{{familys}}"> 
+  <view class="row" style="margin-bottom:28rpx;" wx:for="{{familys}}" wx:key="{{index}}"> 
     <image src="{{item.portrait}}" class="touxiang1"></image>
     <view class="name1">{{item.name}}-{{item.relationship}}</view>
-    <image class="del1" src="../../../images/my/del.svg"></image>
+    <image class="del1" src="../../../images/my/del.svg" data-userid="{{item.userid}}" data-index="{{index}}" bindtap="cancelBinding"></image>
   </view>
 </view>

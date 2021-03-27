@@ -65,7 +65,7 @@
         <input class="yellow" type="text" value="{{reContent}}"bindinput="bindReContentChange"/>
         <button class="confirm" bindtap="confirmVoiceMemo">确 定</button>
         <view class="row">
-            <button class="white" style="width: 195rpx;height: 90rpx;margin-right:48rpx;">重 录</button>
+            <button class="white" style="width: 195rpx;height: 90rpx;margin-right:48rpx;" bindtap="replayRecord">试 听</button>
             <button class="white" style="width: 195rpx;height: 90rpx;" bindtap="cancelRestate">取 消</button>
         </view>
       </view>

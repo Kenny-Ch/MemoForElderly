@@ -14,7 +14,8 @@ Page({
     dateIndex:0,
     isOn:false,
     title:"",
-    belongOpenid: ""
+    belongOpenid: "",
+    fromOld: false
   },
 
   /**
@@ -29,6 +30,11 @@ Page({
     if(options.belongOpenid) {
       this.setData({
         belongOpenid: options.belongOpenid
+      })
+    }
+    if(options.isOld) {
+      this.setData({
+        fromOld: true
       })
     }
   },
@@ -123,10 +129,15 @@ Page({
                         content: '',
                       })
                       let pages = getCurrentPages(); // 当前页，
-                          let prevPage = pages[pages.length - 2]; // 上一页
-                          prevPage.setData({
-                            freshNow: 1,
-                          })
+                      let prevPage
+                      if(that.data.fromOld) {
+                        prevPage = pages[pages.length-4]
+                        prevPage.onLoad()
+                      }
+                      prevPage = pages[pages.length - 2]; // 上一页
+                      prevPage.setData({
+                        freshNow: 1,
+                      })
         
                           
                       if (r == 'reject') {

@@ -9,9 +9,9 @@
 <view class="familyCard">
   <view class="bigword">已绑定用户</view>
   <view class="smallword">已绑定的用户可以为您添加备忘内容</view>
-  <view class="list-item row" wx:for="{{family}}">
+  <view class="list-item row" wx:for="{{family}}"  wx:key="{{index}}">
     <image src="{{item.avarurl}}" class="uesrPic"></image>
     <view class="userName">{{item.name}}</view>
-    <image src="../../../images/my/delete.svg" class="del"></image>
+    <image src="../../../images/my/delete.svg" class="del" bindtap="cancleBinding" data-userid="{{item.userid}}" data-index="{{index}}"></image>
   </view>
 </view>
