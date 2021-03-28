@@ -131,7 +131,9 @@ Page({
                           scrollFlag: false,
                           finish: data[i].finish,
                           height: 90,
-                          recordUrl: data[i].recordUrl
+                          recordUrl: data[i].recordUrl,
+                          belong: data[i].belong,
+                          creator: data[i].creator
                         }
                         things.push(obj)
                       }
@@ -307,9 +309,17 @@ Page({
     })
   },
   jumpRegular: function (e) {
+    console.log(e)
     let title = e.target.dataset.title
+    let belong = e.target.dataset.belong
+    let openid = e.target.dataset.creator
+    let _id =e.target.dataset.id
     wx.navigateTo({
-      url: '../oldMan/addReminder/addReminder?title=' + title,
+      url: '../oldMan/addReminder/addReminder?title=' + title
+      + '&regularInfo=1'
+      + '&belong=' + belong
+      + '&openid=' + openid
+      + '&id=' + _id,
     })
   },
   //-------------------------------------------------------------------------------------------------
