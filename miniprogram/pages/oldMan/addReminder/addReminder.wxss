@@ -93,7 +93,7 @@ label{
 	background-color: rgba(249, 186, 23, 1);
 	border-radius: 35rpx;
 	font-size: 36rpx;
-	line-height: 100%;
+	line-height: 150%;
   text-align: center;
   margin-top:104rpx;
 }

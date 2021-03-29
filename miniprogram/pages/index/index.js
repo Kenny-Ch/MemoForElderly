@@ -11,23 +11,25 @@ Page({
   data: {
     isOld: false,
     isChild: false, //当 isOld 和 isChild 都是fasle时是启动页，当isOld是true时是老人首页
-    things: [{
-      id: 1,
-      title: "这个是备忘事件的标题",
-      time: "2021年3月2日 中午12点",
-    }, {
-      id: 2,
-      title: "这个是备忘事件的标题",
-      time: "2021年3月2日 中午12点",
-    }, {
-      id: 3,
-      title: "这个是备忘事件的标题",
-      time: "2021年3月2日 中午12点",
-    }, {
-      id: 4,
-      title: "这个是备忘事件的标题",
-      time: "2021年3月2日 中午12点",
-    }],
+    things: [
+    //   {
+    //   id: 1,
+    //   title: "这个是备忘事件的标题",
+    //   time: "2021年3月2日 中午12点",
+    // }, {
+    //   id: 2,
+    //   title: "这个是备忘事件的标题",
+    //   time: "2021年3月2日 中午12点",
+    // }, {
+    //   id: 3,
+    //   title: "这个是备忘事件的标题",
+    //   time: "2021年3月2日 中午12点",
+    // }, {
+    //   id: 4,
+    //   title: "这个是备忘事件的标题",
+    //   time: "2021年3月2日 中午12点",
+    // }
+  ],
     say: false,
     is_clock: false,
     restatement: false,
@@ -121,12 +123,13 @@ Page({
                           }
                           time = str
                         }
+                        console.log("isRegular：",data[i].isRegular)
                         let obj = {
                           title: data[i].content,
                           time: time,
                           id: data[i]._id,
                           showAll: false,
-                          // showMore:false,
+                          isRegular:data[i].isRegular,
                           _leftTxt: '0rpx',
                           scrollFlag: false,
                           finish: data[i].finish,
@@ -250,17 +253,24 @@ Page({
   //播放自己录下的录音
   replayRecord:function(e) {
     let url = this.data.vioceTempFilePath
-    innerAudioContext.src = null
+    console.log("url:",url)
+    innerAudioContext.autoplay = true
     innerAudioContext.src = url
-    innerAudioContext.play()
+    innerAudioContext.onPlay(() => {
+      console.log('开始播放')
+    })
     innerAudioContext.onError((res) => {
       wx.showToast({
         title: '播放错误，请稍后再试~',
-        duration: 1000,
-        icon: 'error',
-        mask: true
+        duration: 2000,
+        icon: 'none',
       })
     })
+    innerAudioContext.onPause(
+      () =>{
+        console.log('停止播放')
+      }
+    )
   },
 
   //-------------------更多弹出框--------------------------------------------------
@@ -314,12 +324,15 @@ Page({
     let belong = e.target.dataset.belong
     let openid = e.target.dataset.creator
     let _id =e.target.dataset.id
+    let isRegular=e.target.dataset.isregular
+    console.log("isRegular：",isRegular)
     wx.navigateTo({
       url: '../oldMan/addReminder/addReminder?title=' + title
       + '&regularInfo=1'
       + '&belong=' + belong
       + '&openid=' + openid
-      + '&id=' + _id,
+      + '&id=' + _id
+      +'&isRegular=' + isRegular,
     })
   },
   //-------------------------------------------------------------------------------------------------
@@ -379,7 +392,6 @@ Page({
                 content: '当前微信版本过低，无法使用该功能，请升级到最新微信版本后重试。'
               })
             }
-
           } else if (res.cancel) {
             console.log('用户点击取消')
           }
@@ -667,17 +679,24 @@ Page({
   //播放备忘
   play: function (e) {
     let url = e.target.dataset.id
-    innerAudioContext.src = null
+    console.log("url:",url)
+    innerAudioContext.autoplay = true
     innerAudioContext.src = url
-    innerAudioContext.play()
+    innerAudioContext.onPlay(() => {
+      console.log('开始播放')
+    })
     innerAudioContext.onError((res) => {
       wx.showToast({
         title: '播放错误，请稍后再试~',
-        duration: 1000,
-        icon: 'error',
-        mask: true
+        duration: 2000,
+        icon: 'none',
       })
     })
+    innerAudioContext.onPause(
+      () =>{
+        console.log('停止播放')
+      }
+    )
   },
 
   //文字备忘录内容输入实时保存
@@ -915,11 +934,14 @@ Page({
             new Promise(() => {
               // 语音转文字
               const fs = wx.getFileSystemManager();
+              console.log("fs：",fs)
               fs.readFile({
                 filePath: tempFilePath,
                 success(res) {
                   const base64 = wx.arrayBufferToBase64(res.data);
                   var fileSize = res.data.byteLength;
+                  console.log("base64：",base64)
+                  console.log("fileSize：",fileSize)
                   wx.cloud.callFunction({
                     name: 'sentenceRecognition',
                     data: {

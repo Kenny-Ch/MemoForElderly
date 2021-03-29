@@ -46,9 +46,18 @@ Page({
         regularInfo: {
           belong: options.belong,
           openid: options.openid,
-          _id: options.id
+          _id: options.id 
         }
       })
+      //已经是定期提醒，显示定期提醒时间
+      console.log("isRegular:",options.isRegular)
+      if(options.isRegular==1){
+        this.setData({
+          dateIndex:2,     //需要换为动态的
+          times:'04:08',    //需要换为动态的
+        })
+      }
+      
     }
   },
   changeFrequency(e) {

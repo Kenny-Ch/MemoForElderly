@@ -29,10 +29,11 @@ page{
 	height: 1106rpx;
 	color: rgba(80, 80, 80, 1);
 	background-color: rgba(255, 255, 255, 1);
-	border-radius: 40rpx;
+  border-radius: 40rpx;
+  border-bottom:none;
 	font-size: 28rpx;
-	line-height: 150%;
-	box-shadow: 0rpx 2rpx 28rpx 0rpx rgba(0, 0, 0, 0.3642857142857143);
+  line-height: 150%;
+  box-shadow: 0rpx 2rpx 28rpx 0rpx rgba(0, 0, 0, 0.3642857142857143);
   text-align: center;
   position: fixed;
   left: 0;
