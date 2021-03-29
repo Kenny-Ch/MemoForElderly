@@ -123,7 +123,6 @@ Page({
                           }
                           time = str
                         }
-                        console.log("isRegular：",data[i].isRegular)
                         let obj = {
                           title: data[i].content,
                           time: time,
@@ -319,20 +318,36 @@ Page({
     })
   },
   jumpRegular: function (e) {
-    console.log(e)
     let title = e.target.dataset.title
     let belong = e.target.dataset.belong
     let openid = e.target.dataset.creator
     let _id =e.target.dataset.id
     let isRegular=e.target.dataset.isregular
-    console.log("isRegular：",isRegular)
+    let ttime = e.target.dataset.time
+    let time = ttime.substr(ttime.length-5,5)
+    let week = null
+    let strToDay ={
+      "一" : 0,
+      "二" : 1,
+      "三" : 2,
+      "四" : 3,
+      "五" : 4,
+      "六" : 5,
+      "日" : 6,
+    }
+    if(ttime.substr(0,2) == "每周") {
+      week = strToDay[ttime.substr(2,1)]
+      console.log(week)
+    }
     wx.navigateTo({
       url: '../oldMan/addReminder/addReminder?title=' + title
       + '&regularInfo=1'
       + '&belong=' + belong
       + '&openid=' + openid
       + '&id=' + _id
-      +'&isRegular=' + isRegular,
+      + '&isRegular=' + isRegular
+      + '&time=' + time
+      + (week!=null?("&week="+week):"")
     })
   },
   //-------------------------------------------------------------------------------------------------

@@ -28,7 +28,9 @@
         </view>
       </view>  
       <view class="rightcard row" style="height:{{item.height}}px;" wx:if="{{item.scrollFlag==true}}">
-        <view class="dingqi" data-title="{{item.title}}" data-belong="{{item.belong}}" data-isRegular="{{item.isRegular}}" data-creator="{{item.creator}}" data-id="{{item.id}}" bindtap="jumpRegular">定期</view>
+        <view class="dingqi" data-title="{{item.title}}" data-belong="{{item.belong}}" 
+        data-isRegular="{{item.isRegular}}" data-creator="{{item.creator}}" 
+        data-id="{{item.id}}" data-time="{{item.time}}" bindtap="jumpRegular">定期</view>
         <view class="dell" data-id="{{item.id}}" data-index="{{index}}" bindtap="deleteMemo">删除</view>
       </view>
     </view>

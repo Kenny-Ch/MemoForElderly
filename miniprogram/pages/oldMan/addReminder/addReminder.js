@@ -23,6 +23,7 @@ Page({
    * 生命周期函数--监听页面加载
    */
   onLoad: function (options) {
+    console.log('addReminder传入参数：',options)
     if (options.title != undefined) {
       this.setData({
         title: options.title
@@ -49,12 +50,12 @@ Page({
           _id: options.id 
         }
       })
-      //已经是定期提醒，显示定期提醒时间
-      console.log("isRegular:",options.isRegular)
+      //已经是定期提醒，显示定期提醒时间=
       if(options.isRegular==1){
         this.setData({
-          dateIndex:2,     //需要换为动态的
-          times:'04:08',    //需要换为动态的
+          frequencyIndex: options.week!=null?1:0,
+          dateIndex: options.week,     //需要换为动态的
+          times: options.time,    //需要换为动态的
         })
       }
       
