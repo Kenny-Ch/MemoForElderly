@@ -19,6 +19,15 @@ page {
   height:154rpx;
   margin-bottom: 36rpx;
 }
+.blank{
+  color: rgba(249, 186, 23, 1);
+  font-size: 56rpx;
+  margin-top: 36rpx;
+}
+.blank-pic{
+  width: 180rpx;
+  height: 180rpx;
+}
 .rtitle{
   width: 440rpx;
 	color: rgba(80, 80, 80, 1);

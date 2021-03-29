@@ -15,6 +15,11 @@ page{
   margin-top: 24rpx;
   margin-bottom: 28rpx;
 }
+.blank{
+  color: rgba(249, 186, 23, 1);
+  font-size: 36rpx;
+  margin-top: 96rpx;
+}
 .QRCard{
   width: 684rpx;
 	height: 745rpx;
@@ -64,7 +69,7 @@ page{
 }
 .familyCard{
   width: 684rpx;
-	height: 658rpx;
+	min-height: 358rpx;
 	color: rgba(80, 80, 80, 1);
 	background-color: rgba(255, 255, 255, 1);
 	border-radius: 33rpx;
@@ -75,7 +80,8 @@ page{
   flex-direction: column;
   align-items: center;
   margin-top:48rpx;
-  margin-bottom: 20rpx;
+  margin-bottom: 48rpx;
+  padding-bottom: 48rpx;
 }
 .list-item{
   width: 88%;
