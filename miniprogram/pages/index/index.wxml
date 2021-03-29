@@ -5,7 +5,7 @@
 </view>
 <view wx:if="{{isOld==true}}" style="margin-bottom:128rpx;">
   <!-- 备忘事件列表 -->
-  <view class="content-scroll">
+  <view class="content-scroll" wx:if="{{things.length>0}}">
     <view class="card row" id='card' wx:for="{{things}}" wx:key="{{index}}" style="left:{{item._leftTxt}};width:calc(682rpx - {{item._leftTxt}})">
       <view class="leftcard">
         <view wx:if="{{item.title.length>12&&item.showAll==false}}" class="row" >
@@ -31,6 +31,12 @@
         <view class="dingqi" data-title="{{item.title}}" data-belong="{{item.belong}}" data-creator="{{item.creator}}" data-id="{{item.id}}" bindtap="jumpRegular">定期</view>
         <view class="dell" data-id="{{item.id}}" data-index="{{index}}" bindtap="deleteMemo">删除</view>
       </view>
+    </view>
+  </view>
+  <view class="content-scroll column" style="height:800rpx; justify-content: center;" wx:else>
+    <image class="blank-pic" src="../../images/noRe.png"></image>
+    <view class="blank">
+      暂无任何备忘信息
     </view>
   </view>
   <!-- 底部固定组件 -->

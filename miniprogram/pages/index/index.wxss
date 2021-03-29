@@ -30,6 +30,14 @@ page {
   flex-direction: column;
   align-items: left;
 }
+.blank{
+  color: rgba(249, 186, 23, 1);
+  font-size: 56rpx;
+}
+.blank-pic{
+  width: 200rpx;
+  height: 200rpx;
+}
 .title{
   width: 580rpx;
 	color: rgba(1, 2, 3, 1);

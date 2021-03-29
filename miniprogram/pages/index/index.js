@@ -574,6 +574,9 @@ Page({
                           fail: (res) => {},
                           complete: (res) => {},
                         })
+                        that.setData({
+                          restatement:false
+                        })
                       } else if (r == 'ban') {
                         db.collection('memo').where({
                           _id:_id
@@ -588,6 +591,9 @@ Page({
                           icon: 'error',
                           mask: true
                         })
+                        that.setData({
+                          restatement:false
+                        })
                       } else if(r=='accept') {
                         db.collection('memo').where({
                           _id:_id
@@ -601,6 +607,9 @@ Page({
                           duration: 1000,
                           icon: 'success',
                           mask: true
+                        })
+                        that.setData({
+                          restatement:false
                         })
                       }
                     })
