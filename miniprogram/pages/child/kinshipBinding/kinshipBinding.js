@@ -8,7 +8,10 @@ Page({
     relationshipIndex:-1,
     relationshipList:['子女','儿媳','女婿','伴侣','其他家属'],
     userid: "",
-    relationshipValue: ""
+    relationshipValue: "",
+    relationshipMap:{
+      
+    }
   },
 
   /**
@@ -51,36 +54,44 @@ Page({
 
   //绑定关系
   bindRelation:function(e) {
-    if(this.data.userid && this.data.relation) {
-
-    }
-    db.collection('bindingRelation').add({
-      // data 字段表示需新增的 JSON 数据
-      data: {
-        observed:userid,
-        observedIdentity:"",
-        observer: app.globalData.info.userid,
-        observerIdentity:""
-      }
-    })
-    .then(res => {
-      console.log('新增关系至bindingRealtion数据库成功！',res)
-      wx.showToast({
-        title: '绑定成功！',
-        duration: 1000,
-        icon: 'success',
-        mask: true
+    let that = this
+    if(this.data.userid && this.data.relationshipValue) {
+      db.collection('bindingRelation').add({
+        // data 字段表示需新增的 JSON 数据
+        data: {
+          observed:userid,
+          observedIdentity: that.data.relationshipMap[that.data.relationshipValue].obseved,
+          observer: app.globalData.info.userid,
+          observerIdentity:that.data.relationshipMap[that.data.relationshipValue].obsever
+        }
       })
-    })
-    .catch(err =>{
-      console.log('绑定失败：',err)
+      .then(res => {
+        console.log('新增关系至bindingRealtion数据库成功！',res)
+        wx.showToast({
+          title: '绑定成功！',
+          duration: 1000,
+          icon: 'success',
+          mask: true
+        })
+      })
+      .catch(err =>{
+        console.log('绑定失败：',err)
+        wx.showToast({
+          title: '绑定失败！',
+          duration: 1000,
+          icon: 'error',
+          mask: true
+        })
+      })
+    } else {
       wx.showToast({
-        title: '绑定失败！',
+        title: '信息填写不完整！',
         duration: 1000,
         icon: 'error',
         mask: true
       })
-    })
+    }
+    
   },
 
   //
