@@ -325,7 +325,11 @@ Page({
       })
     }
   },
-
+  bindRelation:function(e){
+    wx.navigateTo({
+      url: '../kinshipBinding/kinshipBinding',
+    })
+  },
   //取消绑定关系
   cancelBinding: function(e) {
     let that = this

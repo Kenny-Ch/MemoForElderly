@@ -38,7 +38,7 @@
   </navigator>
 </view>
 <view class="row bottom" style="justify-content: center;margin-bottom:32rpx">
-  <view class="bottom-black">xx团队</view>
+  <view class="bottom-black">朝夕语记团队</view>
   <view class="bottom-yellow" style="margin-left:20rpx;">关于我们</view>
 </view>
 

@@ -205,3 +205,25 @@ page {
 	color: rgba(249, 186, 23, 1);
 	margin-left: 130rpx;
 }
+.blank{
+	width: 594rpx;
+	height: 594rpx;
+	margin-left: 36rpx;
+}
+.text{
+	width: 100%;
+	color: rgba(80, 80, 80, 1);
+	font-size: 36rpx;
+	line-height: 150%;
+	text-align: center;
+	font-weight: bold;
+}
+.save{
+	color: rgba(0, 2, 2, 1);
+	background-color: rgba(249, 186, 23, 1);
+	border-radius: 35rpx;
+	font-size: 28rpx;
+	line-height: 150%;
+  text-align: center;
+  margin-top:72rpx;
+}

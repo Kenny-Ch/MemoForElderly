@@ -47,7 +47,12 @@
     </view>
   </view>
 </view>
-
+<view style="width:87%"  wx:if="{{person.length==0}}">
+  <image src="../../../images/kong.png" class="blank"></image>
+  <view class="text">暂未绑定亲属</view>
+  <view class="text">请先点击下方按钮进行绑定</view>
+  <button class="save" style="width: 623rpx;height: 68rpx;" bindtap="bindRelation">马上绑定</button>
+</view>
 <!--屏幕背景变暗的背景  -->
 <view class="commodity_screen" bindtap="hideModal" wx:if="{{showModalStatus}}"></view>
 <!--弹出框  -->
