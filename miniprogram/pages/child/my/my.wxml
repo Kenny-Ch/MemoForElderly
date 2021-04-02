@@ -58,7 +58,7 @@
 <!--弹出框  -->
 <view animation="{{animationData}}" class="commodity_attr_box" wx:if="{{showModalStatus}}">
   <view class="row" style="margin-bottom:28rpx;" wx:for="{{familys}}" wx:key="{{index}}">
-    <view class="row" bindtap="changeIndex">
+    <view class="row" data-index="{{index}}" bindtap="changeIndex">
       <image src="{{item.portrait}}" class="touxiang1"></image>
       <view class="name1">{{item.name}}-{{item.relationship}}</view>
     </view>

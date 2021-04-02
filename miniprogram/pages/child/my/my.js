@@ -402,6 +402,16 @@ Page({
     })
   },
 
+  //切换身份
+  changeIndex: function(e){
+    let index = e.target.dataset.index;
+    let p = [].concat(this.data.familys[index])
+    this.setData({
+      person:p
+    })
+    this.hideModal()
+  },
+
   //content内容
   bindinputchange: function (e) {
     let val = e.detail.value
