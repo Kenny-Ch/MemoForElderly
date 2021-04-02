@@ -1,4 +1,5 @@
 // miniprogram/pages/child/kinshipBinding/kinshipBinding.js
+const db=wx.cloud.database()
 Page({
 
   /**
@@ -59,7 +60,7 @@ Page({
       db.collection('bindingRelation').add({
         // data 字段表示需新增的 JSON 数据
         data: {
-          observed:userid,
+          observed:that.data.userid,
           observedIdentity: that.data.relationshipMap[that.data.relationshipValue].obseved,
           observer: app.globalData.info.userid,
           observerIdentity:that.data.relationshipMap[that.data.relationshipValue].obsever
