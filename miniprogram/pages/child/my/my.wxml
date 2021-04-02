@@ -8,7 +8,7 @@
       </view>
     </view>
     <image src="../../../images/my/relation.svg" bindtap="bindRelation" class='rePic' style="margin-left:320rpx;margin-right:20rpx"></image>
-    <image src="../../../images/my/user.svg" class="rePic"></image>
+    <image src="../../../images/my/user.svg" bindtap="jumpMy" class="rePic"></image>
   </view>
   <view class="column">
     <view class="top_card row">

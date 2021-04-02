@@ -89,7 +89,7 @@ page{
   z-index: 60;
 }
 .bottom-black{
-  width: 120rpx;
+  width: 160rpx;
 	color: rgba(80, 80, 80, 1);
 	font-size: 28rpx;
 	line-height: 150%;
