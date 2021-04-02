@@ -409,7 +409,7 @@ Page({
 
   //切换身份
   changeIndex: function(e){
-    let index = e.target.dataset.index;
+    let index = e.currentTarget.dataset.index;
     let p = [].concat(this.data.familys[index])
     this.setData({
       person:p
