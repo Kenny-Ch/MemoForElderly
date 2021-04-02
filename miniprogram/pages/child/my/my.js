@@ -58,7 +58,12 @@ Page({
     stime: null,
     freshNow: 0
   },
-
+  jumpMy:function(e){
+    var child=true
+    wx.navigateTo({
+      url: '../../oldMan/my/my?child='+child,
+    })
+  },
   /**
    * 生命周期函数--监听页面加载
    */
