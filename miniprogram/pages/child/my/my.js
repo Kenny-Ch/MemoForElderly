@@ -338,7 +338,7 @@ Page({
     wx.showModal({
       cancelText: '取消',
       confirmText: '确定',
-      content: '您确定要接触关系嘛？所有您给Ta设置的备忘也将会清空！',
+      content: '您确定要删除关系嘛？所有您给Ta设置的备忘也将会清空！',
       showCancel: true,
       title: '提示',
       success: (result) => {

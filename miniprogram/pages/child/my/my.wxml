@@ -7,7 +7,7 @@
         <image src="../../../images/my/arrow-down.png" class="arrow"></image>
       </view>
     </view>
-    <image src="../../../images/my/relation.svg" class='rePic' style="margin-left:320rpx;margin-right:20rpx"></image>
+    <image src="../../../images/my/relation.svg" bindtap="bindRelation" class='rePic' style="margin-left:320rpx;margin-right:20rpx"></image>
     <image src="../../../images/my/user.svg" class="rePic"></image>
   </view>
   <view class="column">
