@@ -7,17 +7,17 @@ Page({
    */
   data: {
     reminders:[
-      {
-        id:1,
-        title:'标题',
-        time:'每周三提醒',
-        on:false,
-      },{
-        id:2,
-        title:'标题',
-        time:'每周三提醒',
-        on:true,
-      }
+      // {
+      //   id:1,
+      //   title:'标题',
+      //   time:'每周三提醒',
+      //   on:false,
+      // },{
+      //   id:2,
+      //   title:'标题',
+      //   time:'每周三提醒',
+      //   on:true,
+      // }
     ],
     freshNow: 0
   },

@@ -1,5 +1,6 @@
 <view wx:if="{{isOld==false&&isChild==false}}">
-  <image src="../../images/introduce.png" class="intro"></image>
+  <image src="../../images/index.png" class="intro"></image>
+  <view class="pic_text">不论朝夕，帮你记住</view>
   <button class="oldMan" style="width: 623rpx;height: 88rpx;" bindtap="oldToUse">我需要使用备忘录</button>
   <button class="child" style="width: 623rpx;height: 88rpx;" bindtap="childToUse">我是子女</button>
 </view>

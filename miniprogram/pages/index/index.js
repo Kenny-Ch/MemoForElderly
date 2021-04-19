@@ -223,6 +223,7 @@ Page({
       app.globalData.info = {}
       app.globalData.info.avatarUrl = res.userInfo.avatarUrl
       app.globalData.info.nickName = res.userInfo.nickName
+      var mynickname=res.userInfo.nickName
       console.log(res)
       //存用户信息到数据库，并添加user记录
       let userid = (new Date()).getTime().toString() + Math.ceil(Math.random() * 10).toString()
@@ -238,7 +239,7 @@ Page({
         })
         .then(res => {
           console.log('新增用户至user数据库成功！', res)
-          app.globalData.info.nickName = res.userInfo.nickName
+          app.globalData.info.nickName = mynickname
           app.globalData.info.identity = 2
           app.globalData.info.userid = userid
           wx.redirectTo({

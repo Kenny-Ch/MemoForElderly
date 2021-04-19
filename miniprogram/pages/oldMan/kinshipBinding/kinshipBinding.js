@@ -10,16 +10,16 @@ Page({
   data: {
     QRNum:'',
     family:[
-      {
-        avarurl:'../../../images/my/testAvarurl.jpg',
-        name:'李桂明-儿子',
-      },{
-        avarurl:'../../../images/my/testAvarurl.jpg',
-        name:'李桂明-儿子',
-      },{
-        avarurl:'../../../images/my/testAvarurl.jpg',
-        name:'李桂明-儿子',
-      }
+      // {
+      //   avarurl:'../../../images/my/testAvarurl.jpg',
+      //   name:'李桂明-儿子',
+      // },{
+      //   avarurl:'../../../images/my/testAvarurl.jpg',
+      //   name:'李桂明-儿子',
+      // },{
+      //   avarurl:'../../../images/my/testAvarurl.jpg',
+      //   name:'李桂明-儿子',
+      // }
     ]
   },
 

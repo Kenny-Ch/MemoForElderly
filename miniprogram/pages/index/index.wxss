@@ -293,9 +293,7 @@ page {
 /* 用户备忘录确认框 */
 .confirm_card{
   width: 682rpx;
-	height: 808rpx;
-	left: 17rpx;
-	top: 131rpx;
+	min-height: 808rpx;
 	color: rgba(80, 80, 80, 1);
 	background-color: rgba(255, 255, 255, 1);
 	border-radius: 33rpx;
@@ -311,19 +309,19 @@ page {
   width: 532rpx;
 	color: rgba(0, 2, 2, 1);
 	font-size: 52rpx;
-	line-height: 150%;
 	text-align: left;
   font-weight: bold;
   margin-bottom: 12rpx;
 }
 .yellow{
   width: 532rpx;
+  height: 70rpx;
 	color: rgba(249, 186, 23, 1);
 	font-size: 52rpx;
-	line-height: 150%;
-	text-align: left;
+  text-align: left;
   font-weight: bold;
-  margin-bottom: 12rpx;
+  margin-top: 24rpx;
+  margin-bottom: 28rpx;
 }
 .confirm{
   width: 443rpx;
@@ -406,15 +404,23 @@ label{
 /* 启动页 */
 .intro{
   width: 648rpx;
-  height: 768rpx;
+  height: 648rpx;
   margin-top:40rpx;
+}
+.pic_text{
+  width: 100%;
+	color: rgba(80, 80, 80, 1);
+	font-size: 48rpx;
+	line-height: 150%;
+	text-align: center;
+	font-weight: bold;
 }
 .oldMan{
 	color: rgba(0, 2, 2, 1);
 	background-color: rgba(249, 186, 23, 1);
 	border-radius: 45rpx;
 	font-size: 36rpx;
-	line-height: 100%;
+	line-height: 150%;
   text-align: center;
   margin-top:104rpx;
 }
@@ -423,7 +429,7 @@ label{
 	background-color: rgba(255, 255, 255, 1);
 	border-radius: 45rpx;
 	font-size: 36rpx;
-	line-height: 100%;
+	line-height: 150%;
 	border: rgba(0, 0, 0, 1) solid 2rpx;
   text-align: center;
   margin-top:32rpx;

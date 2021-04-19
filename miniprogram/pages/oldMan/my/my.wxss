@@ -89,14 +89,12 @@ page{
   z-index: 60;
 }
 .bottom-black{
-  width: 160rpx;
 	color: rgba(80, 80, 80, 1);
 	font-size: 28rpx;
 	line-height: 150%;
 	text-align: left;
 }
 .bottom-yellow{
-  width: 120rpx;
 	color: rgba(249, 186, 23, 1);
 	font-size: 28rpx;
 	line-height: 150%;

@@ -5,7 +5,7 @@
 </view>
 <view class="content">
   <view  style="width:100%;height:72rpx;" ></view>
-  <view class="column" wx:if="{{child==false}}">
+  <view class="column" wx:if="{{child==false}}" style="width:100%;">
     <view class="row list-item" bindtap="jumpReminder">
       <image src="../../../images/my/time.svg" class="pic"></image>
       <view class="column">
@@ -42,7 +42,6 @@
 </view>
 <view class="row bottom" style="justify-content: center;margin-bottom:32rpx">
   <view class="bottom-black">朝夕语记团队</view>
-  <view class="bottom-yellow" style="margin-left:20rpx;">关于我们</view>
 </view>
 
 
