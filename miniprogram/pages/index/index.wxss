@@ -460,4 +460,47 @@ label{
 	border-top-right-radius: 40rpx;
 	border-top-left-radius: 40rpx;
 }
+.huise{
+  width: 588rpx;
+	color: rgba(80, 80, 80, 1);
+	background-color: rgba(246, 246, 246, 1);
+	border-radius: 35rpx;
+	font-size: 28rpx;
+	line-height: 150%;
+	text-align: center;
+  padding-bottom: 20rpx;
+  padding-top: 20rpx;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  margin-top: 28rpx;
+  margin-bottom: 64rpx;
+}
+.wenzi{
+  width: 516rpx;
+	color: rgba(0, 0, 0, 1);
+	font-size: 52rpx;
+	line-height: 150%;
+	text-align: left;
+	font-weight: bold;
+}
+.myfinish{
+  width: 443rpx;
+	height: 110rpx;
+	color: rgba(1, 2, 3, 1);
+	background-color: rgba(255, 255, 255, 1);
+	border-radius: 56rpx;
+	font-size: 48rpx;
+	line-height: 150%;
+	box-shadow: 0rpx 2rpx 17rpx 0rpx rgba(0, 0, 0, 0.4857142857142857);
+  text-align: center;
+  margin-bottom: 36rpx;
+}
+.close{
+  width: 80rpx;
+	height: 80rpx;
+	font-size: 80rpx;
+	color: rgba(0, 0, 0, 1);
+}
 

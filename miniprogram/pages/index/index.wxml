@@ -81,6 +81,21 @@
     </view>
   </view>
 
+  <!-- 备忘详细框 -->
+  <view wx:if="{{detailed==true}}">
+    <view class="back" style="z-index: 110;">
+      <view class="confirm_card">
+        <view class="black">提醒时间：</view>
+        <view class="huise">
+          <view class="wenzi">{{detail_content}}</view>
+        </view>
+        <button class="confirm">播 放</button>
+        <button class="myfinish">完 成</button>
+        <image src="../../images/close.svg" class="close" bindtap="close"></image>
+      </view>
+    </view>
+  </view>
+
   <!-- 用户编辑框 -->
   <!--屏幕背景变暗的背景  -->
   <view class="commodity_screen" bindtap="hideModal" wx:if="{{edit}}"></view>

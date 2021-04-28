@@ -46,6 +46,14 @@ Page({
     multiIndex: [0, 0, 0],
     reContent: "去医院取药",
     vioceTempFilePath: "", //生产录音时产生的临时路径，用于上传云存储
+    detailed:false,
+    detail_content:'去xxx医院的几号窗口去取药',
+  },
+
+  close:function(e){
+    this.setData({
+      detailed:false
+    })
   },
 
   onLoad: function () {
