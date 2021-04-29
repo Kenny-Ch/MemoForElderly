@@ -85,12 +85,12 @@
   <view wx:if="{{detailed==true}}">
     <view class="back" style="z-index: 110;">
       <view class="confirm_card">
-        <view class="black">提醒时间：</view>
+        <view class="black">提醒时间：{{detail_time}}</view>
         <view class="huise">
           <view class="wenzi">{{detail_content}}</view>
         </view>
-        <button class="confirm">播 放</button>
-        <button class="myfinish">完 成</button>
+        <button class="confirm" data-id="{{detail_url}}" bindtap="play">播 放</button>
+        <button class="myfinish" wx:if="{{detail_finish!=1}}" data-id="{{detail_id}}" data-isRegular="{{detail_isRegular}}" bindtap="finishJump">完 成</button>
         <image src="../../images/close.svg" class="close" bindtap="close"></image>
       </view>
     </view>

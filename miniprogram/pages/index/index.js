@@ -56,12 +56,32 @@ Page({
     })
   },
 
-  onLoad: function () {
+  onLoad: function (param) {
     let that = this
     wx.showLoading({
       title: '加载中',
       mask: true
     })
+    //如果是消息订阅进入，需要进行一些设置
+    if(param.jump) {
+      let url = param.url;
+      let content = param.content;
+      let _id = param.id
+      let time = param.time
+      let finish = param.finish
+      let isRegular = param.isRegular
+
+      this.setData({
+        detailed: true,
+        detail_content: content,
+        detail_url: url,
+        detail_id: _id,
+        detail_time: time,
+        detail_finish: finish,
+        detail_isRegular: isRegular
+      })
+
+    }
     //获取用户openid
     wx.cloud.callFunction({
       name: 'login',
@@ -146,6 +166,12 @@ Page({
                           creator: data[i].creator
                         }
                         things.push(obj)
+                        //弹窗进入判断是否有完成
+                        if(param.jump && data[i]._id == param.id){
+                          that.setData({
+                            detail_finish: data[i].finish
+                          })
+                        }
                       }
                       that.setData({
                         things: things
@@ -739,6 +765,13 @@ Page({
 
   //备忘完成
   finish: function (e) {
+    wx.showLoading({
+      title: '完成中~',
+      mask: true,
+      success: (res) => {},
+      fail: (res) => {},
+      complete: (res) => {},
+    })
     let _id = e.target.dataset.id
     let index = e.target.dataset.index
     let that = this
@@ -755,8 +788,11 @@ Page({
           that.setData({
             things: things
           })
+          wx.hideLoading({
+            success: (res) => {},
+          })
           wx.showToast({
-            title: '完成成功',
+            title: '完成备忘成功',
             duration: 1000,
             icon: 'success',
             mask: true,
@@ -765,6 +801,149 @@ Page({
             complete: (res) => {},
           })
         } else {
+          wx.hideLoading({
+            success: (res) => {},
+          })
+          wx.showToast({
+            title: '完成备忘失败',
+            duration: 1000,
+            icon: 'error',
+            mask: true,
+            success: (res) => {},
+            fail: (res) => {},
+            complete: (res) => {},
+          })
+        }
+
+      },
+      fail: err => {
+        wx.hideLoading({
+          success: (res) => {},
+        })
+        console.error('备忘失败', err)
+      }
+    })
+  },
+
+  //完成弹窗备忘
+  finishJump: function (e) {
+    wx.showLoading({
+      title: '完成中~',
+      mask: true,
+      success: (res) => {},
+      fail: (res) => {},
+      complete: (res) => {},
+    })
+    let _id = e.target.dataset.id
+    let that = this
+    wx.cloud.callFunction({
+      name: 'finishMemo',
+      data: {
+        _id: _id
+      },
+      success: res => {
+        console.log('备忘成功', res.result)
+        if (res.result == 1) {
+          let things = that.data.things
+          for(let i=0; i<things.length; i++){
+            if(things[i].id == _id)
+              things[i].finish = 1
+          }
+          that.setData({
+            detail_finish: 1,
+            things: things
+          })
+          wx.hideLoading({
+            success: (res) => {},
+          })
+          wx.showToast({
+            title: '完成成功',
+            duration: 1000,
+            icon: 'success',
+            mask: true,
+            success: (res) => {},
+            fail: (res) => {},
+            complete: (res) => {
+              //如果是定期的话，弹窗订阅
+              if(that.data.detail_isRegular == 1) {
+                wx.showModal({
+                  confirmText: '我已明白',
+                  content: '请您允许消息推送，以便我们继续给您定期推送备忘信息，如您取消则会收不到我们的定期提醒！',
+                  title: '提示',
+                  showCancel: false,
+                  success: (result) => {
+                    wx.requestSubscribeMessage({
+                      tmplIds: ['GnLGROy6j9ElGm0FNzXnF4k_0zZy1kWYHuwMJ2iez6s'],
+                      //success: (res)=> { console.log(res)}
+                      success: (res) => {
+                        let r = res['GnLGROy6j9ElGm0FNzXnF4k_0zZy1kWYHuwMJ2iez6s']
+                        if (r == 'reject') {
+                          db.collection('memo').where({
+                            _id:_id
+                          }).update({
+                            data:{
+                              accept:false
+                            }
+                          })
+                          wx.showModal({
+                            confirmText: '前往设置',
+                            content: '保存成功！但您可能无法收到我们的备忘通知！',
+                            showCancel: true,
+                            title: '提示',
+                            success: (result) => {
+                              if(result.confirm) {
+                              }
+                            },
+                            fail: (res) => {},
+                            complete: (res) => {},
+                          })
+                        } else if (r == 'ban') {
+                          db.collection('memo').where({
+                            _id:_id
+                          }).update({
+                            data:{
+                              accept:false
+                            }
+                          })
+                          wx.showToast({
+                            title: '保存成功！但消息推送设置出错！',
+                            duration: 1000,
+                            icon: 'error',
+                            mask: true
+                          })
+                          that.setData({
+                            restatement:false
+                          })
+                        } else if(r=='accept') {
+                          db.collection('memo').where({
+                            _id:_id
+                          }).update({
+                            data:{
+                              accept:true
+                            }
+                          })
+                          wx.showToast({
+                            title: '保存成功！',
+                            duration: 1000,
+                            icon: 'success',
+                            mask: true
+                          })
+                        }                       
+                        
+                      }
+                    })
+                  },
+                  fail: (res) => {},
+                  complete: (res) => {},
+                })
+              }
+              
+            },
+          })
+        } else {
+          wx.hideLoading({
+            success: (res) => {},
+          })
           wx.showToast({
             title: '完成失败',
             duration: 1000,
@@ -778,6 +957,9 @@ Page({
 
       },
       fail: err => {
+        wx.hideLoading({
+          success: (res) => {},
+        })
         console.error('备忘失败', err)
       }
     })
